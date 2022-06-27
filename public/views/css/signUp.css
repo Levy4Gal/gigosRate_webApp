@@ -142,7 +142,7 @@ input[type="submit"] {
 }
 input[type="submit"]:hover {
   background-color: #329dd5;
-  -webkit-transition: all 0.2s ease;
+  -webkit-transition: all 0.s ease;
   transition: all 0.2s ease;
 }
 
