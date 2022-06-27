@@ -5,8 +5,10 @@ const port = 8080;
 
 app.use(express.json());
 app.use(express.static("public"));
+// app.use(express.static("public/views"))
+// app.set('views','./public/views');
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
-app.listen(port, () => console.info("Listening on port " % { port }));
+app.listen(port, () => console.info("Listening on port " ,port));
