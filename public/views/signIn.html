@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>HTML5 Login Form with validation Example</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-<link rel="stylesheet" href="./css/signIn.css">
-
+  <link rel="stylesheet" href="./css/signIn.css">
+  <script type = "text/javascript" src="../signIn.js"></script>  
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -19,7 +19,7 @@
     <input type="email" id="email" name="email" placeholder="Email Address" required><i class="validation"><span></span><span></span></i>
     </p>
     <p>
-    <input type="submit" id="login" value="Login">
+    <input type="submit" id="login" value="Login" onclick = "Login()">
     </p>
   </form>
   <div id="create-account-wrap">
