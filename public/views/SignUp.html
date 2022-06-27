@@ -1,44 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>HTML5 Login Form with validation Example</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="./css/signUp.css">
+
 </head>
 <body>
-    <form action="" style="border:1px solid #ccc">
-        <div class="container">
-          <h1>Sign Up</h1>
-          <p>Please fill in this form to create an account.</p>
-          <hr>
-            
-          <label for="username"><b>Username</b></label>
-          <input type="text" placeholder="Enter Username" name="username" required>
-          <br>
+<!-- partial:index.partial.html -->
+<div id="login-form-wrap">
+  <h2>Register</h2>
+  <form id="Register-form">
+    <p>
+        <input type="text" id="username" name="username" placeholder="Username" required><i class="validation"><span></span><span></span></i>
+    </p>
+    <p>
+        <input type="email" id="email" name="email" placeholder="Email Address" required><i class="validation"><span></span><span></span></i>
+    </p>
+    <p>
+        <input type="password" id="firstPassword" name="firstPassword" placeholder="Password" required><i class="validation"><span></span><span></span></i>
+    </p>
+    <p>
+        <input type="password" id="secondPassword" name="secondPassword" placeholder="Confirm password" required><i class="validation"><span></span><span></span></i>
+    </p>
+    <p>
+        <input type="submit" id="SignUp" value="Sign Up">
+    </p>
+  </form>
 
-          <label for="email"><b>Email</b></label>
-          <input type="text" placeholder="Enter Email" name="email" required>
-          <br>
-      
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required>
-          <br>
-      
-          <label for="psw-repeat"><b>Repeat Password</b></label>
-          <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-          <br>
-
-          <label for="profilePic"><b>Profile picture</b></label>
-          <input type="text" placeholder="Enter profile picture link" name="profilePic" required>
-          <br>
-      
-      
-          <div class="clearfix">
-            <button type="submit" class="signupbtn">Sign Up</button>
-          </div>
-        </div>
-      </form>
-    
+</div><!--login-form-wrap-->
+<!-- partial --
+  
 </body>
 </html>
