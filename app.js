@@ -6,6 +6,8 @@ const port = 8080;
 app.use(express.json());
 app.use(express.static("public"));
 
+app.set('views','./public/views');
+
 // app.use(express.static("public/views"))
 // app.set('views','./public/views');
 app.get("/", (req, res) => {

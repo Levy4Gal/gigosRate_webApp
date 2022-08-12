@@ -27,3 +27,22 @@ function Login(){
     var email = document.getElementById("email").value;
     httpPostRequest(username,email);
 }
+
+function SignUpPage(){
+    $(document).ready(function(){
+        $(".content").load("views/SignUp.html"); 
+    });
+    
+    // $(".content").load("views/SignUp.html"); 
+}
+
+function NewLogin(){
+    // get the username, password
+    var result = CheckDB(parms);
+    if(result == true){
+        // switch to the main page
+    }
+    else{
+        // write down to sign up or unmatched username/password
+    }
+}
