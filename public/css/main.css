@@ -1,6 +1,6 @@
-@import url(./var.css);
+ @import url(./var.css); 
 
-@import url(./reset.css);
+/* @import url(./reset.css); */
 
 
 
@@ -15,7 +15,7 @@
   }
   
   .filter-bar select {
-    color: var(--white);
+    /* color: var(--white); */
     font-size: var(--fs-sm);
     margin-right: 15px;
     cursor: pointer;
@@ -70,3 +70,15 @@
     --width:  81px;
     --left:  163px;
   }
+
+  #content:div{
+    margin-left: 5%;
+
+  }
+
+ 
+
+  /* #content1, #content2{
+    margin-left: 5%;
+  } */
+  

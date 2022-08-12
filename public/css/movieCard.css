@@ -3,11 +3,12 @@
 
 .img {
     
-    width: 10%;
-    border-radius: 5%;
+    width: 250px;
+    border-radius: 10%;
     cursor: pointer;
     object-position: top;
-    margin: 1%;
+    margin: 2%;
+    
 }
 
  .img:hover {
@@ -38,17 +39,35 @@
 }
 
 .movieDiv {
-    position: relative;
+    /* margin-left: 30%; */
     overflow: hidden;
     align-items: center;
     display: flex;
     flex-direction: column;
+    padding: 2%;
+    margin: 2%;
+    
     
 }
+
+.movieRow {
+    overflow: hidden;
+    align-items: center;
+    display: flex;
+    flex-direction: row; 
+}
+
+
 .movieName{
     font-family: 'Verdana';
     cursor: pointer;
 }
+
+.text{
+    color: white;
+
+  }
+
 
 
 
