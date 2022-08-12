@@ -7,13 +7,12 @@ var hash = require('object-hash');
 
 app.use(express.json());
 app.use(express.static("public"));
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/SignIn.html"));
 });
 
 app.post("")
-app.listen(port, () => console.info("Listening on port ", port ));
-
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://Shaharkozi:S123456@gigos.kdk9a.mongodb.net/?retryWrites=true&w=majority";
@@ -65,3 +64,10 @@ app.post("/login",(req, res) => {
   }
   autheticateUser("Guy","Guy", test);
 
+//Admin test
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/views/admin.html"));
+});
+
+
+app.listen(port, () => console.info("Listening on port " ,port));
