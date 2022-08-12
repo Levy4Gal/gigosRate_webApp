@@ -10,9 +10,11 @@
 }
 .userOption{
     padding: 10px;  
+    cursor: pointer;
 }
 .movieOption{
     padding: 10px;  
+    cursor: pointer;
 }
 .content{
     display: flex;
