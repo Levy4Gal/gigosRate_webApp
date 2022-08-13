@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
 app.post("")
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { json } = require("stream/consumers");
 const uri = "mongodb+srv://Shaharkozi:S123456@gigos.kdk9a.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -29,7 +30,6 @@ app.post("/login",(req, res) => {
   //-----------DataBase Functions------------//
 
   function addUser(userName, password, isAdmin){
-    client.connect( err => {
       const users = client.db("gigos").collection("users");
       var pass = hash(password);
       const doc = {
@@ -39,30 +39,54 @@ app.post("/login",(req, res) => {
       }
       users.insertOne(doc);
       setTimeout(()=> client.close(),1500);
-    });
   }
-  // addUser("Guy","Guy");
-  async function autheticateUser(userName, password ,callback) {
-    try {
-      client.connect(async err => {
-        const users = client.db("gigos").collection("users");
-        var pass = hash(password);
-        const doc = {
-          "userName":userName,
-          "password": pass,
-        }
-        const res =await users.findOne(doc);
-        callback(res);
-        setTimeout(()=> client.close(),1500);
-      });
-    } finally {
-      await client.close();
+
+   function autheticateUser(userName, password ,res) {//pull thr data from DB for the /get/authenticateUsre
+      const users = client.db("gigos").collection("users");
+      var pass = hash(password);
+      const doc = {
+        "userName":userName,
+        "password": pass,
+      }
+      users.findOne(doc, function(err, result){
+        if(err) throw err;
+        if(result != null){
+          res.send(JSON.parse(
+            '{"isExist": "true"}'
+          ))
+        }else 
+          res.send(JSON.parse(
+            '{"isExist": "false"}'
+          ))
+        });
+   }
+
+   function getUser(userName ,res) {//pull thr data from DB for the /get/user
+    const users = client.db("gigos").collection("users");
+    const doc = {
+      "userName":userName
     }
-  }
-  function test(value){
-    console.log(value);
-  }
-  autheticateUser("Guy","Guy", test);
+    users.findOne(doc, function(err, result){
+      if(err) throw err;
+      if(result == null)
+        res.send(JSON.parse(
+          '{"userName": "this user is not exist"}'
+       ))
+      else
+        res.send(result)});
+ }
+
+
+app.get("/authenticateUsre", (req, res) => {//get the parameters:  userName and password. return Json key: "isExist": value:false/true
+  console.log(req.query.userName);
+  console.log(req.query.password);
+  autheticateUser(req.query.userName,req.query.password, res);
+});
+
+app.get("/user", (req, res) => {//get the parameters:  userName and password. return Json key: "isExist": value:false/true
+  console.log(req.query.userName);
+  getUser(req.query.userName, res);
+});
 
 //Admin test
 app.get("/admin", (req, res) => {
