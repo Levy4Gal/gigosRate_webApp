@@ -37,19 +37,18 @@ app.listen(port, () => console.info("Listening on port " ,port));
 
   //-----------DataBase Functions------------//
 
-  function createUser(userName, password, isAdmin, res){//helper function for signup
+  function createUser(userName, password, res){//helper function for signup
       const users = client.db("gigos").collection("users");
       var pass = hash(password);
       const doc = {
         "userName":userName,
         "password": pass,
-        "isAdmin":isAdmin
+        "isAdmin":false
       }
       const valid = {
         "userName":userName}
       users.findOne(valid, function(err, result){
         if(err) throw err;
-        console.log(result);
         if(result != null){
           res.send("this user name is not available")
         }else 
@@ -184,8 +183,8 @@ function rate(movieName,userName, newRate){//functionality of update rate
     });
 }
 
- app.post("/signUp",(req, res) => {//req  parameters:  userName and password and isAdmin. if the user name is already exist return res = "this user name is not available"
-  createUser(req.query.userName,req.query.password, req.query.isAdmin, res);
+ app.post("/signUp",(req, res) => {//req  parameters:  userName and password.isAdmin is false always if the user name is already exist return res = "this user name is not available"
+  createUser(req.query.userName,req.query.password, res);
 });
 
 
@@ -214,7 +213,7 @@ app.get("/firstMovies", (req, res) => {//req  parameters:  number of the firsts
   getFirstsMovies(req.query.num ,res);
 });
 
-app.post("/rate", (req, res) => {//req  parameters:  movieName, usreName, rate
+app.post("/rate", (req, res) => {//req  parameters:  movieName, userName, rate
   rate(req.query.movieName, req.query.userName, req.query.rate ,res);
 });
 
