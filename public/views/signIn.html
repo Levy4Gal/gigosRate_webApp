@@ -5,23 +5,27 @@
   <title>HTML5 Login Form with validation Example</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel="stylesheet" href="./views/css/signIn.css">
-  <script type = "text/javascript" src="signIn.js"></script>  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+  <script type = "text/javascript" src="signIn.js"></script>
+  <!-- <script type = "module" src="signIn.js"></script> -->
+  <!-- <script src="../index.js"></script>     -->
 </head>
 <body>
 <!-- partial:index.partial.html -->
 <div id="login-form-wrap">
   <h2>Login</h2>
-  <div id="login-form">
+  <form id="login-form">
     <p>
     <input type="text" id="username" name="username" placeholder="Username" required><i class="validation"><span></span><span></span></i>
     </p>
     <p>
-      <input type="password" id="firstPassword" name="firstPassword" placeholder="Password" required><i class="validation"><span></span><span></span></i>
+      <input type="password" id="Password" name="Password" placeholder="Password" required><i class="validation"><span></span><span></span></i>
   </p>
     <p>
-    <input type="submit" id="login" value="Login" onclick = "sendToDB()">
+    <input type="button" id="login" value="Login" onclick = "myLoginIn2()">
     </p>
-  </div>
+  </form>
   <div id="create-account-wrap">
     <p>Not a member? <a onclick="SignUpPage()" href="#">Create Account</a><p>
   </div><!--create-account-wrap-->

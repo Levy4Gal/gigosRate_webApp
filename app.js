@@ -1,15 +1,58 @@
-const express = require("express");
+const express = require("express"); //
 const bodyParser = require("body-parser");
-const app = express();
-const path = require("path");
-const port = 8080;
+const app = express(); //
+const path = require("path"); //
+const port = 8080; //
 var hash = require('object-hash');
+
+// hellooooo
+
+//
+var http = require('http') //
+var server = http.createServer(app) //
+var io = require('socket.io')(server); //
+server.listen(port); //
+console.log('server strarted on port: '+ port);
+// var socket = require('socket.io');
+// var io = socket.listen(app);
+io.sockets.on('connection', function (ClientSocket) {
+  console.log("connection");
+  
+  ClientSocket.on('login', function(data){
+    console.log('got login');
+    var _username = data.username;
+    var password = data.password;
+    var is_admin = data.is_admin;
+    console.log(_username + " logged in");
+    // var isValid = addUser(_username, password, is_admin);
+  // io.sockets.emit('login-in',isValid);
+  // add io.socket.on("login-in") inside the login html
+  io.sockets.emit('login',{is_valid:true});})
+
+  ClientSocket.on('sign-up', function(data){
+    console.log('got sign-up');
+    var _username = data.username;
+    var password = data.password;
+    var is_admin = data.is_admin;
+    console.log(_username + " is sign-up");
+    // var isValid = addUser(_username, password, is_admin);
+  // io.sockets.emit('login-in',isValid);
+  // add io.socket.on("login-in") inside the login html
+  io.sockets.emit('sign-up',{is_valid:true});})
+});
+  
+
+
 
 app.use(express.json());
 app.use(express.static("public"));
 
+app.set('views','./public/views');
+
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/views/SignIn.html"));
+  console.log('sent landing page');
+  res.sendFile(path.join(__dirname, "public/views/index.html"));
+  // res.sendFile(path.join(__dirname, "public/views/main.html"));
 });
 
 app.post("")
@@ -27,6 +70,7 @@ app.post("/login",(req, res) => {
   });
 
   //-----------DataBase Functions------------//
+  
 
   function addUser(userName, password, isAdmin){
     client.connect( err => {
@@ -41,6 +85,7 @@ app.post("/login",(req, res) => {
       setTimeout(()=> client.close(),1500);
     });
   }
+  
   // addUser("Guy","Guy");
   async function autheticateUser(userName, password ,callback) {
     try {
@@ -70,4 +115,7 @@ app.get("/admin", (req, res) => {
 });
 
 
-app.listen(port, () => console.info("Listening on port " ,port));
+
+
+// app.listen(port, () => console.info("Listening on port " ,port));
+
