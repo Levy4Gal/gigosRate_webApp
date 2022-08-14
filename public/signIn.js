@@ -4,12 +4,11 @@ var url = "https://localhost:8080";
 function httpPostRequest(username,email){
 let xhr = new XMLHttpRequest();
 xhr.open("POST",url + '/login');
-
+console.log(url + '/login');
 xhr.setRequestHeader("Accept", "application/json");
 xhr.setRequestHeader("Content-Type", "application/json");
 
-xhr.onload = () => console.log(xhr.responseText);
-
+console.log("bef");
 let myData = new Object();
     myData.username = username; 
     myData.email = email;
@@ -18,7 +17,8 @@ let myData = new Object();
 //   "Id": 78912,
 //   "Customer": "Jason Sweet",
 // }`;
-
+xhr.body = JSON.stringify(myData);
+console.log("af");
 xhr.send(JSON.stringify(myData));
 }
 
