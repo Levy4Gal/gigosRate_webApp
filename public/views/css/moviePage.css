@@ -1,0 +1,254 @@
+body{
+    display: block;
+    background-color: #273636;
+    font-size: 1.6rem;
+    font-family: Roboto;
+    border: 0.5px;
+
+    background-image: url('/public/views/img/jhonWick.jpg');
+    background-repeat: no-repeat;
+    background-attachment:scroll;
+    background-size: cover;
+}
+
+.firstTitle{
+    font-style:italic;
+    font: size 2.5rem;
+    color:rgb(147, 142, 142);
+    background-color: rgb(34, 34, 37);
+    size: 200cm;
+    width: 300px;
+    border-radius: 80%;
+    text-align: center;
+}
+
+#movieName{
+    font-size: 300%;
+    padding-left: 1ch;
+}
+
+.leaveAcomment{
+    margin: 3%;
+    font-size: 0.6rem;
+    color:whitesmoke;
+    font-family: "Open Sans", sans-serif;
+    padding: 0ch;
+
+    background-color: rgb(79, 79, 79);
+    opacity: 0.9;
+}
+
+.lastTitle{
+    border-radius: 45px;
+    border: none;
+    background:none;
+    padding: none;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    margin-top: 2%;
+    color: whitesmoke;
+}
+
+.trailer,.image{
+  border-radius: 0%;
+  padding-left: 2%;
+}
+
+.rating{
+    float:right;
+    position: sticky; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 8%;
+    height: 100%; /* Full height */
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    float: right;
+}
+  
+.tooltiptext {
+    visibility: hidden;
+    width: 30px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    float: left;
+    border-radius: 6px;
+    padding: 1px 0;
+    font-size: xx-small;
+    /* Position the tooltip */
+    position: static;
+    z-index: 1;
+}
+  
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    /* margin-right: auto; */
+    text-align: left;
+    float: left;
+}
+
+#addToList{
+    border: none;
+    background:none;
+    /* padding: none; */
+    font-size: x-large;
+    /* cursor: pointer; */
+    float: right;
+    /* text-align: center; */
+    border-color: none;
+    color:  #da6f18b2;
+   text-shadow:5px 5px 5px black;
+   outline-color: black;
+   padding-top: 8%;
+}
+
+#addToList:hover{
+    background: none;
+    color: white;
+    border-radius: 7%;
+}
+
+#rateTitle{
+   color:  #dabd18b2;
+   text-shadow:5px 5px 5px black;
+   text-align: center;
+   outline-color: black;
+}
+
+#grade{
+    color:  #dabd18b2;
+   text-shadow:2px 2px 2px black;
+}
+
+#rateButton{
+   font-size: 1.1rem;
+   background-color: rgb(99, 99, 240) ;
+   border: 0.01px solid black;
+   border-radius:60% ;
+   text-align: right; 
+} 
+  
+.rating__star {
+ cursor: pointer;
+ color: #dabd18b2;
+}
+
+.rating__star:hover {
+    filter: drop-shadow(1px 1px 4px gold);
+ }
+
+.starsRating{
+    text-align: right;
+    font-size: small;
+}
+
+.scroll {
+  border: none;
+  background:none;
+  padding: none;
+  font-size: xx-large;
+  cursor: pointer;
+  float: right;
+  text-align: center;
+  border-color: none;
+  color: black(13, 50, 88);
+}
+
+.scroll:hover{
+    background: none;
+    color: white;
+}
+
+#movieData{
+    margin: 3%;
+    font-size: 0.6rem;
+    color:whitesmoke;
+    font-family: "Open Sans", sans-serif;
+    background-color: black;
+    opacity: 0.7;
+    padding: 0.2ch;
+    /* margin: auto; */
+}
+
+.mapouter{
+    position:relative;
+    text-align:right;
+    height:240px;
+    width:600px;
+    padding: 0%;
+    border-radius: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    margin-top: 3%;
+}
+
+.gmap_canvas {
+    overflow:hidden;
+    background:none!important;
+    height:240px;
+    width:580px;
+    border-radius: 25%;
+}
+
+#mapTitle{
+    border-radius: 45px;
+    border: none;
+    background:none;
+    padding: none;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    margin-top: 2%;
+    color: whitesmoke;
+}
+
+.leaveAcomment{
+    font-size: 1.2rem;
+}
+
+.text {
+    background-color: black;
+    color: white    ;
+    font-size: 5vw; /* Responsive font size */
+    font-style:italic;
+    font-weight: bold;
+    margin: 0 auto; /* Center the text container */
+    padding: 15px;
+    width: 30%;
+    text-align: center; /* Center text */
+    position: absolute; /* Position text */
+    top: 10%;
+    left: 20%; 
+    transform: translate(-50%, -50%); /* Position text in the middle */
+    mix-blend-mode: multiply; /* This makes the cutout text possible */
+    border-radius: 80%;
+}
+
+.fa{
+    color: #dabd18b2;
+}
+
+/* .checked {
+    color: #dabd18b2;
+}
+
+
+.fa-star-half-full{
+    color: #dabd18b2;
+    
+} */
+
