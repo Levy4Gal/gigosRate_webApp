@@ -1,32 +1,69 @@
+//const { response } = require("express");
+
 $(document).ready(function () {
-  var e = document.getElementById("content");
-  var e1 = document.createElement("div");
-  var e2 = document.createElement("div");
-  e.appendChild(e1);
-  e.appendChild(e2);
-  let img = "<img class='img' src='img/casino-royale.jpg' />";
-  let img1 = "<img class='img' src='img/action.jpg' />";
-  let text = "<p class = 'text' >Casino Royal</p>";
+  //displayMovies();
+  async function fetchMovies() {
+    const res = await fetch("https://www.anapioficeandfire.com/api/books");
+    const movies = await res.json();
+    return movies;
+  }
 
-  let movie = "<span class ='movieDiv'>" + img + text + "</span>";
-  let movie1 = "<span class ='movieDiv'>" + img1 + text + "</span>";
-
-  e1.innerHTML =
-    "<html><div class ='movieRow'>" +
-    movie +
-    movie +
-    movie +
-    movie +
-    "</div></html>";
-
-  e2.innerHTML =
-    "<html><div class ='movieRow'>" +
-    movie1 +
-    movie1 +
-    movie1 +
-    movie1 +
-    "</div></html>";
-
-  //var el2 = document.getElementById("content2");
-  // el.innerHTML = "<html><div class ='movieDiv'>" + img + "</div></html>";
+  fetchMovies().then((movies) => {
+    displayMovies(movies);
+  });
 });
+
+function displayMovies(movies) {
+  console.log(movies);
+  let e = document.getElementById("content");
+  let imgOpenTemp = "<img class='img' src="; // append img url + imgCloseTemp
+  let imgCloseTemp = " onclick = 'start()' >";
+  let movieDivOpenTemp = "<html><div class ='movieRow'>"; // append movie + movieDivCloseTemp
+  let movieDivCloseTemp = "</div></html>";
+  let movieSpanOpenTemp = "<span class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
+  let movieSpanCloseTemp = "</span>";
+  let textOpenTemp = "<p class = 'text'>"; // append movie name + textCloseTemp
+  let textCloseTemp = "</p>";
+  let div = null;
+  let nameArray = new Array(163);
+  let imgArray = new Array(163);
+  let tmpArray = [];
+  for (let i = 0; i < 163; i++) {
+    nameArray[i] = "Casino Royal" + i.toString();
+    imgArray[i] =
+      "https://drive.google.com/file/d/1dVMXPKMWUNdbbyCm4URBpstjvOWrlT7R/view?usp=sharing";
+    // "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg";
+  }
+  for (let i = 0; i < nameArray.length; i++) {
+    if (i % 5 == 0) {
+      div = document.createElement("div");
+    }
+    e.appendChild(div);
+    let text = textOpenTemp + nameArray[i] + textCloseTemp;
+    let img = imgOpenTemp + imgArray[i] + imgCloseTemp;
+    let movie = movieSpanOpenTemp + img + text + movieSpanCloseTemp;
+    tmpArray.push(movie);
+    if (tmpArray.length == 5) {
+      let movieDiv = movieDivOpenTemp;
+      while (tmpArray.length != 0) {
+        movieDiv += tmpArray.pop();
+      }
+      movieDiv += movieDivCloseTemp;
+      div.innerHTML = movieDiv;
+    }
+  }
+  if (tmpArray.length != 0) {
+    div = document.createElement("div");
+    e.appendChild(div);
+    let movieDiv = movieDivOpenTemp;
+    while (tmpArray.length != 0) {
+      movieDiv += tmpArray.pop();
+    }
+    movieDiv += movieDivCloseTemp;
+    div.innerHTML = movieDiv;
+  }
+}
+
+function start() {
+  alert("inside start");
+}
