@@ -1,0 +1,15 @@
+{
+    "movieName": "Casino Roya",
+    "movieId": 1,
+    "description": "blbla",
+    "locations":["1","2"],
+    "trailer": "http...",
+    "rate": {
+        "user1": 3,
+        "user2": 4
+    },
+    "duration": 120,
+    "director": "Yanon",
+    "stars": "Gal Levy",
+    "img": "Link..."
+}
