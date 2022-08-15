@@ -78,6 +78,7 @@ app.post("");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const { json } = require("stream/consumers");
 const { dir } = require("console");
+const { unwatchFile } = require("fs");
 const uri =
   "mongodb+srv://Shaharkozi:S123456@gigos.kdk9a.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
@@ -375,6 +376,36 @@ async function getMoviesByYear(startYear, endYear, res){
 
 }
 
+async function getWatchListByUserName(userName, res){
+  const users = client.db("gigos").collection("users");
+  const user = {
+    userName: userName,
+  };
+  users.findOne(user, async function (err, result) {
+    var filterMov = [];
+    var wl = result.watchList;
+    if (err) throw err;
+    if(result == null){
+      return;
+    }else{
+      var movies = await client
+        .db("gigos")
+        .collection("movies")
+        .find().toArray();
+      var filterMov = [];
+      var wl = result.watchList;
+      for(let i =0; i<movies.length; i++){
+        for(let j = 0; j<wl.length; j++){
+          if(movies[i].movieName == wl[j]){
+            filterMov.push(movies[i]);
+          }
+        }
+      }
+      res.send(filterMov);
+    }
+  });
+}
+
 app.post("/signUp", (req, res) => {
   //req  parameters:  userName and password.isAdmin is false always if the user name is already exist return res = "this user name is not available"
   createUser(req.query.userName, req.query.password, res);
@@ -440,4 +471,9 @@ app.get("/moviesByGenre", (req, res) => {
 app.get("/moviesByRY", (req, res) => {
   //req  parameters:  start, end. this func check if a start=<releaseYear<=end, if dont find return empty arr
   getMoviesByYear(req.query.start,req.query.end , res);
+});
+
+app.get("/watchList", (req, res) => {
+  //req  parameters:  userName. if dont find return empty arr
+  getWatchListByUserName(req.query.userName , res);
 });
