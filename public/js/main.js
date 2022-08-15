@@ -1,9 +1,44 @@
 //const { response } = require("express");
 
 $(document).ready(function () {
-  displayMovies();
-  async function fetchMovies() {
-    const res = await fetch("http://localhost:8080/allMovies");
+  // const data = {
+  //   movieName: "shrek2",
+  //   description: "blbla",
+  //   locations: ["1", "2"],
+  //   trailer: "http...",
+  //   rate: {
+  //     user1: 3,
+  //     user2: 4,
+  //     totalRate: 3.5,
+  //   },
+  //   duration: 120,
+  //   director: "Yanon",
+  //   stars: "Gal Levy",
+  //   img: "https://drive.google.com/uc?export=view&id=1dVMXPKMWUNdbbyCm4URBpstjvOWrlT7R",
+  // };
+
+  // fetch("http://localhost:8080/addMovie", {
+  //   method: "POST",
+  //   body: data,
+  // })
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     console.log("Success:", data);
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error:", error);
+  //   });
+
+  async function fetchMovies(type) {
+    let res;
+    if (type === "year") {
+      res = await fetch("http://localhost:8080/allMovies");
+    } else if (type === "genre") {
+      res = await fetch("http..");
+    } else {
+      res = await fetch("http://localhost:8080/allMovies");
+    }
+
     const movies = await res.json();
     return movies;
   }
@@ -13,7 +48,6 @@ $(document).ready(function () {
 });
 
 function displayMovies(movies) {
-  console.log(movies);
   let e = document.getElementById("movieContent");
   let imgOpenTemp = "<img class='img' src="; // append img url + imgCloseTemp
   let imgCloseTemp = " onclick = 'start()' >";
@@ -24,22 +58,15 @@ function displayMovies(movies) {
   let textOpenTemp = "<p class = 'text'>"; // append movie name + textCloseTemp
   let textCloseTemp = "</p>";
   let div = null;
-  let nameArray = new Array(163);
-  let imgArray = new Array(163);
   let tmpArray = [];
-  for (let i = 0; i < 163; i++) {
-    nameArray[i] = "Casino Royal" + i.toString();
-    imgArray[i] =
-      "https://drive.google.com/uc?export=view&id=1dVMXPKMWUNdbbyCm4URBpstjvOWrlT7R"; //https://drive.google.com/uc?export=view&id= (add img id)
-  }
-  for (let i = 0; i < nameArray.length; i++) {
+  for (let i = 0; i < movies.length; i++) {
     if (i % 5 == 0) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
     }
     e.appendChild(div);
-    let text = textOpenTemp + nameArray[i] + textCloseTemp;
-    let img = imgOpenTemp + imgArray[i] + imgCloseTemp;
+    let text = textOpenTemp + movies[i].movieName + textCloseTemp;
+    let img = imgOpenTemp + movies[i].img + imgCloseTemp;
     let movie = movieSpanOpenTemp + img + text + movieSpanCloseTemp;
     tmpArray.push(movie);
     if (tmpArray.length == 5) {
@@ -65,4 +92,14 @@ function displayMovies(movies) {
 
 function start() {
   alert("inside start");
+}
+
+function displayGenre() {
+  let x = document.getElementById("genre").value;
+  console.log(x);
+}
+
+function displayByYear() {
+  let x = document.getElementById("year").value;
+  console.log(x);
 }

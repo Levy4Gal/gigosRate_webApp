@@ -21,16 +21,16 @@
   <body>
     <div class="filter-bar">
       <div class="filter-dropdowns">
-        <select name="genre" class="genre">
+        <select id="genre" class="genre" onchange="displayGenre()">
           <option value="all genres">All genres</option>
           <option value="action">Action</option>
-          <option value="adventure">Adventure</option>
-          <option value="animal">Animal</option>
+          <option value="drama">Drama</option>
+          <option value="comedy">Comedy</option>
           <option value="animation">Animation</option>
           <option value="biography">Biography</option>
         </select>
 
-        <select name="year" class="year">
+        <select id="year" class="year" onchange="displayByYear()">
           <option value="all years">All the years</option>
           <option value="2022">2022</option>
           <option value="2020-2021">2020-2021</option>
