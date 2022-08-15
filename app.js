@@ -5,17 +5,67 @@ const path = require("path");
 const port = 8080;
 var hash = require('object-hash');
 
+// mine
+var http = require('http') //
+var server = http.createServer(app) //
+var io = require('socket.io')(server); //
+server.listen(port); //
+console.log('server strarted on port: '+ port);
+// var socket = require('socket.io');
+// var io = socket.listen(app);
+io.sockets.on('connection', function (ClientSocket) {
+  console.log("connection");
+  
+  ClientSocket.on('login', function(data){
+    console.log('got login');
+    var _username = data.username;
+    var password = data.password;
+    var is_admin = data.is_admin;
+    console.log(_username + " logged in");
+    autheticateUser(_username,password);})
+
+  ClientSocket.on('sign-up', function(data){
+    console.log('got sign-up');
+    var _username = data.username;
+    var password = data.password;
+    var is_admin = data.is_admin;
+    createUser(_username,password);
+})
+
+ClientSocket.on('getUser', function(data){
+  console.log('got "getUser"');
+  var _username = data.username;
+  getUser(_username);
+})
+
+ClientSocket.on('addMovie', function(data){
+  console.log('got "addMovie"');
+  var userName = data.userName;
+  var movieName = data.movieName;
+  var description= data.description;
+  var locations= data.locations;
+  var trailer = data.trailer;
+  var rate= data.rate;
+  var duration= data.duration;
+  var director= data.director;
+  var stars= data.stars;
+  var img= data.img;
+  addMovie(userName,movieName,description,locations,trailer,rate,duration,director,stars,img);
+})
+});
+
 app.use(express.json());
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/views/SignIn.html"));
+  res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
 app.post("")
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const { json } = require("stream/consumers");
+const { dir } = require("console");
 const uri = "mongodb+srv://Shaharkozi:S123456@gigos.kdk9a.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -33,7 +83,7 @@ app.get("/admin", (req, res) => {
 });
 
 
-app.listen(port, () => console.info("Listening on port " ,port));
+// app.listen(port, () => console.info("Listening on port " ,port));
 
   //-----------DataBase Functions------------//
 
@@ -50,9 +100,14 @@ app.listen(port, () => console.info("Listening on port " ,port));
       users.findOne(valid, function(err, result){
         if(err) throw err;
         if(result != null){
-          res.send("this user name is not available")
+          // res.send("this user name is not available")
+          console.log('client alredy sign up before')
+          io.sockets.emit('sign-up',{is_valid:false}); //****** 
+          return;
         }else 
+          console.log('client sign up NOW');
           users.insertOne(doc);
+          io.sockets.emit('sign-up',{is_valid:true}); //****** 
         });
   }
 
@@ -66,29 +121,42 @@ app.listen(port, () => console.info("Listening on port " ,port));
       users.findOne(doc, function(err, result){
         if(err) throw err;
         if(result != null){
-          res.send(JSON.parse(
-            '{"isExist": "true"}'
-          ))
-        }else 
-          res.send(JSON.parse(
-            '{"isExist": "false"}'
-          ))
+          // res.send(JSON.parse(
+          //   '{"isExist": "true"}'
+          // ))
+          console.log('client is valid and may log in');
+          io.sockets.emit('login',{is_valid:true,userName:userName});
+        }else{ 
+          // res.send(JSON.parse(
+          //   '{"isExist": "false"}'
+          // ))
+          console.log('client isnt valid and cant log in');
+          io.sockets.emit('login',{is_valid:false});
+        }
         });
    }
 
    function getUser(userName ,res) {//pull thr data from DB for the /get/user
+    console.log("inside getUser");
     const users = client.db("gigos").collection("users");
     const doc = {
       "userName":userName
     }
     users.findOne(doc, function(err, result){
       if(err) throw err;
-      if(result == null)
-        res.send(JSON.parse(
-          '{"userName": "this user is not exist"}'
-       ))
-      else
-        res.send(result)});
+      if(result == null){
+      //   res.send(JSON.parse(
+      //     '{"userName": "this user is not exist"}'
+      //  ))
+      console.log("user not found");
+       io.sockets.emit('getUser',{user:null});
+       return;
+      } else{
+        // res.send(result)
+        console.log("user found");
+        io.sockets.emit('getUser',{user:result});
+      }
+      });
  }
 
  function addMovie( userName, movieName, description,locations,trailer,rate,duration,director,stars,img, res){//helper function for signup
@@ -114,9 +182,15 @@ app.listen(port, () => console.info("Listening on port " ,port));
       movies.findOne(movie, function(err, result){
         if(err) throw err;
         if(result != null){
-          res.send("this movie is already exist")
-        }else 
-          movies.insertOne(movie);
+          console.log("this movie is already exist");
+          io.sockets.emit('addMovie',{result:false});
+          return;
+          // res.send("this movie is already exist")
+        }else {
+          console.log("insert new movie");
+          movies.insertOne(movie);}
+          io.sockets.emit('addMovie',{result:true});
+          return;
         });
     }
     else
