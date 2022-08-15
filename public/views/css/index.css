@@ -18,7 +18,7 @@
     grid-area: navBar;
   }
 
-  .content{
+  #content{
       grid-area: content;
       background-color: #273636;
   }
