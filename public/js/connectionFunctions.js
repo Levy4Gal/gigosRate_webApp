@@ -1,6 +1,6 @@
 // const e = require("express");
 
-var isSignUp = false;
+// var isSignUp = false;
 
 function SignUpPage(){
     $(document).ready(function(){
@@ -12,6 +12,10 @@ function SignUpPage(){
 
 function SignInPage(){
     $(".content").load("views/signIn.html"); 
+}
+
+function AdminPage(){
+    $(".content").load("views/admin.html"); 
 }
 
 // function ConnectToServer(){
@@ -42,6 +46,10 @@ socket.on('login',function(data){
     {
         console.log("client is valid");
         HideLi();
+        getUser(data.userName);
+        // socket.emit('getUser',{
+        //     username:data.userName,
+        // });
     }
     else{
         console.log("client isn't valid");
@@ -70,27 +78,84 @@ function mySignUp2(){
 }
 
 socket.on('sign-up',function(data){
+    console.log('inside the sign-up on of the client')
     if(data.is_valid == true)
     {
-        console.log("client is sign-up");
-        ShowLi();
+        console.log("client is now sign-up");
+        // HideLi();
     }
     else{
-        console.log("client isn't sign-up");
+        console.log("client is already signed up");
     }
 });
 
+var ClientUser;
+
+function getUser(username){
+    socket.emit('getUser',{
+        username:username,
+    });
+}
+
+socket.on('getUser',function(data){
+    console.log('inside the sign-up on of the client')
+    if(data.user == null)
+    {
+        console.log("user not found");
+        // HideLi();
+    }
+    else{
+        console.log("user found");
+        ClientUser = data.user;
+        console.log(ClientUser.userName);
+        console.log(ClientUser.password);
+        console.log(ClientUser.isAdmin);
+    }
+});
+
+socket.on('addMovie',function(data){
+    console.log('inside the addMovie on of the client')
+    if(data.result == true)
+    {
+        console.log("movie added");
+        // HideLi();
+    }
+    else{
+        console.log("movie already exist");
+    }
+});
+
+function addMovie(userName, movieName, description,locations,trailer,rate,duration,director,stars,img){
+    socket.emit("addMovie",{
+        userName:userName, 
+        movieName:movieName, 
+        description:description,
+        locations:locations,
+        trailer:trailer,
+        rate:rate,
+        duration:duration,
+        director:director,
+        stars:stars,
+        img:img
+    });
+}
+
+function myFunc(){
+    addMovie("beni","Mickey Mouse","blbla","[\"1\",\"2\"]","http...",
+    "{\"user1\":3,\"user2\":4,\"totalRate\":3,\"gal\":\"2\"}",
+    "120","Yanon","Gal Levy","Link...");
+}
+
 function HideLi(){
-    console.log('inside hide');
     // $('#top-bar')
     $("#sign-up").remove();
     $("#sign-in").remove();
+    // if admin add li of admin
     $("#top-bar").append("<li id=\"sign-out\" onclick=\"ShowLi()\"><a>Sign out</a></li>");
     // if its admin show admin 
 }
 
 function ShowLi(){
-    console.log('inside hide');
     $("#sign-out").remove();
     $('#top-bar').append("<li id=\"sign-up\" onclick=\"SignUpPage()\"><a>Sign up</a></li>");
     $('#top-bar').append("<li id=\"sign-in\" onclick=\"SignInPage()\"><a>Sign in</a></li>");

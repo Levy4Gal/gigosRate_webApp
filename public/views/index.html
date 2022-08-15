@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
-    <script src="../index.js"></script>
+    <script src="../js/connectionFunctions.js"></script>
     <!-- <script type = "module" src="../index.js"></script> -->
     <link rel="stylesheet" href="views/css/index.css">
     <title>GigosRate</title>
@@ -19,7 +19,7 @@
           <li><a href="#news">News</a></li>
           <li><a href="#contact">Contact</a></li>
           <li><a href="#about">About</a></li>
-          <li onclick=""><a>Admin</a></li>
+          <li id="admin" onclick="AdminPage()"><a>Admin</a></li>
           <li id="sign-up" onclick="SignUpPage()"><a>Sign up</a></li>
           <li id="sign-in" onclick="SignInPage()"><a>Sign in</a></li>
         </ul>
