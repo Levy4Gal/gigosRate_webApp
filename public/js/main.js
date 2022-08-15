@@ -1,13 +1,12 @@
 //const { response } = require("express");
 
 $(document).ready(function () {
-  //displayMovies();
+  displayMovies();
   async function fetchMovies() {
-    const res = await fetch("https://www.anapioficeandfire.com/api/books");
+    const res = await fetch("http://localhost:8080/allMovies");
     const movies = await res.json();
     return movies;
   }
-
   fetchMovies().then((movies) => {
     displayMovies(movies);
   });
@@ -15,11 +14,11 @@ $(document).ready(function () {
 
 function displayMovies(movies) {
   console.log(movies);
-  let e = document.getElementById("content");
+  let e = document.getElementById("movieContent");
   let imgOpenTemp = "<img class='img' src="; // append img url + imgCloseTemp
   let imgCloseTemp = " onclick = 'start()' >";
-  let movieDivOpenTemp = "<html><div class ='movieRow'>"; // append movie + movieDivCloseTemp
-  let movieDivCloseTemp = "</div></html>";
+  let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
+  let movieDivCloseTemp = "</html>";
   let movieSpanOpenTemp = "<span class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
   let movieSpanCloseTemp = "</span>";
   let textOpenTemp = "<p class = 'text'>"; // append movie name + textCloseTemp
@@ -31,12 +30,12 @@ function displayMovies(movies) {
   for (let i = 0; i < 163; i++) {
     nameArray[i] = "Casino Royal" + i.toString();
     imgArray[i] =
-      "https://drive.google.com/file/d/1dVMXPKMWUNdbbyCm4URBpstjvOWrlT7R/view?usp=sharing";
-    // "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg";
+      "https://drive.google.com/uc?export=view&id=1dVMXPKMWUNdbbyCm4URBpstjvOWrlT7R"; //https://drive.google.com/uc?export=view&id= (add img id)
   }
   for (let i = 0; i < nameArray.length; i++) {
     if (i % 5 == 0) {
       div = document.createElement("div");
+      div.setAttribute("class", "movieRow");
     }
     e.appendChild(div);
     let text = textOpenTemp + nameArray[i] + textCloseTemp;
