@@ -71,9 +71,17 @@
     --left:  163px;
   }
 
-  #content:div{
+  /* #content:div{
     margin-left: 5%;
 
+
+  } */
+
+  .headLine{
+    text-align: center;
+    color: white;
+    padding: 1%;
+    font-size: 40px;
   }
 
  
