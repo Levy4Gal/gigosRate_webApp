@@ -14,7 +14,7 @@ $(document).ready(function () {
 
 function displayMovies(movies) {
   console.log(movies);
-  let e = document.getElementById("content");
+  let e = document.getElementById("movieContent");
   let imgOpenTemp = "<img class='img' src="; // append img url + imgCloseTemp
   let imgCloseTemp = " onclick = 'start()' >";
   let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
