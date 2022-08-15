@@ -111,6 +111,7 @@ function createUser(userName, password, res) {
     userName: userName,
     password: pass,
     isAdmin: false,
+    watchList:[]
   };
   const valid = {
     userName: userName,
@@ -303,6 +304,77 @@ function rate(movieName, userName, newRate) {
   });
 }
 
+function addToWatchList(userName , movieName){
+  var user = {
+    userName: userName
+  }
+  var movie = {
+    movieName: movieName
+  }
+  client.db("gigos").collection("users").findOne(user, function (err, userRes) {
+    if (err) throw err;
+    client.db("gigos").collection("movies").findOne(movie, function (err, movieRes) {
+        if(movieRes != null){
+          var tmpWL = userRes.watchList;
+          for(let i =0; i<tmpWL.length; i++){
+            if(tmpWL[i] == movieName){
+              return;
+            }
+          }
+          tmpWL.push(movieName);
+          var json = {
+            watchList:tmpWL
+          }
+          var newValues = { $set: json };
+          client
+        .db("gigos")
+        .collection("users")
+        .updateOne(user, newValues, function (err, res) {
+          //update the values at the DB
+          if (err) throw err;
+          console.log("1 document updated");
+          });
+        }else{
+          return
+        }
+    });
+    
+  });
+}
+
+async function getMoviesByGenre(genre, res){
+  var movies = await client
+        .db("gigos")
+        .collection("movies")
+        .find().toArray();
+  var genreArr = [];
+  for(let i =0; i<movies.length; i++){
+    if(movies[i].genre == genre){
+      genreArr.push(movies[i]);
+    }
+  }
+  res.send(genreArr);
+
+}
+
+async function getMoviesByYear(startYear, endYear, res){
+  var movies = await client
+        .db("gigos")
+        .collection("movies")
+        .find().toArray();
+  var filterMov = [];
+  let start = Number.parseInt(startYear);
+  let end = Number.parseInt(endYear);
+  for(let i =0; i<movies.length; i++){
+    let relYear = Number.parseInt( movies[i].releaseYear);
+    if(relYear >= startYear && relYear <= endYear){
+      filterMov.push(movies[i]);
+    }
+  }
+  res.send(filterMov);
+
+}
+
 app.post("/signUp", (req, res) => {
   //req  parameters:  userName and password.isAdmin is false always if the user name is already exist return res = "this user name is not available"
   createUser(req.query.userName, req.query.password, res);
@@ -353,4 +425,19 @@ app.get("/firstMovies", (req, res) => {
 app.post("/rate", (req, res) => {
   //req  parameters:  movieName, userName, rate
   rate(req.query.movieName, req.query.userName, req.query.rate, res);
+});
+
+app.post("/addToWl", (req, res) => {
+  //req  parameters:  movieName, userName. if the movie is already exist in the watchList this func do nothing
+  addToWatchList(req.query.userName, req.query.movieName);
+});
+
+app.get("/moviesByGenre", (req, res) => {
+  //req  parameters:  genre. if dont find return empty arr
+  getMoviesByGenre(req.query.genre, res);
+});
+
+app.get("/moviesByRY", (req, res) => {
+  //req  parameters:  start, end. this func check if a start=<releaseYear<=end, if dont find return empty arr
+  getMoviesByYear(req.query.start,req.query.end , res);
 });
