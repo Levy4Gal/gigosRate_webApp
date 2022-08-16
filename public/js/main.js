@@ -50,7 +50,7 @@ function displayMovies(movies) {
   e.replaceChildren();
   let imgOpenTemp = "<img class='img' name= '";
   let imgSrc = "' src='"; // append img url + imgCloseTemp
-  let imgCloseTemp = " 'onclick = 'start(event)' >";
+  let imgCloseTemp = " 'onclick = 'moveToMovie(event)' >";
   let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
   let movieDivCloseTemp = "</html>";
   let movieSpanOpenTemp = "<div class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
@@ -102,9 +102,16 @@ function displayMovies(movies) {
   }
 }
 
-function start(e) {
+function moveToMovie(e) {
   let movieName = e.target.name;
+  window.localStorage.setItem("movieName", movieName);
   console.log(movieName);
+  let doc = document.getElementById("content");
+  doc.replaceChildren();
+  let div = document.createElement("div");
+  div.setAttribute("id", "movieCard");
+  doc.appendChild(div);
+  $("#movieCard").load("views/moviePage.html", () => {});
 }
 
 function addToWatch(e) {
