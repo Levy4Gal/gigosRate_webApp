@@ -39,13 +39,13 @@
 }
 
 .movieDiv {
-    /* margin-left: 30%; */
+    
     overflow: hidden;
     align-items: center;
     display: flex;
     flex-direction: column;
     padding: 2%;
-    margin: 2%;
+    
     
     
 }
@@ -55,6 +55,7 @@
     align-items: center;
     display: flex;
     flex-direction: row; 
+    margin-left: 7%;
 }
 
 

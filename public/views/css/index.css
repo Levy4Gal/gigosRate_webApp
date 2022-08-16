@@ -1,5 +1,6 @@
  body{
    margin: 0;
+   font-family: "Open Sans", sans-serif;
  }
  .main-container {
     display: grid;
@@ -17,7 +18,7 @@
     grid-area: navBar;
   }
 
-  .content{
+  #content{
       grid-area: content;
       background-color: #273636;
   }

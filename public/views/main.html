@@ -5,29 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="../js/main.js"></script>
+    <script src="/js/main.js"></script>
     <link
       href="https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900"
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="css/movieCard.css" />
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="views/css/movieCard.css" />
+    <link rel="stylesheet" href="views/css/main.css" />
     <title>GigosRate</title>
   </head>
+  <div>
+    <p class="headLine">GigosRate - rate the best movies out there!</p>
+  </div>
   <body>
     <div class="filter-bar">
       <div class="filter-dropdowns">
-        <select name="genre" class="genre">
+        <select id="genre" class="genre" onchange="displayGenre()">
           <option value="all genres">All genres</option>
           <option value="action">Action</option>
-          <option value="adventure">Adventure</option>
-          <option value="animal">Animal</option>
+          <option value="drama">Drama</option>
+          <option value="comedy">Comedy</option>
           <option value="animation">Animation</option>
           <option value="biography">Biography</option>
         </select>
 
-        <select name="year" class="year">
+        <select id="year" class="year" onchange="displayByYear()">
           <option value="all years">All the years</option>
           <option value="2022">2022</option>
           <option value="2020-2021">2020-2021</option>
@@ -50,7 +53,7 @@
         <div class="checked-radio-bg"></div>
       </div> 
     </div>
-    <div id = 'content'>
+    <div id = 'movieContent'>
 
     </div>
   </body>

@@ -5,7 +5,7 @@
   <title>HTML5 Login Form with validation Example</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="./css/signUp.css">
+<link rel="stylesheet" href="./views/css/signUp.css">
 
 </head>
 <body>
@@ -17,19 +17,13 @@
         <input type="text" id="username" name="username" placeholder="Username" required><i class="validation"><span></span><span></span></i>
     </p>
     <p>
-        <input type="email" id="email" name="email" placeholder="Email Address" required><i class="validation"><span></span><span></span></i>
-    </p>
-    <p>
         <input type="password" id="firstPassword" name="firstPassword" placeholder="Password" required><i class="validation"><span></span><span></span></i>
     </p>
     <p>
         <input type="password" id="secondPassword" name="secondPassword" placeholder="Confirm password" required><i class="validation"><span></span><span></span></i>
     </p>
     <p>
-        <input type="text" id="imageURL" name="imageURL" placeholder="Image URL" required><i class="validation"><span></span><span></span></i>
-    </p>
-    <p>
-        <input type="submit" id="SignUp" value="Sign Up">
+        <input type="button" id="SignUp" value="Sign Up" onclick="mySignUp2()">
     </p>
     <p>
         <input type="submit" id="SignUpGoogle" value="Sign Up with Google">
