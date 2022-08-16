@@ -43,7 +43,6 @@ body{
     border: none;
     background:none;
     padding: none;
-    font-size: large;
     font-weight: bold;
     text-align: center;
     margin-left: auto;
@@ -51,6 +50,7 @@ body{
     width: 50%;
     margin-top: 2%;
     color: whitesmoke;
+    font-size: 1rem;
 }
 
 .trailer,.image{
@@ -171,7 +171,7 @@ body{
 
 #movieData{
     margin: 3%;
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     color:whitesmoke;
     font-family: "Open Sans", sans-serif;
     background-color: black;
@@ -217,7 +217,7 @@ body{
 }
 
 .leaveAcomment{
-    font-size: 1.2rem;
+    font-size: 0.5rem;
 }
 
 .text {
