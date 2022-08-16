@@ -57,7 +57,8 @@ function displayMovies(movies) {
   let movieSpanCloseTemp = "</div>";
   let textOpenTemp = "<p class = 'text'>"; // append movie name + textCloseTemp
   let textCloseTemp = "</p>";
-  let addToCart = "<p><button>Add to Watch List</button></p>";
+  let addToCartOpen = "<p><button onclick= 'addToWatch(event)' name ='";
+  let addToCartClose = "'>Add to Watch List</button></p>";
   let div = null;
   let tmpArray = [];
   for (let i = 0; i < movies.length; i++) {
@@ -65,11 +66,18 @@ function displayMovies(movies) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
     }
+    let name = movies[i].movieName;
 
-    let text = textOpenTemp + movies[i].movieName + textCloseTemp;
-    let img =
-      imgOpenTemp + movies[i].movieName + imgSrc + movies[i].img + imgCloseTemp;
-    let movie = movieSpanOpenTemp + img + text + addToCart + movieSpanCloseTemp;
+    let text = textOpenTemp + name + textCloseTemp;
+    let img = imgOpenTemp + name + imgSrc + movies[i].img + imgCloseTemp;
+    let movie =
+      movieSpanOpenTemp +
+      img +
+      text +
+      addToCartOpen +
+      name +
+      addToCartClose +
+      movieSpanCloseTemp;
     tmpArray.push(movie);
     if (tmpArray.length == 5) {
       e.appendChild(div);
@@ -99,6 +107,10 @@ function start(e) {
   console.log(movieName);
 }
 
+function addToWatch(e) {
+  let movieName = e.target.name;
+  console.log(movieName);
+}
 function displayGenre() {
   let x = document.getElementById("genre").value;
   if (x === "all genres") {

@@ -57,7 +57,7 @@
 
   .movieDiv {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 300px;
+    max-width: 250px;
     /* margin:  */
     text-align: center;
     font-family: arial;
@@ -97,7 +97,7 @@
 .img {
     
   width: 250px;
-  border-radius: 10%;
+  border-radius: 5%;
   cursor: pointer;
   object-position: top;
   
