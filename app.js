@@ -106,13 +106,20 @@ app.get("/admin", (req, res) => {
 
 function createUser(userName, password, res) {
   //helper function for signup
-  const users = client.db("gigos").collection("users");
+  var currentDate = new Date()
+var day = currentDate.getDate()
+var month = currentDate.getMonth() + 1
+var year = currentDate.getFullYear()
+
+currentDate = String(day) + '/' +String(month) + '/' +String(year);
+const users = client.db("gigos").collection("users");
   var pass = hash(password);
   const doc = {
     userName: userName,
     password: pass,
     isAdmin: false,
-    watchList:[]
+    watchList:[],
+    signupDate: currentDate
   };
   const valid = {
     userName: userName,
@@ -368,7 +375,7 @@ async function getMoviesByYear(startYear, endYear, res){
   let end = Number.parseInt(endYear);
   for(let i =0; i<movies.length; i++){
     let relYear = Number.parseInt( movies[i].releaseYear);
-    if(relYear >= startYear && relYear <= endYear){
+    if(relYear >= start && relYear <= end){
       filterMov.push(movies[i]);
     }
   }
@@ -404,6 +411,47 @@ async function getWatchListByUserName(userName, res){
       res.send(filterMov);
     }
   });
+}
+
+async function groupByGenre(res){
+  const movies =client
+        .db("gigos")
+        .collection("movies");
+  const query = [{ $group: { _id: "$genre", count: { $sum: 1 } } }];
+  const aggCursor = movies.aggregate(query);
+  var groups = [];
+  for await (const doc of aggCursor) {
+    groups.push(doc);
+  }
+  res.send(groups);
+}
+
+async function groupBySignupDate(res){
+  var currentDate = new Date()
+  var day = currentDate.getDate()
+  var month = currentDate.getMonth() + 1
+  var year = currentDate.getFullYear()
+  
+  currentDate = String(day) + '/' +String(month) + '/' +String(year);
+  var arr = currentDate.split("/");
+  var today =  new Date(arr[2],parseInt(arr[1])-1,arr[0]);
+  var weekAgo = new Date(arr[2],parseInt(arr[1])-1,parseInt(arr[0]) -7);
+  console.log(today);
+  console.log(weekAgo);
+  const users =client
+        .db("gigos")
+        .collection("users");
+  const query = [{ $group: { _id: "$signupDate", count: { $sum: 1 } } }];
+  const aggCursor = users.aggregate(query);
+  var groups = [];
+  for await (const doc of aggCursor) {
+    var d = doc._id.split("/");
+    var date = new Date(d[2],parseInt(d[1])-1,d[0]);
+    if(date <= today && date >= weekAgo){
+      groups.push(doc);
+    }
+  }
+  res.send(groups);
 }
 
 app.post("/signUp", (req, res) => {
@@ -476,4 +524,14 @@ app.get("/moviesByRY", (req, res) => {
 app.get("/watchList", (req, res) => {
   //req  parameters:  userName. if dont find return empty arr
   getWatchListByUserName(req.query.userName , res);
+});
+
+app.get("/movStatics", (req, res) => {
+  //req  parameters:  none. if dont exist movie in genre the res dont contain this genre. 
+  groupByGenre(res);
+});
+
+app.get("/userStatics", (req, res) => {
+  //req  parameters:  none. if dont exist movie in genre the res dont contain this genre. 
+  groupBySignupDate(res);
 });
