@@ -21,6 +21,13 @@
 
 11. get movies by range of years - path: get http://localhost:8080/moviesByRY , parameters:  start, end. this func check if a start=<releaseYear<=end, if dont find return empty arr. V
 
+12. get watch list by user name - path: get http://localhost:8080/watchList , parameters:  userName. if dont find return empty arr. V
+
+13. get watch list by user name - path: get http://localhost:8080/movStatics , parameters:  none. if dont exist movie in genre the res dont contain this genre. V
+
+14. get watch list by user name - path: get http://localhost:8080/userStatics , parameters:  none. this func return 
+json contains key:date value: count of how many users signs up at everyday last week 
+if at specific day there is 0 signs up this date will not be included at the response json. V
 
 movieJson: 
 
@@ -44,6 +51,7 @@ userJson:
     "userName": "JLO",
     "password":"335455Fff",
 	"isAdmin": true,
-    "watchList" : ["blblaMovie",...]
+    "watchList" : ["blblaMovie",...],
+    "signupDate": "14/8/2022"
 }
 
