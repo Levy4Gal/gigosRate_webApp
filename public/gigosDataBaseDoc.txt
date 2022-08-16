@@ -1,0 +1,49 @@
+1. authetication of the user - path: get http://localhost:8080/authenticateUsre , parameters:  userName and password. return Json key: "isExist": value:false/true. V
+
+2. get user by userName path - get http://localhost:8080/user , parameters:  userName . return Json of the user, if user is not exist return this Json {     key:"userName": value:"this user is not exist" }. V
+
+3. get movie by name path: get http://localhost:8080/movie , parameters:  movieName. if the movie is not exist return res = "this movie is not exist", else return the movie. V
+
+4. get first(movies) by num - path: get http://localhost:8080/firstMovies , parameters:  number of the firsts. V
+
+5. write/update rate to movie - path: post http://localhost:8080/rate , parameters:  movieName, userName, rate. V
+
+6. add movie path: post http://localhost:8080/addMovie , parameters:  user name, movieName, description, locations, trailer, rate,duration, director, stars, img.
+ if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none. V
+
+7 create user - path: post http://localhost:8080/signUp , parameters:  userName and password.isAdmin is false always if the user name is already exist return res = "this user name is not available". V
+
+8. get arr of all the movies - path: get http://localhost:8080/allMovies , parameters:  none. V
+
+9. get watchList - path: post http://localhost:8080/addToWl , parameters:  movieName, userName. if the movie is already exist in the watchList this func do nothing. V
+
+10. get movies by genre - path: get http://localhost:8080/moviesByGenre , parameters:  genre. if dont find return empty arr. value
+
+11. get movies by range of years - path: get http://localhost:8080/moviesByRY , parameters:  start, end. this func check if a start=<releaseYear<=end, if dont find return empty arr. V
+
+
+movieJson: 
+
+    {
+        "_id": "62f7999912153e6908110fd7",
+        "movieName": "Mickey Mouse",
+        "description": "blbla",
+        "locations": "[\"1\",\"2\"]",
+        "trailer": "http...",
+        "rate": "{\"user1\":3,\"user2\":4,\"totalRate\":3,\"gal\":\"2\"}",
+        "duration": "120",
+        "director": "Yanon",
+        "stars": "Gal Levy",
+        "img": "https://drive.google.com/uc?export=view&id=1dVMXPKMWUNdbbyCm4URBpstjvOWrlT7R",
+        "genre": "comedy",
+        "releaseYear": "2006"
+    }
+
+userJson:
+{
+    "userName": "JLO",
+    "password":"335455Fff",
+	"isAdmin": true,
+    "watchList" : ["blblaMovie",...]
+}
+

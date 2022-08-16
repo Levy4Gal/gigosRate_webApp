@@ -1,0 +1,77 @@
+/* @import url(./reset.css); */
+
+
+.img {
+    
+    width: 250px;
+    border-radius: 10%;
+    cursor: pointer;
+    object-position: top;
+    margin: 2%;
+    
+}
+
+ .img:hover {
+    transform: scale(1.1);
+    filter: blur(2px);
+}
+
+.span {
+    display: flex;
+    flex-direction: row;
+}
+
+.movieCategory {
+    font-family: 'Verdana';
+    margin-top: -10%;
+    margin-right: 3%;
+}
+
+.releaseYear {
+    font-family: 'Verdana';
+    margin-top: -10%;
+    margin-left: 3%;
+}
+
+.parant {
+    display: flex;
+    flex-direction: row;
+}
+
+.movieDiv {
+    
+    overflow: hidden;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: 2%;
+    
+    
+    
+}
+
+.movieRow {
+    overflow: hidden;
+    align-items: center;
+    display: flex;
+    flex-direction: row; 
+    margin-left: 7%;
+}
+
+
+.movieName{
+    font-family: 'Verdana';
+    cursor: pointer;
+}
+
+.text{
+    color: white;
+
+  }
+
+
+
+
+
+
+
