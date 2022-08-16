@@ -1,3 +1,4 @@
+
 let onUsers = true;
 
 function changeOnUsers(state){
@@ -32,5 +33,6 @@ function onAddMovie(){
     var director= $('#director').val();
     var stars= $('#stars').val();
     var img= $('#imgLink').val();
-    alert(movieName);
+    var json = `{   "movieName":"${movieName}",   "movieDescription":"${movieDesc}",   "locations":"${locations}",   "trailer":"${trailer}",   "duration":"${duration}",   "director":"${director}",   "stars":"${stars}",   "img":"${img}" }`;
+    console.log(JSON.parse(json));
 }
