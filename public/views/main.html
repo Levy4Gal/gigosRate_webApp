@@ -10,8 +10,6 @@
       href="https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900"
       rel="stylesheet"
     />
-
-    <link rel="stylesheet" href="views/css/movieCard.css" />
     <link rel="stylesheet" href="views/css/main.css" />
     <title>GigosRate</title>
   <head>
@@ -21,8 +19,8 @@
   </head>
   <body>
     <div class="filter-bar">
-      <div class="filter-dropdowns">
-        <select id="genre" class="genre" onchange="displayGenre()">
+      <div class="custom-select">
+        <select id="genre" class="select" onchange="displayGenre()">
           <option value="all genres">All genres</option>
           <option value="action">Action</option>
           <option value="drama">Drama</option>
@@ -31,7 +29,7 @@
           <option value="biography">Biography</option>
         </select>
 
-        <select id="year" class="year" onchange="displayByYear()">
+        <select id="year" class="select" onchange="displayByYear()">
           <option value="all years">All the years</option>
           <option value="2022">2022</option>
           <option value="2020-2021">2020-2021</option>
@@ -43,20 +41,7 @@
       <div>
         <input type="search" id="site-search" >
         <button>Search</button>
-       
       </div>
-<!-- 
-      <div class="filter-radios">
-        <!-- <input type="radio" name="grade" id="featured" checked />
-        <label for="featured">Featured</label>
-
-        <input type="radio" name="grade" id="popular" />
-        <label for="popular">Popular</label>
-
-        <input type="radio" name="grade" id="newest" />
-        <label for="newest">Newest</label>
-
-        <div class="checked-radio-bg"></div> -->
       </div>  
     </div>
     <div id = 'movieContent'>

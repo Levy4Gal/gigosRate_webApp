@@ -2,24 +2,29 @@
 
 $(document).ready(function () {
   // const data = {
-  //   movieName: "shrek2",
+  //   movieName: "Toy story 3",
   //   description: "blbla",
-  //   locations: ["1", "2"],
+  //   locations: '["1","2"]',
   //   trailer: "http...",
-  //   rate: {
-  //     user1: 3,
-  //     user2: 4,
-  //     totalRate: 3.5,
-  //   },
-  //   duration: 120,
+  //   rate: '{"user1":3,"user2":4,"totalRate":3,"gal":"2"}',
+  //   duration: "120",
   //   director: "Yanon",
   //   stars: "Gal Levy",
   //   img: "https://drive.google.com/uc?export=view&id=1dVMXPKMWUNdbbyCm4URBpstjvOWrlT7R",
+  //   genre: "comedy",
+  //   releaseYear: "2006",
   // };
+
+  // let xhr = new XMLHttpRequest();
+  // xhr.open("POST", "http://localhost:8080/addMovie");
+
+  // xhr.onload = () => console.log(xhr.responseText);
+
+  // xhr.send(data);
 
   // fetch("http://localhost:8080/addMovie", {
   //   method: "POST",
-  //   body: data,
+  //   body: JSON.stringify(data),
   // })
   //   .then((response) => response.json())
   //   .then((data) => {
@@ -60,13 +65,14 @@ function displayMovies(movies) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
     }
-    e.appendChild(div);
+
     let text = textOpenTemp + movies[i].movieName + textCloseTemp;
     let img =
       imgOpenTemp + movies[i].movieName + imgSrc + movies[i].img + imgCloseTemp;
     let movie = movieSpanOpenTemp + img + text + addToCart + movieSpanCloseTemp;
     tmpArray.push(movie);
     if (tmpArray.length == 5) {
+      e.appendChild(div);
       let movieDiv = movieDivOpenTemp;
       while (tmpArray.length != 0) {
         movieDiv += tmpArray.pop();
@@ -77,6 +83,7 @@ function displayMovies(movies) {
   }
   if (tmpArray.length != 0) {
     div = document.createElement("div");
+    div.setAttribute("class", "movieRow");
     e.appendChild(div);
     let movieDiv = movieDivOpenTemp;
     while (tmpArray.length != 0) {

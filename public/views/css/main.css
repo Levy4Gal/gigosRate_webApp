@@ -1,7 +1,23 @@
  @import url(./var.css); 
 
-/* @import url(./reset.css); */
 
+.custom-select{
+  position: relative;
+  font-family: Arial;
+}
+
+.custom-select select {
+  background-color: gray;
+}
+
+
+.select {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
 
 
 .filter-bar {
@@ -14,68 +30,6 @@
     margin-bottom: 30px;
   }
   
-  .filter-bar select {
-    /* color: var(--white); */
-    font-size: var(--fs-sm);
-    margin-right: 15px;
-    cursor: pointer;
-  }
-  
-  .filter-bar option { background: var(--oxford-blue); }
-  
-  .filter-radios {
-    position: relative;
-    background: var(--rich-black-fogra-29);
-    padding: 10px;
-    border-radius: 15px;
-  }
-  
-  .filter-radios input { display: none; }
-  
-  .filter-radios label {
-    position: relative;
-    margin: 0 10px;
-    font-size: var(--fs-sm);
-    user-select: none;
-    cursor: pointer;
-    z-index: 10;
-  }
-  
-  .filter-radios input:checked + label,
-  .filter-radios label:hover { color: var(--light-azure); }
-  
-  input ~ .checked-radio-bg {
-    /**
-     * variable for changing position and size
-     * besed on radio checked 
-     */
-    --width: 85px;
-    --left:   5px;
-  
-    background: var(--oxford-blue);
-    position: absolute;
-    top:    5px;
-    left:   var(--left);
-    bottom: 5px;
-    width: var(--width);
-    border-radius: 10px;
-  }
-  
-  #popular:checked ~ .checked-radio-bg {
-    --width: 73px;
-    --left:  90px;
-  }
-  
-  #newest:checked ~ .checked-radio-bg {
-    --width:  81px;
-    --left:  163px;
-  }
-
-  /* #content:div{
-    margin-left: 5%;
-
-
-  } */
 
   .headLine{
     text-align: center;
@@ -84,18 +38,14 @@
     font-size: 40px;
   }
 
- 
-
-  /* #content1, #content2{
-    margin-left: 5%;
-  } */
 
   .movieDiv {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     max-width: 300px;
-    margin: auto;
+    /* margin:  */
     text-align: center;
     font-family: arial;
+    padding: 3%;
   }
   
   .movieDiv button{
@@ -122,8 +72,23 @@
 .movieRow {
   overflow: hidden;
   align-items: center;
-  display: flex;
+  display:flex;
   flex-direction: row; 
   margin-bottom: 2%;
   
+}
+
+.img {
+    
+  width: 250px;
+  border-radius: 10%;
+  cursor: pointer;
+  object-position: top;
+  
+  
+}
+
+.img:hover {
+  transform: scale(1.1);
+  filter: blur(2px);
 }
