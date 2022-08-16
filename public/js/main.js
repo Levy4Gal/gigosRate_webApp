@@ -2,24 +2,29 @@
 
 $(document).ready(function () {
   // const data = {
-  //   movieName: "shrek2",
+  //   movieName: "Toy story 3",
   //   description: "blbla",
-  //   locations: ["1", "2"],
+  //   locations: '["1","2"]',
   //   trailer: "http...",
-  //   rate: {
-  //     user1: 3,
-  //     user2: 4,
-  //     totalRate: 3.5,
-  //   },
-  //   duration: 120,
+  //   rate: '{"user1":3,"user2":4,"totalRate":3,"gal":"2"}',
+  //   duration: "120",
   //   director: "Yanon",
   //   stars: "Gal Levy",
   //   img: "https://drive.google.com/uc?export=view&id=1dVMXPKMWUNdbbyCm4URBpstjvOWrlT7R",
+  //   genre: "comedy",
+  //   releaseYear: "2006",
   // };
+
+  // let xhr = new XMLHttpRequest();
+  // xhr.open("POST", "http://localhost:8080/addMovie");
+
+  // xhr.onload = () => console.log(xhr.responseText);
+
+  // xhr.send(data);
 
   // fetch("http://localhost:8080/addMovie", {
   //   method: "POST",
-  //   body: data,
+  //   body: JSON.stringify(data),
   // })
   //   .then((response) => response.json())
   //   .then((data) => {
@@ -43,14 +48,17 @@ $(document).ready(function () {
 function displayMovies(movies) {
   let e = document.getElementById("movieContent");
   e.replaceChildren();
-  let imgOpenTemp = "<img class='img' src="; // append img url + imgCloseTemp
-  let imgCloseTemp = " onclick = 'start()' >";
+  let imgOpenTemp = "<img class='img' name= '";
+  let imgSrc = "' src='"; // append img url + imgCloseTemp
+  let imgCloseTemp = " 'onclick = 'start(event)' >";
   let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
   let movieDivCloseTemp = "</html>";
-  let movieSpanOpenTemp = "<span class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
-  let movieSpanCloseTemp = "</span>";
+  let movieSpanOpenTemp = "<div class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
+  let movieSpanCloseTemp = "</div>";
   let textOpenTemp = "<p class = 'text'>"; // append movie name + textCloseTemp
   let textCloseTemp = "</p>";
+  let addToCartOpen = "<p><button onclick= 'addToWatch(event)' name ='";
+  let addToCartClose = "'>Add to Watch List</button></p>";
   let div = null;
   let tmpArray = [];
   for (let i = 0; i < movies.length; i++) {
@@ -58,12 +66,21 @@ function displayMovies(movies) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
     }
-    e.appendChild(div);
-    let text = textOpenTemp + movies[i].movieName + textCloseTemp;
-    let img = imgOpenTemp + movies[i].img + imgCloseTemp;
-    let movie = movieSpanOpenTemp + img + text + movieSpanCloseTemp;
+    let name = movies[i].movieName;
+
+    let text = textOpenTemp + name + textCloseTemp;
+    let img = imgOpenTemp + name + imgSrc + movies[i].img + imgCloseTemp;
+    let movie =
+      movieSpanOpenTemp +
+      img +
+      text +
+      addToCartOpen +
+      name +
+      addToCartClose +
+      movieSpanCloseTemp;
     tmpArray.push(movie);
     if (tmpArray.length == 5) {
+      e.appendChild(div);
       let movieDiv = movieDivOpenTemp;
       while (tmpArray.length != 0) {
         movieDiv += tmpArray.pop();
@@ -74,6 +91,7 @@ function displayMovies(movies) {
   }
   if (tmpArray.length != 0) {
     div = document.createElement("div");
+    div.setAttribute("class", "movieRow");
     e.appendChild(div);
     let movieDiv = movieDivOpenTemp;
     while (tmpArray.length != 0) {
@@ -84,10 +102,15 @@ function displayMovies(movies) {
   }
 }
 
-function start() {
-  alert("inside start");
+function start(e) {
+  let movieName = e.target.name;
+  console.log(movieName);
 }
 
+function addToWatch(e) {
+  let movieName = e.target.name;
+  console.log(movieName);
+}
 function displayGenre() {
   let x = document.getElementById("genre").value;
   if (x === "all genres") {
