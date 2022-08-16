@@ -29,26 +29,20 @@ $(document).ready(function () {
   //     console.error("Error:", error);
   //   });
 
-  async function fetchMovies(type) {
-    let res;
-    if (type === "year") {
-      res = await fetch("http://localhost:8080/allMovies");
-    } else if (type === "genre") {
-      res = await fetch("http..");
-    } else {
-      res = await fetch("http://localhost:8080/allMovies");
-    }
-
+  async function fetchAllMovies() {
+    let res = await fetch("http://localhost:8080/allMovies");
     const movies = await res.json();
     return movies;
   }
-  fetchMovies().then((movies) => {
+
+  fetchAllMovies().then((movies) => {
     displayMovies(movies);
   });
 });
 
 function displayMovies(movies) {
   let e = document.getElementById("movieContent");
+  e.replaceChildren();
   let imgOpenTemp = "<img class='img' src="; // append img url + imgCloseTemp
   let imgCloseTemp = " onclick = 'start()' >";
   let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
@@ -96,10 +90,62 @@ function start() {
 
 function displayGenre() {
   let x = document.getElementById("genre").value;
-  console.log(x);
+  if (x === "all genres") {
+    async function fetchAllMovies() {
+      let res = await fetch("http://localhost:8080/allMovies");
+      const movies = await res.json();
+      return movies;
+    }
+
+    fetchAllMovies().then((movies) => {
+      displayMovies(movies);
+    });
+  } else {
+    async function fetchByGenre(genre) {
+      let urlAndGenre = "http://localhost:8080/moviesByGenre?genre=" + genre;
+      const res = await fetch(urlAndGenre);
+      const movies = await res.json();
+      console.log(movies);
+      return movies;
+    }
+    fetchByGenre(x).then((movies) => {
+      displayMovies(movies);
+    });
+  }
 }
 
 function displayByYear() {
   let x = document.getElementById("year").value;
-  console.log(x);
+  if (x === "all years") {
+    async function fetchAllMovies() {
+      let res = await fetch("http://localhost:8080/allMovies");
+      const movies = await res.json();
+      return movies;
+    }
+
+    fetchAllMovies().then((movies) => {
+      displayMovies(movies);
+    });
+  } else {
+    async function fetchByYear(startYear, endYear) {
+      let urlAndYears =
+        "http://localhost:8080/moviesByRY?start=" +
+        startYear +
+        "&end=" +
+        endYear;
+      let res = await fetch(urlAndYears);
+      const movies = await res.json();
+      return movies;
+    }
+    if (x.includes("-")) {
+      let yearArr = x.split("-");
+      fetchByYear(yearArr[0], yearArr[1]).then((movies) => {
+        displayMovies(movies);
+      });
+    } else {
+      fetchByYear(x, x).then((movies) => {
+        displayMovies(movies);
+      });
+    }
+  }
 }
