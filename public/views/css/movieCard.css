@@ -38,7 +38,7 @@
     flex-direction: row;
 }
 
-.movieDiv {
+/* .movieDiv {
     
     overflow: hidden;
     align-items: center;
@@ -48,26 +48,11 @@
     
     
     
-}
-
-.movieRow {
-    overflow: hidden;
-    align-items: center;
-    display: flex;
-    flex-direction: row; 
-    margin-left: 7%;
-}
+} */
 
 
-.movieName{
-    font-family: 'Verdana';
-    cursor: pointer;
-}
 
-.text{
-    color: white;
 
-  }
 
 
 

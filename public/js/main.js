@@ -43,14 +43,16 @@ $(document).ready(function () {
 function displayMovies(movies) {
   let e = document.getElementById("movieContent");
   e.replaceChildren();
-  let imgOpenTemp = "<img class='img' src="; // append img url + imgCloseTemp
-  let imgCloseTemp = " onclick = 'start()' >";
+  let imgOpenTemp = "<img class='img' name= '";
+  let imgSrc = "' src='"; // append img url + imgCloseTemp
+  let imgCloseTemp = " 'onclick = 'start(event)' >";
   let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
   let movieDivCloseTemp = "</html>";
-  let movieSpanOpenTemp = "<span class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
-  let movieSpanCloseTemp = "</span>";
+  let movieSpanOpenTemp = "<div class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
+  let movieSpanCloseTemp = "</div>";
   let textOpenTemp = "<p class = 'text'>"; // append movie name + textCloseTemp
   let textCloseTemp = "</p>";
+  let addToCart = "<p><button>Add to Watch List</button></p>";
   let div = null;
   let tmpArray = [];
   for (let i = 0; i < movies.length; i++) {
@@ -60,8 +62,9 @@ function displayMovies(movies) {
     }
     e.appendChild(div);
     let text = textOpenTemp + movies[i].movieName + textCloseTemp;
-    let img = imgOpenTemp + movies[i].img + imgCloseTemp;
-    let movie = movieSpanOpenTemp + img + text + movieSpanCloseTemp;
+    let img =
+      imgOpenTemp + movies[i].movieName + imgSrc + movies[i].img + imgCloseTemp;
+    let movie = movieSpanOpenTemp + img + text + addToCart + movieSpanCloseTemp;
     tmpArray.push(movie);
     if (tmpArray.length == 5) {
       let movieDiv = movieDivOpenTemp;
@@ -84,8 +87,9 @@ function displayMovies(movies) {
   }
 }
 
-function start() {
-  alert("inside start");
+function start(e) {
+  let movieName = e.target.name;
+  console.log(movieName);
 }
 
 function displayGenre() {

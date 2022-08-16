@@ -89,4 +89,37 @@
   /* #content1, #content2{
     margin-left: 5%;
   } */
+
+  .movieDiv {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+  }
   
+  .movieDiv button{
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+  }
+
+  
+.text {
+  color: grey;
+  font-size: 22px;
+}
+.movieRow {
+  overflow: hidden;
+  align-items: center;
+  display: flex;
+  flex-direction: row; 
+  margin-bottom: 2%;
+  
+}
