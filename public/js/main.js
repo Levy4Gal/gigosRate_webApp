@@ -95,6 +95,22 @@ function addToWatch(e) {
     ClientUser.userName;
   Http.open("POST", url);
   Http.send();
+
+  async function getWatch(userName) {
+    let url = "http://localhost:8080/watchList?userName=" + userName;
+    const res = await fetch(url);
+    const movies = await res.json();
+    console.log(movies);
+    return movies;
+  }
+
+  getWatch(ClientUser.userName).then((movies) => {
+    let text = "Hello " + ClientUser.userName + "! here is your watch list";
+    const p = document.getElementById("headLine");
+    p.textContent = text;
+    movieContent.replaceChildren();
+    displayMovies(movies, body);
+  });
 }
 function displayGenre() {
   let x = document.getElementById("genre").value;
