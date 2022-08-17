@@ -14,7 +14,7 @@ body{
     font-style:italic;
     font: size 2.5rem;
     color:rgb(147, 142, 142);
-    background-color: rgb(34, 34, 37);
+    background-color: navy;
     size: 200cm;
     width: 300px;
     border-radius: 80%;
@@ -246,6 +246,14 @@ body{
     height: 420px;
 }
 
+#middle{
+    padding: 80px;  
+    background-color: rgb(5, 5, 46);
+    margin-left: 35px;
+    margin-right: 35px;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
 /* .checked {
     color: #dabd18b2;
 }
