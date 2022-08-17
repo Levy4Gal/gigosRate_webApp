@@ -8,12 +8,13 @@
 
 5. write/update rate to movie - path: post http://localhost:8080/rate , parameters:  movieName, userName, rate. V
 
-6. add movie path: post http://localhost:8080/addMovie , parameters:  user name, movieName, description, locations, trailer, rate,duration, director, stars, img.
+6. add movie path: post http://localhost:8080/addMovie , parameters:  user name, movieName, description, 
+locations, trailer, rate,duration, director, stars, img, releaseYear, genre.
  if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none. V
 
 7 create user - path: post http://localhost:8080/signUp , parameters:  userName and password.isAdmin is false always if the user name is already exist return res = "this user name is not available". V
 
-8. get arr of all the movies - path: get http://localhost:8080/allMovies , parameters:  none. V
+8. get arr of all the movies - path: get http://localhost:8080/allMovies ,   parameters:  userName. V
 
 9. get watchList - path: post http://localhost:8080/addToWl , parameters:  movieName, userName. if the movie is already exist in the watchList this func do nothing. V
 
