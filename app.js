@@ -76,7 +76,7 @@ io.sockets.on("connection", function (ClientSocket) {
 app.post("");
 
 const { MongoClient, ServerApiVersion } = require("mongodb");
-const { json } = require("stream/consumers");
+// const { json } = require("stream/consumers");
 const { dir } = require("console");
 const { unwatchFile } = require("fs");
 const uri =
@@ -97,7 +97,7 @@ app.post("/login", (req, res) => {
 
 //Admin test
 app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/views/admin.html"));
+  res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
 // app.listen(port, () => console.info("Listening on port " ,port));
