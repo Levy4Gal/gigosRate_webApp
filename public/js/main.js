@@ -62,7 +62,7 @@ function displayMovies(movies) {
   let div = null;
   let tmpArray = [];
   for (let i = 0; i < movies.length; i++) {
-    if (i % 5 == 0) {
+    if (i % 4 == 0) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
     }
@@ -79,7 +79,7 @@ function displayMovies(movies) {
       addToCartClose +
       movieSpanCloseTemp;
     tmpArray.push(movie);
-    if (tmpArray.length == 5) {
+    if (tmpArray.length == 4) {
       e.appendChild(div);
       let movieDiv = movieDivOpenTemp;
       while (tmpArray.length != 0) {
@@ -117,6 +117,18 @@ function moveToMovie(e) {
 function addToWatch(e) {
   let movieName = e.target.name;
   console.log(movieName);
+  const Http = new XMLHttpRequest();
+  const url =
+    "http://localhost:8008/addToWl?movieName=" +
+    movieName +
+    "&userName=" +
+    "Guy12";
+  Http.open("GET", url);
+  Http.send();
+
+  Http.onreadystatechange = (e) => {
+    console.log(Http.responseText);
+  };
 }
 function displayGenre() {
   let x = document.getElementById("genre").value;
