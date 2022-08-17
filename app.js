@@ -187,18 +187,9 @@ function getUser(userName, res) {
   });
 }
 
-function addMovie(
-  userName,
-  movieName,
-  description,
-  locations,
-  trailer,
-  rate,
-  duration,
-  director,
-  stars,
-  img,
-  res
+function addMovie(userName, movieName, description, locations, trailer, rate,
+  duration, director, stars,
+  img, releaseYear, genre, res
 ) {
   //helper function for signup
   const users = client.db("gigos").collection("users");
@@ -216,6 +207,8 @@ function addMovie(
     director: director,
     stars: stars,
     img: img,
+    releaseYear: releaseYear,
+    genre: genre
   };
   users.findOne(user, function (err, result) {
     if (err) throw err;
@@ -252,10 +245,58 @@ function getMovie(movieName, res) {
   });
 }
 
-async function getAllMovies(res) {
+async function getAllMovies(userName, res) {
   //helper function for signup
   var movies = await client.db("gigos").collection("movies").find().toArray();
-  res.send(movies);
+  console.log(userName);
+  if(userName != null){//case that wants movies with content of user
+    const users = client.db("gigos").collection("users");
+    const user = {
+      userName: userName,
+    };
+    users.findOne(user, async function (err, result) {
+      var filterMov = [];
+      var wl = result.watchList;
+      if (err) throw err;
+      if(result == null){
+        return;
+      }else{
+        var filterMov = [];
+        var wl = result.watchList;
+        for(let i =0; i<movies.length; i++){
+          for(let j = 0; j<wl.length; j++){
+            if(movies[i].movieName == wl[j]){
+              filterMov.push(movies[i]);
+            }
+          }
+        }
+      }
+      if(filterMov.length == 0){//case that the user dont has watchlist
+        res.send(movies);
+      }else{//case that the user has watchlist
+        var json ={
+          'action': 0,
+          'drama': 0,
+          'comedy': 0, 
+          'documentary':0
+        }
+        for(var i =0; i<filterMov.length; i++){
+          json[filterMov[i].genre] += 1;
+        }
+        var maxGenre = 'action';
+        for (var key of Object.keys(json)) {
+          //iterate over all the rating values
+          if (json[key] >= json[maxGenre]) {
+            maxGenre = key;
+          }
+        }
+        console.log(maxGenre);
+        getMoviesByGenre(maxGenre,res);
+      }
+    });
+  }else{//case that wants all movies without content of user
+    res.send(movies);
+  }
 }
 
 async function getFirstsMovies(num, res) {
@@ -470,7 +511,8 @@ app.get("/user", (req, res) => {
 });
 
 app.post("/addMovie", (req, res) => {
-  //req  parameters:  user name, movieName, description, locations, trailer, rate,duration, director, stars, img. if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none
+  //req  parameters:  user name, movieName, description, locations, trailer, rate,duration, director, stars, img, 
+  //releaseYear, genre. if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none
   addMovie(
     req.query.userName,
     req.query.movieName,
@@ -481,19 +523,21 @@ app.post("/addMovie", (req, res) => {
     req.query.duration,
     req.query.director,
     req.query.stars,
-    req.query.img,
+    req.query.img, 
+    req.query.releaseYear, 
+    req.query.genre,
     res
   );
 });
 
 app.get("/movie", (req, res) => {
   //req  parameters:  movieName. if the movie is not exist return res = "this movie is not exist", else return the movie
-  getMovie(req.query.movieName, res);
+  getMovie(req.query.movieName,req. res);
 });
 
 app.get("/allMovies", (req, res) => {
-  //req  parameters:  none
-  getAllMovies(res);
+  //req  parameters:  userName
+  getAllMovies(req.query.userName ,res);
 });
 
 app.get("/firstMovies", (req, res) => {
@@ -532,6 +576,7 @@ app.get("/movStatics", (req, res) => {
 });
 
 app.get("/userStatics", (req, res) => {
-  //req  parameters:  none. if dont exist movie in genre the res dont contain this genre. 
+  //req  parameters:  none. this func return json contains key:date value: count of how many users signs up at 
+  //everyday last week if at specific day there is 0 signs up this date will not be included at the response json. 
   groupBySignupDate(res);
 });
