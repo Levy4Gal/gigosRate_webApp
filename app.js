@@ -76,7 +76,7 @@ io.sockets.on("connection", function (ClientSocket) {
 app.post("");
 
 const { MongoClient, ServerApiVersion } = require("mongodb");
-// const { json } = require("stream/consumers");
+const { json } = require("stream/consumers");
 const { dir } = require("console");
 const { unwatchFile } = require("fs");
 const uri =
@@ -97,7 +97,7 @@ app.post("/login", (req, res) => {
 
 //Admin test
 app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/views/index.html"));
+  res.sendFile(path.join(__dirname, "public/views/admin.html"));
 });
 
 // app.listen(port, () => console.info("Listening on port " ,port));
@@ -127,9 +127,7 @@ const users = client.db("gigos").collection("users");
   users.findOne(valid, function (err, result) {
     if (err) throw err;
     if (result != null) {
-      if(res!=null){
-      res.send("this user name is not available")
-    }
+      // res.send("this user name is not available")
       console.log("client alredy sign up before");
       io.sockets.emit("sign-up", { is_valid: false }); //******
       return;
@@ -150,18 +148,15 @@ function autheticateUser(userName, password, res) {
   users.findOne(doc, function (err, result) {
     if (err) throw err;
     if (result != null) {
-      if(res!=null){
-      res.send(JSON.parse(
-        '{"isExist": "true"}'
-      ))
-      }
+      // res.send(JSON.parse(
+      //   '{"isExist": "true"}'
+      // ))
       console.log("client is valid and may log in");
       io.sockets.emit("login", { is_valid: true, userName: userName });
     } else {
-      if(res!=null){
-      res.send(JSON.parse(
-        '{"isExist": "false"}'
-      ))}
+      // res.send(JSON.parse(
+      //   '{"isExist": "false"}'
+      // ))
       console.log("client isnt valid and cant log in");
       io.sockets.emit("login", { is_valid: false });
     }
@@ -178,34 +173,23 @@ function getUser(userName, res) {
   users.findOne(doc, function (err, result) {
     if (err) throw err;
     if (result == null) {
-        res.send(JSON.parse(
-          '{"userName": "this user is not exist"}'
-       ))
+      //   res.send(JSON.parse(
+      //     '{"userName": "this user is not exist"}'
+      //  ))
       console.log("user not found");
       io.sockets.emit("getUser", { user: null });
       return;
     } else {
-      if(res!=null){
-        res.send(result)
-      }
+      // res.send(result)
       console.log("user found");
       io.sockets.emit("getUser", { user: result });
     }
   });
 }
 
-function addMovie(
-  userName,
-  movieName,
-  description,
-  locations,
-  trailer,
-  rate,
-  duration,
-  director,
-  stars,
-  img,
-  res
+function addMovie(userName, movieName, description, locations, trailer, rate,
+  duration, director, stars,
+  img, releaseYear, genre, res
 ) {
   //helper function for signup
   const users = client.db("gigos").collection("users");
@@ -223,6 +207,8 @@ function addMovie(
     director: director,
     stars: stars,
     img: img,
+    releaseYear: releaseYear,
+    genre: genre
   };
   users.findOne(user, function (err, result) {
     if (err) throw err;
@@ -233,7 +219,7 @@ function addMovie(
           console.log("this movie is already exist");
           io.sockets.emit("addMovie", { result: false });
           return;
-          res.send("this movie is already exist")
+          // res.send("this movie is already exist")
         } else {
           console.log("insert new movie");
           movies.insertOne(movie);
@@ -259,10 +245,58 @@ function getMovie(movieName, res) {
   });
 }
 
-async function getAllMovies(res) {
+async function getAllMovies(userName, res) {
   //helper function for signup
   var movies = await client.db("gigos").collection("movies").find().toArray();
-  res.send(movies);
+  console.log(userName);
+  if(userName != null){//case that wants movies with content of user
+    const users = client.db("gigos").collection("users");
+    const user = {
+      userName: userName,
+    };
+    users.findOne(user, async function (err, result) {
+      var filterMov = [];
+      var wl = result.watchList;
+      if (err) throw err;
+      if(result == null){
+        return;
+      }else{
+        var filterMov = [];
+        var wl = result.watchList;
+        for(let i =0; i<movies.length; i++){
+          for(let j = 0; j<wl.length; j++){
+            if(movies[i].movieName == wl[j]){
+              filterMov.push(movies[i]);
+            }
+          }
+        }
+      }
+      if(filterMov.length == 0){//case that the user dont has watchlist
+        res.send(movies);
+      }else{//case that the user has watchlist
+        var json ={
+          'action': 0,
+          'drama': 0,
+          'comedy': 0, 
+          'documentary':0
+        }
+        for(var i =0; i<filterMov.length; i++){
+          json[filterMov[i].genre] += 1;
+        }
+        var maxGenre = 'action';
+        for (var key of Object.keys(json)) {
+          //iterate over all the rating values
+          if (json[key] >= json[maxGenre]) {
+            maxGenre = key;
+          }
+        }
+        console.log(maxGenre);
+        getMoviesByGenre(maxGenre,res);
+      }
+    });
+  }else{//case that wants all movies without content of user
+    res.send(movies);
+  }
 }
 
 async function getFirstsMovies(num, res) {
@@ -477,7 +511,8 @@ app.get("/user", (req, res) => {
 });
 
 app.post("/addMovie", (req, res) => {
-  //req  parameters:  user name, movieName, description, locations, trailer, rate,duration, director, stars, img. if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none
+  //req  parameters:  user name, movieName, description, locations, trailer, rate,duration, director, stars, img, 
+  //releaseYear, genre. if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none
   addMovie(
     req.query.userName,
     req.query.movieName,
@@ -488,19 +523,21 @@ app.post("/addMovie", (req, res) => {
     req.query.duration,
     req.query.director,
     req.query.stars,
-    req.query.img,
+    req.query.img, 
+    req.query.releaseYear, 
+    req.query.genre,
     res
   );
 });
 
 app.get("/movie", (req, res) => {
   //req  parameters:  movieName. if the movie is not exist return res = "this movie is not exist", else return the movie
-  getMovie(req.query.movieName, res);
+  getMovie(req.query.movieName,req. res);
 });
 
 app.get("/allMovies", (req, res) => {
-  //req  parameters:  none
-  getAllMovies(res);
+  //req  parameters:  userName
+  getAllMovies(req.query.userName ,res);
 });
 
 app.get("/firstMovies", (req, res) => {
@@ -539,6 +576,7 @@ app.get("/movStatics", (req, res) => {
 });
 
 app.get("/userStatics", (req, res) => {
-  //req  parameters:  none. if dont exist movie in genre the res dont contain this genre. 
+  //req  parameters:  none. this func return json contains key:date value: count of how many users signs up at 
+  //everyday last week if at specific day there is 0 signs up this date will not be included at the response json. 
   groupBySignupDate(res);
 });
