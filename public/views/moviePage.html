@@ -3,12 +3,12 @@
 <head>
     <!--style css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <link rel="stylesheet" href="./css/moviePage.css">
+    <link rel="stylesheet" href="views/css/moviePage.css">
     <script src="https://kit.fontawesome.com/4c974060b2.js" crossorigin="anonymous"></script>
     <title>moviePage</title>
     <!-- js -->
     <script src = "https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
-    <script src = "/public/js/moviePage.js"></script>
+    <script src = "/js/moviePage.js"></script>
     <!-- js -->
 
 
@@ -16,82 +16,80 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,700&display=swap" rel="stylesheet">
 </head>
-
-<body>
-    <div class="title">
-        <span id="movieName"></span>
-        <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
-        <span id="grade"></span>
-    </div>
-
-
-    <div class="rating">
-        <div class="starsRating">
-            <h2 id="rateTitle">rate it</h2>
-            <span class="rating__star far fa-star"></span>
-            <span class="rating__star far fa-star"></span>
-            <span class="rating__star far fa-star"></span>
-            <span class="rating__star far fa-star"></span>
-            <span class="rating__star far fa-star"></span>
+<div id="body">
+    <body>
+        <div class="title">
+            <span id="movieName"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span id="rate"></span>
         </div>
-        <div class="tooltip">
-            <button id="addToList" onclick="addToList()"><i class="fa-solid fa-list-check"></i></button>
-            <span class="tooltiptext">Add to watch list</span>
-          </div>
-        
-    </div>
     
-    <!-- movie image -->
-    <img class="image" src="\public\views\img\johnWick2p.jpg" alt="jhon" width="280" height="360">
-    <!-- video -->
-    <video class="video" width="540" height="420" controls autoplay >
-    <source src="video.mp4" type="video/mp4">
-    <source src="movie.ogg" type="video/ogg">
-    </video>
-
-    <div id = "movieData">
-        <h1>
-            <div id="duration"></div>
-            <div id ="description"></div>
-            <div id="director"> </div>
-            <div id="writer"></div>
-            <div id="stars"></div>
-        </h1>
-        
-    </div>
-
-    <div class="leaveAcomment">
-        <h1 class="lastTitle">thanks for watching! we will preciate it if you can like and share</h1>
-        <iframe id="facebook" src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FGigos-Rate-104140762405866%2Fgroups&width=450&layout=standard&action=like&size=large&share=true&height=35&appId"
-            width="450" height="35"
-            style="border:none;
-            overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay;
-            clipboard-write;
-            encrypted-media;
-            picture-in-picture;
-            web-share">
-        </iframe>        
-    </div>
-
-    <div>
-        <div class="mapouter">
-            <div class="gmap_canvas">
-                <iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
-                <a href="https://putlocker-is.org"></a><br>
-                <a href="https://www.embedgooglemap.net">custom google map embed</a>
+    
+        <div class="rating">
+            <div class="starsRating">
+                <h2 id="rateTitle">rate it</h2>
+                <span class="rating__star far fa-star"></span>
+                <span class="rating__star far fa-star"></span>
+                <span class="rating__star far fa-star"></span>
+                <span class="rating__star far fa-star"></span>
+                <span class="rating__star far fa-star"></span>
             </div>
+            <div class="tooltip">
+                <button id="addToList" onclick="addToList()"><i class="fa-solid fa-list-check"></i></button>
+                <span class="tooltiptext">Add to watch list</span>
+              </div>
+            
         </div>
-        <div id="mapTitle"> <i class="fa-solid fa-map-location-dot"></i> Check out where this movie was filmed <i class="fa-solid fa-map-location-dot"></i> </div>
-    </div>
+        
+        <!-- movie image -->
+        <img id="image" alt="jhon" width="280" height="360">
+        <!-- video -->
+        <video class="video" width="540" height="420" controls autoplay >
+        <!-- <source src="video.mp4" type="video/mp4"> -->
+        <!-- <source src="movie.ogg" type="video/ogg"> -->
+        </video>
     
-    <button onclick="scrollToTop()" class="scroll">
-        <i class="fa-solid fa-circle-chevron-up"></i>
-    </button>
-</body>
+        <div id = "movieData">
+            <h1>
+                <div id="duration"></div>
+                <div id ="description"></div>
+                <div id="director"> </div>
+                <div id="writer"></div>
+                <div id="stars"></div>
+            </h1>
+            
+        </div>
+    
+        <div class="leaveAcomment">
+            <h1 class="lastTitle">thanks for watching! we will preciate it if you can like and share</h1>
+            <iframe id="facebook" src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FGigos-Rate-104140762405866%2Fgroups&width=450&layout=standard&action=like&size=large&share=true&height=35&appId"
+                width="450" height="35"
+                style="border:none;
+                overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay;
+                clipboard-write;
+                encrypted-media;
+                picture-in-picture;
+                web-share">
+            </iframe>        
+        </div>
+    
+        <!-- <div id="map"></div>
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2MhSzwkJdU50VOmGdqaiyHAMIZ_y12ok&callback=initMap&v=weekly"
+            defer>
+        </script> -->
+
+        <div id="mapTitle"> <i class="fa-solid fa-map-location-dot"></i> Check out where this movie was filmed <i class="fa-solid fa-map-location-dot"></i> </div>
+        
+        <button onclick="scrollToTop()" class="scroll">
+            <i class="fa-solid fa-circle-chevron-up"></i>
+        </button>
+    </body>
+</div>
 
 
 
