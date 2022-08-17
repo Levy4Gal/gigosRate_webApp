@@ -5,7 +5,6 @@ body{
     font-family: Roboto;
     border: 0.5px;
 
-    background-image: url('/public/views/img/jhonWick.jpg');
     background-repeat: no-repeat;
     background-attachment:scroll;
     background-size: cover;
@@ -240,6 +239,11 @@ body{
 
 .fa{
     color: #dabd18b2;
+}
+
+#image{
+    width:300px;
+    height: 420px;
 }
 
 /* .checked {
