@@ -1,86 +1,95 @@
-// const e = require("express");
-
-// var isSignUp = false;
-
 function SignUpPage() {
   $(document).ready(function () {
     $("#content").load("views/SignUp.html");
   });
-
-  // $(".content").load("views/SignUp.html");
 }
 
 function SignInPage() {
-  $("#content").load("views/signIn.html");
+  $(document).ready(function () {
+    $("#content").load("views/signIn.html");
+  });    
 }
 
 function AdminPage() {
   $("#content").load("views/admin.html");
 }
 
-// function ConnectToServer(){
-//     socket = io.connect('http://localhost:8080');
-// }
 
 var socket = io.connect("http://localhost:8080");
 console.log("client connected");
 
-function myLoginIn2() {
-  console.log("pressed login2");
-  username = document.getElementById("username").value;
-  password = document.getElementById("Password").value;
-  console.log(
-    "from index.js: username is: " + username + " password is:" + password
-  );
-  // console.log(username);
-  // console.log(password);
-  is_admin = false;
-  socket.emit("login", {
-    username: username,
-    password: password,
-    is_admin: is_admin,
-  });
-  console.log("sent login emit");
-}
+// function myLoginIn2() {
+//   console.log("pressed login2");
+//   username = document.getElementById("username").value;
+//   password = document.getElementById("Password").value;
+//   console.log(
+//     "from index.js: username is: " + username + " password is:" + password
+//   );
+//   is_admin = false;
+//   socket.emit("login", {
+//     username: username,
+//     password: password,
+//     is_admin: is_admin,
+//   });
+//   console.log("sent login emit");
+// }
+
 
 socket.on("login", function (data) {
   if (data.is_valid == true) {
     console.log("client is valid");
-    HideLi();
     getUser(data.userName);
+    // HideLi();
     // socket.emit('getUser',{
     //     username:data.userName,
     // });
   } else {
     console.log("client isn't valid");
+    var SignInLabel = document.getElementById("value");
+    if(SignInLabel == null){
+      $("#respond").append("<p id=\"value\">username/password are incorrect.</p>");
+    }
   }
 });
 
-// exports.serverSocket = socket;
+// function mySignUp2() {
+//   console.log("pressed sign up 2");
+//   username = document.getElementById("username").value;
+//   password = document.getElementById("firstPassword").value;
+//   password2 = document.getElementById("secondPassword").value;
+//   if(passwordCheck2(password,password2)==false){
+//     SignUpLabel = document.getElementById("value");
+//     if(SignUpLabel == null){
+//       console.log("here");
+//     $("#Sign-Up-Respond").append("<p id=\"value\">username/password are incorrect.</p>");
+//     }
+//     return;
+//   }
+//   console.log(
+//     "from index.js - sign up: username is: " +
+//       username +
+//       " password is:" +
+//       password
+//   );
+//   // console.log(username);
+//   // console.log(password);
+//   is_admin = false;
+//   socket.emit("sign-up", {
+//     username: username,
+//     password: password,
+//     is_admin: is_admin,
+//   });
+//   console.log("sent sign-up emit");
+// }
 
-// export default socket;
-// export {SignInPage,SignUpPage};
-
-function mySignUp2() {
-  console.log("pressed sign up 2");
-  username = document.getElementById("username").value;
-  password = document.getElementById("firstPassword").value;
-  console.log(
-    "from index.js - sign up: username is: " +
-      username +
-      " password is:" +
-      password
-  );
-  // console.log(username);
-  // console.log(password);
-  is_admin = false;
-  socket.emit("sign-up", {
-    username: username,
-    password: password,
-    is_admin: is_admin,
-  });
-  console.log("sent sign-up emit");
-}
+// function passwordCheck2(pas1,pas2){
+//   console.log(pas1);
+//   console.log(pas2);
+//   if(pas1!=pas2){
+//       return false;   
+//   }
+//   return true;
+// }
 
 socket.on("sign-up", function (data) {
   console.log("inside the sign-up on of the client");
@@ -89,16 +98,24 @@ socket.on("sign-up", function (data) {
     // HideLi();
   } else {
     console.log("client is already signed up");
+    var SignUpLabel = document.getElementById("value");
+    if(SignUpLabel == null){
+      console.log("here");
+    $("#Sign-Up-Respond").append("<p id=\"value\">User already exist.</p>");
+    }
+    else{
+      $("p#value").text("User already exist.");
+    }
   }
 });
 
 var ClientUser;
 
-function getUser(username) {
-  socket.emit("getUser", {
-    username: username,
-  });
-}
+// function getUser(username) {
+//   socket.emit("getUser", {
+//     username: username,
+//   });
+// }
 
 socket.on("getUser", function (data) {
   console.log("inside the sign-up on of the client");
@@ -108,6 +125,9 @@ socket.on("getUser", function (data) {
   } else {
     console.log("user found");
     ClientUser = data.user;
+    if(ClientUser!=null){
+      HideLi();
+    }
     console.log(ClientUser.userName);
     console.log(ClientUser.password);
     console.log(ClientUser.isAdmin);
@@ -150,39 +170,60 @@ function addMovie(
   });
 }
 
-function myFunc() {
-  addMovie(
-    "beni",
-    "Mickey Mouse",
-    "blbla",
-    '["1","2"]',
-    "http...",
-    '{"user1":3,"user2":4,"totalRate":3,"gal":"2"}',
-    "120",
-    "Yanon",
-    "Gal Levy",
-    "Link..."
-  );
-}
+// function myFunc() {
+//   addMovie(
+//     "beni",
+//     "Mickey Mouse",
+//     "blbla",
+//     '["1","2"]',
+//     "http...",
+//     '{"user1":3,"user2":4,"totalRate":3,"gal":"2"}',
+//     "120",
+//     "Yanon",
+//     "Gal Levy",
+//     "Link..."
+//   );
+// }
 
-function HideLi() {
-  // $('#top-bar')
-  $("#sign-up").remove();
-  $("#sign-in").remove();
-  // if admin add li of admin
-  $("#top-bar").append(
-    '<li id="sign-out" onclick="ShowLi()"><a>Sign out</a></li>'
-  );
-  // if its admin show admin
-}
+// function HideLi() {
+//   // $('#top-bar')
+//   $("#sign-up").remove();
+//   $("#sign-in").remove();
+//   // if admin add li of admin
+//   if(IsAdmin(ClientUser)==true){
+//     $("#top-bar").append(
+//       '<li id="admin" onclick="AdminPage()"><a>Admin</a></li>'
+//     );
+//   }
+//   $("#top-bar").append(
+//     '<li id="sign-out" onclick="ShowLi()"><a>Sign out</a></li>'
+//   );
+//   mainPage();
+//   // if its admin show admin
+// }
 
-function ShowLi() {
-  $("#sign-out").remove();
-  $("#top-bar").append(
-    '<li id="sign-up" onclick="SignUpPage()"><a>Sign up</a></li>'
-  );
-  $("#top-bar").append(
-    '<li id="sign-in" onclick="SignInPage()"><a>Sign in</a></li>'
-  );
-  // remove admin
-}
+// function ShowLi() {
+//   if(IsAdmin(ClientUser)==true){
+//     $("#admin").remove();  
+//   }
+//   $("#sign-out").remove();
+//   $("#top-bar").append(
+//     '<li id="sign-up" onclick="SignUpPage()"><a>Sign up</a></li>'
+//   );
+//   $("#top-bar").append(
+//     '<li id="sign-in" onclick="SignInPage()"><a>Sign in</a></li>'
+//   );
+//   ClientUser = null;
+//   // remove admin
+// }
+
+// function IsAdmin(user){
+//   if(user.isAdmin == true){
+//     return true;
+//   }
+//   return false;
+// }
+
+// function mainPage(){
+//   $("#content").load("views/main.html");
+// }

@@ -118,7 +118,9 @@ function createUser(userName, password, res) {
   users.findOne(valid, function (err, result) {
     if (err) throw err;
     if (result != null) {
-      // res.send("this user name is not available")
+      if(res!=null){
+      res.send("this user name is not available")
+    }
       console.log("client alredy sign up before");
       io.sockets.emit("sign-up", { is_valid: false }); //******
       return;
@@ -139,15 +141,18 @@ function autheticateUser(userName, password, res) {
   users.findOne(doc, function (err, result) {
     if (err) throw err;
     if (result != null) {
-      // res.send(JSON.parse(
-      //   '{"isExist": "true"}'
-      // ))
+      if(res!=null){
+      res.send(JSON.parse(
+        '{"isExist": "true"}'
+      ))
+      }
       console.log("client is valid and may log in");
       io.sockets.emit("login", { is_valid: true, userName: userName });
     } else {
-      // res.send(JSON.parse(
-      //   '{"isExist": "false"}'
-      // ))
+      if(res!=null){
+      res.send(JSON.parse(
+        '{"isExist": "false"}'
+      ))}
       console.log("client isnt valid and cant log in");
       io.sockets.emit("login", { is_valid: false });
     }
@@ -164,14 +169,16 @@ function getUser(userName, res) {
   users.findOne(doc, function (err, result) {
     if (err) throw err;
     if (result == null) {
-      //   res.send(JSON.parse(
-      //     '{"userName": "this user is not exist"}'
-      //  ))
+        res.send(JSON.parse(
+          '{"userName": "this user is not exist"}'
+       ))
       console.log("user not found");
       io.sockets.emit("getUser", { user: null });
       return;
     } else {
-      // res.send(result)
+      if(res!=null){
+        res.send(result)
+      }
       console.log("user found");
       io.sockets.emit("getUser", { user: result });
     }
@@ -217,7 +224,7 @@ function addMovie(
           console.log("this movie is already exist");
           io.sockets.emit("addMovie", { result: false });
           return;
-          // res.send("this movie is already exist")
+          res.send("this movie is already exist")
         } else {
           console.log("insert new movie");
           movies.insertOne(movie);
