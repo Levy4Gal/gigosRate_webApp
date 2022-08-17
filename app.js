@@ -137,6 +137,25 @@ const users = client.db("gigos").collection("users");
   });
 }
 
+function removeUser(adminName ,userNameToDelete, res) {
+  const users = client.db("gigos").collection("users");
+  const admin = {
+    userName:adminName
+  }
+  users.findOne(admin, function (err, result) {
+    if (err) throw err;
+    if (result != null) {//check if user exist
+      if(result.isAdmin == true){//check if user is admin
+        var myquery = { userName: userNameToDelete };
+        users.remove(myquery, function(err, obj) {//remove user
+          if (err) throw err;
+          console.log(" document(s) deleted");
+        });
+      }
+    }
+  });
+}
+
 function autheticateUser(userName, password, res) {
   //pull thr data from DB for the /get/authenticateUsre
   const users = client.db("gigos").collection("users");
@@ -228,6 +247,26 @@ function addMovie(userName, movieName, description, locations, trailer, rate,
         return;
       });
     } else return null;
+  });
+}
+
+function removeMovie(userName ,movieName, res) {
+  const users = client.db("gigos").collection("users");
+  const user = {
+    userName:userName
+  }
+  users.findOne(user, function (err, result) {
+    if (err) throw err;
+    if (result != null) {//check if user exist
+      if(result.isAdmin == true){//check if user is admin
+        const movies = client.db("gigos").collection("movies");
+        var myquery = { movieName: movieName };
+        movies.remove(myquery, function(err, obj) {//remove movie
+          if (err) throw err;
+          console.log(" document(s) deleted");
+        });
+      }
+    }
   });
 }
 
@@ -500,6 +539,11 @@ app.post("/signUp", (req, res) => {
   createUser(req.query.userName, req.query.password, res);
 });
 
+app.post("/removeUser", (req, res) => {
+  //get the parameters:  adminName, toDelete . adminName - is the user commit the act, toDelete - is the user that need to delere 
+  removeUser(req.query.adminName,req.query.toDelete, res);
+});
+
 app.get("/authenticateUsre", (req, res) => {
   //get the parameters:  userName and password. return Json key: "isExist": value:false/true
   autheticateUser(req.query.userName, req.query.password, res);
@@ -530,9 +574,15 @@ app.post("/addMovie", (req, res) => {
   );
 });
 
+app.post("/removeMovie", (req, res) => {
+  //req  parameters:  userName ,movieName. remove movie
+  console.log(req.query.userName + "  " + req.query.movieName);
+  removeMovie(req.query.userName , req.query.movieName, res);
+});
+
 app.get("/movie", (req, res) => {
   //req  parameters:  movieName. if the movie is not exist return res = "this movie is not exist", else return the movie
-  getMovie(req.query.movieName,req. res);
+  getMovie(req.query.movieName, res);
 });
 
 app.get("/allMovies", (req, res) => {
