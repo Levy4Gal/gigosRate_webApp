@@ -14,6 +14,10 @@ function AdminPage() {
   $("#content").load("views/admin.html");
 }
 
+function MainPageSwitch(){
+  $("#content").load("views/main.html");
+}
+
 
 var socket = io.connect("http://localhost:8080");
 console.log("client connected");
@@ -128,7 +132,7 @@ socket.on("getUser", function (data) {
     if(ClientUser!=null){
       HideLi();
     }
-    console.log(ClientUser.userName);
+    console.log("user name is: "+ ClientUser.userName);
     console.log(ClientUser.password);
     console.log(ClientUser.isAdmin);
   }
