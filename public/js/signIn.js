@@ -139,15 +139,21 @@ function getUser(username) {
     $("#top-bar").append(
       '<li id="sign-out" onclick="ShowLi()"><a>Sign out</a></li>'
     );
+    $("#top-bar").append(
+      '<li id="watch list" onclick="watchList()"><a>WatchList</a></li>'
+    );
     mainPage();
     // if its admin show admin
   }
 
+
+  
   function ShowLi() {
     if(IsAdmin(ClientUser)==true){
       $("#admin").remove();  
     }
     $("#sign-out").remove();
+    $("[id='watch list']").remove();
 
     $("#top-bar").append(
       '<li id="sign-up" onclick="SignUpPage()"><a>Sign up</a></li>'
