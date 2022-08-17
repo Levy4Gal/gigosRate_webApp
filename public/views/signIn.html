@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title>HTML5 Login Form with validation Example</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel="stylesheet" href="./views/css/signIn.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+
+  
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
   <script type = "text/javascript" src="../js/signIn.js"></script>
   <!-- <script type = "module" src="signIn.js"></script> -->
   <!-- <script src="../index.js"></script>     -->
+  <meta name="google-signin-client_id" content="703175951622-uin6fr9messd7an66nfmotpci761m2d9.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -24,8 +29,25 @@
   </p>
     <p>
     <!-- <input type="button" id="login" value="Login" onclick = "myLoginIn2()"> -->
-    <input type="button" id="login" value="Login" onclick = "myLoginIn2()">
+    <input type="button" id="login" value="Login" onclick = "LoginButton()">
     </p>
+    <!-- <p>
+      <input type="button" id="SignUpGoogle" value="Sign in with Google" onclick="onSignIn()">
+  </p> -->
+  <!-- <div class="g-signin2" data-onsuccess="onSignIn" data-width="622" data-height="60px" data-longtitle="true"></div> -->
+  <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div>
+  <script>
+      function onSignIn(googleUser) {
+    var profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  }
+  </script> -->
+
+  <div id="respond">
+    </div>
   </form>
   <div id="create-account-wrap">
     <p>Not a member? <a onclick="SignUpPage()" href="#">Create Account</a><p>
