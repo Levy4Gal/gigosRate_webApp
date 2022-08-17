@@ -1,52 +1,23 @@
-//const { response } = require("express");
-
 $(document).ready(function () {
-  // const data = {
-  //   movieName: "Toy story 3",
-  //   description: "blbla",
-  //   locations: '["1","2"]',
-  //   trailer: "http...",
-  //   rate: '{"user1":3,"user2":4,"totalRate":3,"gal":"2"}',
-  //   duration: "120",
-  //   director: "Yanon",
-  //   stars: "Gal Levy",
-  //   img: "https://drive.google.com/uc?export=view&id=1dVMXPKMWUNdbbyCm4URBpstjvOWrlT7R",
-  //   genre: "comedy",
-  //   releaseYear: "2006",
-  // };
-
-  // let xhr = new XMLHttpRequest();
-  // xhr.open("POST", "http://localhost:8080/addMovie");
-
-  // xhr.onload = () => console.log(xhr.responseText);
-
-  // xhr.send(data);
-
-  // fetch("http://localhost:8080/addMovie", {
-  //   method: "POST",
-  //   body: JSON.stringify(data),
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     console.log("Success:", data);
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error:", error);
-  //   });
-
+  const movieContent = document.getElementById("movieContent");
+  const body = document.getElementById("body");
   async function fetchAllMovies() {
     let res = await fetch("http://localhost:8080/allMovies");
     const movies = await res.json();
     return movies;
   }
-
   fetchAllMovies().then((movies) => {
-    displayMovies(movies);
+    displayMovies(movies, movieContent);
+  });
+  $(".searchButton").click(function () {
+    var inputString = $(".movie-search").val();
+    $(".movie-search").val("");
+
+    alert(inputString);
   });
 });
 
-function displayMovies(movies) {
-  let e = document.getElementById("movieContent");
+function displayMovies(movies, e) {
   e.replaceChildren();
   let imgOpenTemp = "<img class='img' name= '";
   let imgSrc = "' src='"; // append img url + imgCloseTemp
@@ -116,19 +87,30 @@ function moveToMovie(e) {
 
 function addToWatch(e) {
   let movieName = e.target.name;
-  console.log(movieName);
   const Http = new XMLHttpRequest();
   const url =
-    "http://localhost:8008/addToWl?movieName=" +
+    "http://localhost:8080/addToWl?movieName=" +
     movieName +
     "&userName=" +
-    "Guy12";
-  Http.open("GET", url);
+    ClientUser.userName;
+  Http.open("POST", url);
   Http.send();
 
-  Http.onreadystatechange = (e) => {
-    console.log(Http.responseText);
-  };
+  async function getWatch(userName) {
+    let url = "http://localhost:8080/watchList?userName=" + userName;
+    const res = await fetch(url);
+    const movies = await res.json();
+    console.log(movies);
+    return movies;
+  }
+
+  getWatch(ClientUser.userName).then((movies) => {
+    let text = "Hello " + ClientUser.userName + "! here is your watch list";
+    const p = document.getElementById("headLine");
+    p.textContent = text;
+    movieContent.replaceChildren();
+    displayMovies(movies, body);
+  });
 }
 function displayGenre() {
   let x = document.getElementById("genre").value;
@@ -140,7 +122,7 @@ function displayGenre() {
     }
 
     fetchAllMovies().then((movies) => {
-      displayMovies(movies);
+      displayMovies(movies, movieContent);
     });
   } else {
     async function fetchByGenre(genre) {
@@ -151,7 +133,7 @@ function displayGenre() {
       return movies;
     }
     fetchByGenre(x).then((movies) => {
-      displayMovies(movies);
+      displayMovies(movies, movieContent);
     });
   }
 }
@@ -166,7 +148,7 @@ function displayByYear() {
     }
 
     fetchAllMovies().then((movies) => {
-      displayMovies(movies);
+      displayMovies(movies, movieContent);
     });
   } else {
     async function fetchByYear(startYear, endYear) {
@@ -182,11 +164,12 @@ function displayByYear() {
     if (x.includes("-")) {
       let yearArr = x.split("-");
       fetchByYear(yearArr[0], yearArr[1]).then((movies) => {
-        displayMovies(movies);
+        displayMovies(movies, movieContent);
       });
     } else {
       fetchByYear(x, x).then((movies) => {
-        displayMovies(movies);
+        let e = document.getElementById("movieContent");
+        displayMovies(movies, movieContent);
       });
     }
   }
