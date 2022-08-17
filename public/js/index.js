@@ -1,7 +1,11 @@
 $(document).ready(() => {
-  $("#content").load("views/main.html", () => {
-    // var el = document.getElementById("content");
-    // el.innerHTML =
-    //   "<html><div class ='movieDiv'> <img class='img' src='img/casino-royale.jpg' /></div></html>";
-  });
+  let route = window.location.href.split("/")[3];
+  if(route == ""){
+    $("#content").load("views/main.html", () => {
+    });  
+  }
+  if(route == "admin"){
+    $("#content").load("views/admin.html");
+  }
+  console.log(route);
 });

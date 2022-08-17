@@ -5,30 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <link rel="stylesheet" href="views/css/admin.css">
     <script src="js/admin.js" ></script>
+    <script src="js/httpService.js"></script>
   </head>
   <body>
     <div class="container">
-      <div class="search">
+      <div class="statistics">
+        <div class="title">Statistics</div>
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+      </div>
+      <div class="actions">
+        <div class="search">
           <input id="searchInput" type="text" placeholder="Search.." name="search">
-          <img onclick="search()" alt="searchIcon" src=""/>
-      </div>
-      <div class="options">
-        <div class="userOption" onclick="changeOnUsers(true)">
-          Users
+          <img class="icon" onclick="search()" alt="searchIcon" src="img/searchIcon.png" />
         </div>
-        <div class="movieOption" onclick="changeOnUsers(false)">
-          Movies
+        <div class="options">
+          <div id="moviesOption" class="selectetOption" onclick="changeOnUsers(false)">
+            Movies
+          </div>
+          <div id="usersOption" class="innerOption" onclick="changeOnUsers(true)">
+            Users
+          </div>
+        </div>
+        <div class="list">
+          <!-- <div class="line">
+            <div class="name"> user/movie name</div>
+            <img class="edit" src="img/editIcon.png"/>
+            <img class="delete" src="img/deleteIcon.png" />
+          </div> -->
         </div>
       </div>
-      <div class="content">
-        <div class="name"> user/movie name</div>
-        <div class="edit"> edit icon</div>
-        <div class="delete"> delete icon</div>
-      </div>
-
-
 
       <div class="addMovie">
         <div class="title">Add a movie</div>

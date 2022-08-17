@@ -2,47 +2,92 @@
     display: flex;
     flex-flow: column;
     align-items: center;
+    color: white;
 
+}
+.statistics{
+    padding-top: 40px;
+    height: 100vh;
+
+}
+.actions{
+    display: flex;
+    flex-flow: column;
+    height: 100vh;
+    align-items: center;
+    width: 100%;
+}
+.search{
+    display: flex;
+    flex-flow: row;
+}
+.icon{
+    max-width: 30px;
+    cursor: pointer;
+    padding-left: 5px;
 }
 .options{
     display: flex;
     flex-flow: row;
+    padding: 40px;
 }
-.userOption{
+.innerOption{
     padding: 10px;  
     cursor: pointer;
 }
-.movieOption{
+.selectetOption{
     padding: 10px;  
     cursor: pointer;
+    text-decoration: underline;
+    color:rgb(57, 99, 203);
 }
-.content{
+.list{
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    align-items: center;
+}
+.line{
     display: flex;
     flex-flow: row;
+    width: 60%;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid black;
+    color: black;
+    margin-top: 15px;
 }
 .name{
     padding: 10px;
+    width: 90%;
 }
 .edit{
     padding: 10px;
-
+    max-width: 25px;
+    cursor: pointer;
 }
 .delete{
     padding: 10px;
-
+    max-width: 25px;
+    cursor: pointer;
 }
 
 
 .addMovie{
     display: flex;
     flex-flow: column;
+    height: 100vh;
+    justify-content: center;
 }
 .title{
     font-size: 36px;
+    text-align: center;
 }
 .displayRow{
     display: flex;
     flex-flow: row;
+    align-items: center;
+    margin-top: 20px;
 }
 .addName{
     margin: 10px;
@@ -59,6 +104,8 @@
     width: 100%;
     text-align: center;
     border-radius: 10px;
+    color: #0c59c5;
+    background-color: white;
 }
 .addBtn:hover{
     cursor: pointer;
