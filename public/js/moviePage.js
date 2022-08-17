@@ -65,23 +65,23 @@ $(document).ready(function(){
         let clientRate;
         stars.map((star) => {
             star.onclick = () => {
-            i = stars.indexOf(star);
-            clientRate = i+1;        
-            newGrade = ((grade*numOfVoters)+clientRate)/ (numOfVoters+1);
-            if(newGrade>5){
-                newGrade = 5;
-            }  
-            item.grade = newGrade;    
-                
-            toFixedRate(fixedStars);
-        
-            item.numOfVoters = numOfVoters+1;      
+                i = stars.indexOf(star);
+                clientRate = i+1;        
+                newGrade = ((grade*numOfVoters)+clientRate)/ (numOfVoters+1);
+                if(newGrade>5){
+                    newGrade = 5;
+                }  
+                item.grade = newGrade;    
+                    
+                toFixedRate(fixedStars);
+            
+                item.numOfVoters = numOfVoters+1;      
 
-            if (star.className === starClassInactive) {
-                for (i; i >= 0; --i) stars[i].className = starClassActive;
-            } else {
-                for (i; i < starsLength; ++i) stars[i].className = starClassInactive;
-            }
+                if (star.className === starClassInactive) {
+                    for (i; i >= 0; --i) stars[i].className = starClassActive;
+                } else {
+                    for (i; i < starsLength; ++i) stars[i].className = starClassInactive;
+                }
             };
         });
     }

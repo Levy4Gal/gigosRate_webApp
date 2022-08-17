@@ -10,18 +10,17 @@
       href="https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900"
       rel="stylesheet"
     />
-
-    <link rel="stylesheet" href="views/css/movieCard.css" />
     <link rel="stylesheet" href="views/css/main.css" />
     <title>GigosRate</title>
+  <head>
+    <div>
+      <p class="headLine">GigosRate - rate the best movies out there!</p>
+    </div>
   </head>
-  <div>
-    <p class="headLine">GigosRate - rate the best movies out there!</p>
-  </div>
   <body>
     <div class="filter-bar">
-      <div class="filter-dropdowns">
-        <select id="genre" class="genre" onchange="displayGenre()">
+      <div class="custom-select">
+        <select id="genre" class="select" onchange="displayGenre()">
           <option value="all genres">All genres</option>
           <option value="action">Action</option>
           <option value="drama">Drama</option>
@@ -30,7 +29,7 @@
           <option value="biography">Biography</option>
         </select>
 
-        <select id="year" class="year" onchange="displayByYear()">
+        <select id="year" class="select" onchange="displayByYear()">
           <option value="all years">All the years</option>
           <option value="2022">2022</option>
           <option value="2020-2021">2020-2021</option>
@@ -39,19 +38,11 @@
           <option value="1980-1999">1980-1999</option>
         </select>
       </div>
-
-      <div class="filter-radios">
-        <input type="radio" name="grade" id="featured" checked />
-        <label for="featured">Featured</label>
-
-        <input type="radio" name="grade" id="popular" />
-        <label for="popular">Popular</label>
-
-        <input type="radio" name="grade" id="newest" />
-        <label for="newest">Newest</label>
-
-        <div class="checked-radio-bg"></div>
-      </div> 
+      <div>
+        <input type="search" class="movie-search" placeholder="enter movie name" >
+        <button class="searchButton">Search</button>
+      </div>
+      </div>  
     </div>
     <div id = 'movieContent'>
 
