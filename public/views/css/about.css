@@ -1,0 +1,11 @@
+.mainDiv{
+    padding: 10%;
+    /* border: 5px solid #707015; */
+    text-align: center;
+}
+
+.p{
+    color: white;
+    font-size: 20px;
+    font-family:courier;
+}
