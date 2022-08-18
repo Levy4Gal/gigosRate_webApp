@@ -11,4 +11,14 @@ $(document).ready(() => {
 
   if (route.includes("moviepage")) $("#content").load("views/moviePage.html");
   console.log(route);
+
+  if (route == "login") {
+    $("#content").load("views/signIn.html");
+  }
+
+  if (route == "sign-up") {
+    $("#content").load("views/signUp.html");
+  }
 });
+ 
+//

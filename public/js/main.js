@@ -21,7 +21,7 @@ function displayMovies(movies, e) {
   e.replaceChildren();
   let imgOpenTemp = "<img class='img' name= '";
   let imgSrc = "' src='"; // append img url + imgCloseTemp
-  let imgCloseTemp = " 'onclick = 'moveToMovie(event)' >";
+  let imgCloseTemp = " 'onclick = 'moveToMoviePage(event)' >";
   let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
   let movieDivCloseTemp = "</html>";
   let movieSpanOpenTemp = "<div class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
@@ -73,7 +73,7 @@ function displayMovies(movies, e) {
   }
 }
 
-function moveToMovie(e) {
+function moveToMoviePage(e) {
   let movieName = e.target.name;
   console.log(movieName);
   const url = "http://localhost:8080/moviepage?moviename=" + movieName;
@@ -88,6 +88,7 @@ function addToWatch(e) {
   Http.open("POST", url);
   Http.send();
 }
+
 function displayGenre() {
   let x = document.getElementById("genre").value;
   if (x === "all genres") {

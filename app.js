@@ -108,6 +108,14 @@ app.get("/watchlist-view", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/views/index.html"));
+});
+
+app.get("/sign-up", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/views/index.html"));
+});
+
 // app.listen(port, () => console.info("Listening on port " ,port));
 
 //-----------DataBase Functions------------//

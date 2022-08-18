@@ -127,6 +127,9 @@ function getUser(username) {
   }
 
   function HideLi() {
+    sessionStorage.setItem('user',JSON.stringify(ClientUser));
+    console.log(sessionStorage.getItem('user'));
+    console.log('saved the session of the user')
     // $('#top-bar')
     $("#sign-up").remove();
     $("#sign-in").remove();
@@ -140,9 +143,12 @@ function getUser(username) {
       '<li id="sign-out" onclick="ShowLi()"><a>Sign out</a></li>'
     );
     $("#top-bar").append(
-      '<li id="watch list" onclick="watchList()"><a>WatchList</a></li>'
+      // '<li id="watch list" onclick="watchList()"><a>WatchList</a></li>'
+      '<li id="watch list"><a href="watchlist-view">WatchList</a></li>'
     );
-    mainPage();
+    const url = "http://localhost:8080";
+    window.location = url;
+    // mainPage();
     // if its admin show admin
   }
 
