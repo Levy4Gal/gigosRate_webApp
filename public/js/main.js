@@ -1,56 +1,27 @@
-//const { response } = require("express");
-
 $(document).ready(function () {
-  // const data = {
-  //   movieName: "Toy story 3",
-  //   description: "blbla",
-  //   locations: '["1","2"]',
-  //   trailer: "http...",
-  //   rate: '{"user1":3,"user2":4,"totalRate":3,"gal":"2"}',
-  //   duration: "120",
-  //   director: "Yanon",
-  //   stars: "Gal Levy",
-  //   img: "https://drive.google.com/uc?export=view&id=1dVMXPKMWUNdbbyCm4URBpstjvOWrlT7R",
-  //   genre: "comedy",
-  //   releaseYear: "2006",
-  // };
-
-  // let xhr = new XMLHttpRequest();
-  // xhr.open("POST", "http://localhost:8080/addMovie");
-
-  // xhr.onload = () => console.log(xhr.responseText);
-
-  // xhr.send(data);
-
-  // fetch("http://localhost:8080/addMovie", {
-  //   method: "POST",
-  //   body: JSON.stringify(data),
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     console.log("Success:", data);
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error:", error);
-  //   });
-
+  const movieContent = document.getElementById("movieContent");
+  const body = document.getElementById("body");
   async function fetchAllMovies() {
     let res = await fetch("http://localhost:8080/allMovies");
     const movies = await res.json();
     return movies;
   }
-
   fetchAllMovies().then((movies) => {
-    displayMovies(movies);
+    displayMovies(movies, movieContent);
+  });
+  $(".searchButton").click(function () {
+    var inputString = $(".movie-search").val();
+    $(".movie-search").val("");
+
+    alert(inputString);
   });
 });
 
-function displayMovies(movies) {
-  let e = document.getElementById("movieContent");
+function displayMovies(movies, e) {
   e.replaceChildren();
   let imgOpenTemp = "<img class='img' name= '";
   let imgSrc = "' src='"; // append img url + imgCloseTemp
-  let imgCloseTemp = " 'onclick = 'start(event)' >";
+  let imgCloseTemp = " 'onclick = 'moveToMovie(event)' >";
   let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
   let movieDivCloseTemp = "</html>";
   let movieSpanOpenTemp = "<div class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
@@ -62,7 +33,7 @@ function displayMovies(movies) {
   let div = null;
   let tmpArray = [];
   for (let i = 0; i < movies.length; i++) {
-    if (i % 5 == 0) {
+    if (i % 4 == 0) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
     }
@@ -79,7 +50,7 @@ function displayMovies(movies) {
       addToCartClose +
       movieSpanCloseTemp;
     tmpArray.push(movie);
-    if (tmpArray.length == 5) {
+    if (tmpArray.length == 4) {
       e.appendChild(div);
       let movieDiv = movieDivOpenTemp;
       while (tmpArray.length != 0) {
@@ -102,14 +73,25 @@ function displayMovies(movies) {
   }
 }
 
-function start(e) {
+function moveToMovie(e) {
   let movieName = e.target.name;
+  window.localStorage.setItem("movieName", movieName);
   console.log(movieName);
+  let doc = document.getElementById("content");
+  doc.replaceChildren();
+  let div = document.createElement("div");
+  div.setAttribute("id", "movieCard");
+  doc.appendChild(div);
+  $("#movieCard").load("views/moviePage.html", () => {});
 }
 
 function addToWatch(e) {
   let movieName = e.target.name;
-  console.log(movieName);
+  const Http = new XMLHttpRequest();
+  const url =
+    "http://localhost:8080/addToWl?movieName=" + movieName + "&userName=Guy12";
+  Http.open("POST", url);
+  Http.send();
 }
 function displayGenre() {
   let x = document.getElementById("genre").value;
@@ -121,7 +103,7 @@ function displayGenre() {
     }
 
     fetchAllMovies().then((movies) => {
-      displayMovies(movies);
+      displayMovies(movies, movieContent);
     });
   } else {
     async function fetchByGenre(genre) {
@@ -132,7 +114,7 @@ function displayGenre() {
       return movies;
     }
     fetchByGenre(x).then((movies) => {
-      displayMovies(movies);
+      displayMovies(movies, movieContent);
     });
   }
 }
@@ -147,7 +129,7 @@ function displayByYear() {
     }
 
     fetchAllMovies().then((movies) => {
-      displayMovies(movies);
+      displayMovies(movies, movieContent);
     });
   } else {
     async function fetchByYear(startYear, endYear) {
@@ -163,11 +145,12 @@ function displayByYear() {
     if (x.includes("-")) {
       let yearArr = x.split("-");
       fetchByYear(yearArr[0], yearArr[1]).then((movies) => {
-        displayMovies(movies);
+        displayMovies(movies, movieContent);
       });
     } else {
       fetchByYear(x, x).then((movies) => {
-        displayMovies(movies);
+        let e = document.getElementById("movieContent");
+        displayMovies(movies, movieContent);
       });
     }
   }
