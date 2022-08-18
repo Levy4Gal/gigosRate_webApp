@@ -1,33 +1,49 @@
-1. authetication of the user - path: get http://localhost:8080/authenticateUsre , parameters:  userName and password. return Json key: "isExist": value:false/true. V
+1. authetication of the user - path: get http://localhost:8080/authenticateUsre , parameters:  userName and password.
+ return Json key: "isExist": value:false/true. V
 
-2. get user by userName path - get http://localhost:8080/user , parameters:  userName . return Json of the user, if user is not exist return this Json {     key:"userName": value:"this user is not exist" }. V
+2. get user by userName path - get http://localhost:8080/user , parameters:  userName .
+ return Json of the user, if user is not exist return this Json {     key:"userName": value:"this user is not exist" }. V
 
-3. get movie by name path: get http://localhost:8080/movie , parameters:  movieName. if the movie is not exist return res = "this movie is not exist", else return the movie. V
+3. get movie by name path: get http://localhost:8080/movie , parameters:  movieName. 
+if the movie is not exist return res = "this movie is not exist", else return the movie. V
 
 4. get first(movies) by num - path: get http://localhost:8080/firstMovies , parameters:  number of the firsts. V
 
 5. write/update rate to movie - path: post http://localhost:8080/rate , parameters:  movieName, userName, rate. V
 
-6. add movie path: post http://localhost:8080/addMovie , parameters:  user name, movieName, description, locations, trailer, rate,duration, director, stars, img.
+6. add movie path: post http://localhost:8080/addMovie , parameters:  user name, movieName, description, 
+locations, trailer, rate,duration, director, stars, img, releaseYear, genre.
  if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none. V
 
-7 create user - path: post http://localhost:8080/signUp , parameters:  userName and password.isAdmin is false always if the user name is already exist return res = "this user name is not available". V
+7 create user - path: post http://localhost:8080/signUp , parameters:  userName and password.
+isAdmin is false always if the user name is already exist return res = "this user name is not available". V
 
-8. get arr of all the movies - path: get http://localhost:8080/allMovies , parameters:  none. V
+8. get arr of all the movies - path: get http://localhost:8080/allMovies ,   parameters:  userName. V
 
-9. get watchList - path: post http://localhost:8080/addToWl , parameters:  movieName, userName. if the movie is already exist in the watchList this func do nothing. V
+9. get watchList - path: post http://localhost:8080/addToWl , parameters:  movieName, userName. 
+if the movie is already exist in the watchList this func do nothing. V
 
-10. get movies by genre - path: get http://localhost:8080/moviesByGenre , parameters:  genre. if dont find return empty arr. value
+10. get movies by genre - path: get http://localhost:8080/moviesByGenre , parameters:  genre. 
+if dont find return empty arr. value
 
-11. get movies by range of years - path: get http://localhost:8080/moviesByRY , parameters:  start, end. this func check if a start=<releaseYear<=end, if dont find return empty arr. V
+11. get movies by range of years - path: get http://localhost:8080/moviesByRY , parameters:  start, end.
+ this func check if a start=<releaseYear<=end, if dont find return empty arr. V
 
-12. get watch list by user name - path: get http://localhost:8080/watchList , parameters:  userName. if dont find return empty arr. V
+12. get watch list by user name - path: get http://localhost:8080/watchList , parameters:  userName. if dont 
+find return empty arr. V
 
-13. get watch list by user name - path: get http://localhost:8080/movStatics , parameters:  none. if dont exist movie in genre the res dont contain this genre. V
+13. get watch list by user name - path: get http://localhost:8080/movStatics , parameters:  none. if dont exist
+ movie in genre the res dont contain this genre. V
 
 14. get watch list by user name - path: get http://localhost:8080/userStatics , parameters:  none. this func return 
 json contains key:date value: count of how many users signs up at everyday last week 
 if at specific day there is 0 signs up this date will not be included at the response json. V
+
+15. remove movie by movieName - path: post http://localhost:8080/removeMovie ,   parameters:  userName ,movieName. V
+
+16. remove user by userName - path: post http://localhost:8080/removeUser , parameters:  adminName, toDelete .
+ adminName - is the user commit the act, toDelete - is the user that need to delere 
+
 
 movieJson: 
 

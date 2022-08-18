@@ -76,7 +76,7 @@ io.sockets.on("connection", function (ClientSocket) {
 app.post("");
 
 const { MongoClient, ServerApiVersion } = require("mongodb");
-// const { json } = require("stream/consumers");
+const { json } = require("stream/consumers");
 const { dir } = require("console");
 const { unwatchFile } = require("fs");
 const uri =
@@ -97,6 +97,14 @@ app.post("/login", (req, res) => {
 
 //Admin test
 app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/views/admin.html"));
+});
+
+app.get("/moviepage", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/views/index.html"));
+});
+
+app.get("/watchlist-view", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
@@ -106,20 +114,20 @@ app.get("/admin", (req, res) => {
 
 function createUser(userName, password, res) {
   //helper function for signup
-  var currentDate = new Date()
-var day = currentDate.getDate()
-var month = currentDate.getMonth() + 1
-var year = currentDate.getFullYear()
+  var currentDate = new Date();
+  var day = currentDate.getDate();
+  var month = currentDate.getMonth() + 1;
+  var year = currentDate.getFullYear();
 
-currentDate = String(day) + '/' +String(month) + '/' +String(year);
-const users = client.db("gigos").collection("users");
+  currentDate = String(day) + "/" + String(month) + "/" + String(year);
+  const users = client.db("gigos").collection("users");
   var pass = hash(password);
   const doc = {
     userName: userName,
     password: pass,
     isAdmin: false,
-    watchList:[],
-    signupDate: currentDate
+    watchList: [],
+    signupDate: currentDate,
   };
   const valid = {
     userName: userName,
@@ -127,15 +135,35 @@ const users = client.db("gigos").collection("users");
   users.findOne(valid, function (err, result) {
     if (err) throw err;
     if (result != null) {
-      if(res!=null){
-      res.send("this user name is not available")
-    }
+      // res.send("this user name is not available")
       console.log("client alredy sign up before");
       io.sockets.emit("sign-up", { is_valid: false }); //******
       return;
     } else console.log("client sign up NOW");
     users.insertOne(doc);
     io.sockets.emit("sign-up", { is_valid: true }); //******
+  });
+}
+
+function removeUser(adminName, userNameToDelete, res) {
+  const users = client.db("gigos").collection("users");
+  const admin = {
+    userName: adminName,
+  };
+  users.findOne(admin, function (err, result) {
+    if (err) throw err;
+    if (result != null) {
+      //check if user exist
+      if (result.isAdmin == true) {
+        //check if user is admin
+        var myquery = { userName: userNameToDelete };
+        users.remove(myquery, function (err, obj) {
+          //remove user
+          if (err) throw err;
+          console.log(" document(s) deleted");
+        });
+      }
+    }
   });
 }
 
@@ -150,18 +178,15 @@ function autheticateUser(userName, password, res) {
   users.findOne(doc, function (err, result) {
     if (err) throw err;
     if (result != null) {
-      if(res!=null){
-      res.send(JSON.parse(
-        '{"isExist": "true"}'
-      ))
-      }
+      // res.send(JSON.parse(
+      //   '{"isExist": "true"}'
+      // ))
       console.log("client is valid and may log in");
       io.sockets.emit("login", { is_valid: true, userName: userName });
     } else {
-      if(res!=null){
-      res.send(JSON.parse(
-        '{"isExist": "false"}'
-      ))}
+      // res.send(JSON.parse(
+      //   '{"isExist": "false"}'
+      // ))
       console.log("client isnt valid and cant log in");
       io.sockets.emit("login", { is_valid: false });
     }
@@ -178,16 +203,14 @@ function getUser(userName, res) {
   users.findOne(doc, function (err, result) {
     if (err) throw err;
     if (result == null) {
-        res.send(JSON.parse(
-          '{"userName": "this user is not exist"}'
-       ))
+      //   res.send(JSON.parse(
+      //     '{"userName": "this user is not exist"}'
+      //  ))
       console.log("user not found");
       io.sockets.emit("getUser", { user: null });
       return;
     } else {
-      if(res!=null){
-        res.send(result)
-      }
+      // res.send(result)
       console.log("user found");
       io.sockets.emit("getUser", { user: result });
     }
@@ -205,6 +228,8 @@ function addMovie(
   director,
   stars,
   img,
+  releaseYear,
+  genre,
   res
 ) {
   //helper function for signup
@@ -223,6 +248,8 @@ function addMovie(
     director: director,
     stars: stars,
     img: img,
+    releaseYear: releaseYear,
+    genre: genre,
   };
   users.findOne(user, function (err, result) {
     if (err) throw err;
@@ -233,7 +260,7 @@ function addMovie(
           console.log("this movie is already exist");
           io.sockets.emit("addMovie", { result: false });
           return;
-          res.send("this movie is already exist")
+          // res.send("this movie is already exist")
         } else {
           console.log("insert new movie");
           movies.insertOne(movie);
@@ -242,6 +269,29 @@ function addMovie(
         return;
       });
     } else return null;
+  });
+}
+
+function removeMovie(userName, movieName, res) {
+  const users = client.db("gigos").collection("users");
+  const user = {
+    userName: userName,
+  };
+  users.findOne(user, function (err, result) {
+    if (err) throw err;
+    if (result != null) {
+      //check if user exist
+      if (result.isAdmin == true) {
+        //check if user is admin
+        const movies = client.db("gigos").collection("movies");
+        var myquery = { movieName: movieName };
+        movies.remove(myquery, function (err, obj) {
+          //remove movie
+          if (err) throw err;
+          console.log(" document(s) deleted");
+        });
+      }
+    }
   });
 }
 
@@ -259,10 +309,62 @@ function getMovie(movieName, res) {
   });
 }
 
-async function getAllMovies(res) {
+async function getAllMovies(userName, res) {
   //helper function for signup
   var movies = await client.db("gigos").collection("movies").find().toArray();
-  res.send(movies);
+  console.log(userName);
+  if (userName != null) {
+    //case that wants movies with content of user
+    const users = client.db("gigos").collection("users");
+    const user = {
+      userName: userName,
+    };
+    users.findOne(user, async function (err, result) {
+      var filterMov = [];
+      var wl = result.watchList;
+      if (err) throw err;
+      if (result == null) {
+        return;
+      } else {
+        var filterMov = [];
+        var wl = result.watchList;
+        for (let i = 0; i < movies.length; i++) {
+          for (let j = 0; j < wl.length; j++) {
+            if (movies[i].movieName == wl[j]) {
+              filterMov.push(movies[i]);
+            }
+          }
+        }
+      }
+      if (filterMov.length == 0) {
+        //case that the user dont has watchlist
+        res.send(movies);
+      } else {
+        //case that the user has watchlist
+        var json = {
+          action: 0,
+          drama: 0,
+          comedy: 0,
+          documentary: 0,
+        };
+        for (var i = 0; i < filterMov.length; i++) {
+          json[filterMov[i].genre] += 1;
+        }
+        var maxGenre = "action";
+        for (var key of Object.keys(json)) {
+          //iterate over all the rating values
+          if (json[key] >= json[maxGenre]) {
+            maxGenre = key;
+          }
+        }
+        console.log(maxGenre);
+        getMoviesByGenre(maxGenre, res);
+      }
+    });
+  } else {
+    //case that wants all movies without content of user
+    res.send(movies);
+  }
 }
 
 async function getFirstsMovies(num, res) {
@@ -319,78 +421,75 @@ function rate(movieName, userName, newRate) {
   });
 }
 
-function addToWatchList(userName , movieName){
+function addToWatchList(userName, movieName) {
   var user = {
-    userName: userName
-  }
+    userName: userName,
+  };
   var movie = {
-    movieName: movieName
-  }
-  client.db("gigos").collection("users").findOne(user, function (err, userRes) {
-    if (err) throw err;
-    client.db("gigos").collection("movies").findOne(movie, function (err, movieRes) {
-        if(movieRes != null){
-          var tmpWL = userRes.watchList;
-          for(let i =0; i<tmpWL.length; i++){
-            if(tmpWL[i] == movieName){
-              return;
-            }
-          }
-          tmpWL.push(movieName);
-          var json = {
-            watchList:tmpWL
-          }
-          var newValues = { $set: json };
-          client
-        .db("gigos")
-        .collection("users")
-        .updateOne(user, newValues, function (err, res) {
-          //update the values at the DB
-          if (err) throw err;
-          console.log("1 document updated");
-          });
-        }else{
-          return
-        }
-    });
-    
-  });
-}
-
-async function getMoviesByGenre(genre, res){
-  var movies = await client
+    movieName: movieName,
+  };
+  client
+    .db("gigos")
+    .collection("users")
+    .findOne(user, function (err, userRes) {
+      if (err) throw err;
+      client
         .db("gigos")
         .collection("movies")
-        .find().toArray();
+        .findOne(movie, function (err, movieRes) {
+          if (movieRes != null) {
+            var tmpWL = userRes.watchList;
+            for (let i = 0; i < tmpWL.length; i++) {
+              if (tmpWL[i] == movieName) {
+                return;
+              }
+            }
+            tmpWL.push(movieName);
+            var json = {
+              watchList: tmpWL,
+            };
+            var newValues = { $set: json };
+            client
+              .db("gigos")
+              .collection("users")
+              .updateOne(user, newValues, function (err, res) {
+                //update the values at the DB
+                if (err) throw err;
+                console.log("1 document updated");
+              });
+          } else {
+            return;
+          }
+        });
+    });
+}
+
+async function getMoviesByGenre(genre, res) {
+  var movies = await client.db("gigos").collection("movies").find().toArray();
   var genreArr = [];
-  for(let i =0; i<movies.length; i++){
-    if(movies[i].genre == genre){
+  for (let i = 0; i < movies.length; i++) {
+    if (movies[i].genre == genre) {
       genreArr.push(movies[i]);
     }
   }
   res.send(genreArr);
-
 }
 
-async function getMoviesByYear(startYear, endYear, res){
-  var movies = await client
-        .db("gigos")
-        .collection("movies")
-        .find().toArray();
+async function getMoviesByYear(startYear, endYear, res) {
+  var movies = await client.db("gigos").collection("movies").find().toArray();
   var filterMov = [];
   let start = Number.parseInt(startYear);
   let end = Number.parseInt(endYear);
-  for(let i =0; i<movies.length; i++){
-    let relYear = Number.parseInt( movies[i].releaseYear);
-    if(relYear >= start && relYear <= end){
+  for (let i = 0; i < movies.length; i++) {
+    let relYear = Number.parseInt(movies[i].releaseYear);
+    if (relYear >= start && relYear <= end) {
       filterMov.push(movies[i]);
     }
   }
   res.send(filterMov);
-
 }
 
-async function getWatchListByUserName(userName, res){
+async function getWatchListByUserName(userName, res) {
   const users = client.db("gigos").collection("users");
   const user = {
     userName: userName,
@@ -399,18 +498,19 @@ async function getWatchListByUserName(userName, res){
     var filterMov = [];
     var wl = result.watchList;
     if (err) throw err;
-    if(result == null){
+    if (result == null) {
       return;
-    }else{
+    } else {
       var movies = await client
         .db("gigos")
         .collection("movies")
-        .find().toArray();
+        .find()
+        .toArray();
       var filterMov = [];
       var wl = result.watchList;
-      for(let i =0; i<movies.length; i++){
-        for(let j = 0; j<wl.length; j++){
-          if(movies[i].movieName == wl[j]){
+      for (let i = 0; i < movies.length; i++) {
+        for (let j = 0; j < wl.length; j++) {
+          if (movies[i].movieName == wl[j]) {
             filterMov.push(movies[i]);
           }
         }
@@ -420,10 +520,8 @@ async function getWatchListByUserName(userName, res){
   });
 }
 
-async function groupByGenre(res){
-  const movies =client
-        .db("gigos")
-        .collection("movies");
+async function groupByGenre(res) {
+  const movies = client.db("gigos").collection("movies");
   const query = [{ $group: { _id: "$genre", count: { $sum: 1 } } }];
   const aggCursor = movies.aggregate(query);
   var groups = [];
@@ -433,28 +531,26 @@ async function groupByGenre(res){
   res.send(groups);
 }
 
-async function groupBySignupDate(res){
-  var currentDate = new Date()
-  var day = currentDate.getDate()
-  var month = currentDate.getMonth() + 1
-  var year = currentDate.getFullYear()
-  
-  currentDate = String(day) + '/' +String(month) + '/' +String(year);
+async function groupBySignupDate(res) {
+  var currentDate = new Date();
+  var day = currentDate.getDate();
+  var month = currentDate.getMonth() + 1;
+  var year = currentDate.getFullYear();
+
+  currentDate = String(day) + "/" + String(month) + "/" + String(year);
   var arr = currentDate.split("/");
-  var today =  new Date(arr[2],parseInt(arr[1])-1,arr[0]);
-  var weekAgo = new Date(arr[2],parseInt(arr[1])-1,parseInt(arr[0]) -7);
+  var today = new Date(arr[2], parseInt(arr[1]) - 1, arr[0]);
+  var weekAgo = new Date(arr[2], parseInt(arr[1]) - 1, parseInt(arr[0]) - 7);
   console.log(today);
   console.log(weekAgo);
-  const users =client
-        .db("gigos")
-        .collection("users");
+  const users = client.db("gigos").collection("users");
   const query = [{ $group: { _id: "$signupDate", count: { $sum: 1 } } }];
   const aggCursor = users.aggregate(query);
   var groups = [];
   for await (const doc of aggCursor) {
     var d = doc._id.split("/");
-    var date = new Date(d[2],parseInt(d[1])-1,d[0]);
-    if(date <= today && date >= weekAgo){
+    var date = new Date(d[2], parseInt(d[1]) - 1, d[0]);
+    if (date <= today && date >= weekAgo) {
       groups.push(doc);
     }
   }
@@ -464,6 +560,11 @@ async function groupBySignupDate(res){
 app.post("/signUp", (req, res) => {
   //req  parameters:  userName and password.isAdmin is false always if the user name is already exist return res = "this user name is not available"
   createUser(req.query.userName, req.query.password, res);
+});
+
+app.post("/removeUser", (req, res) => {
+  //get the parameters:  adminName, toDelete . adminName - is the user commit the act, toDelete - is the user that need to delere
+  removeUser(req.query.adminName, req.query.toDelete, res);
 });
 
 app.get("/authenticateUsre", (req, res) => {
@@ -477,7 +578,8 @@ app.get("/user", (req, res) => {
 });
 
 app.post("/addMovie", (req, res) => {
-  //req  parameters:  user name, movieName, description, locations, trailer, rate,duration, director, stars, img. if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none
+  //req  parameters:  user name, movieName, description, locations, trailer, rate,duration, director, stars, img,
+  //releaseYear, genre. if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none
   addMovie(
     req.query.userName,
     req.query.movieName,
@@ -489,8 +591,16 @@ app.post("/addMovie", (req, res) => {
     req.query.director,
     req.query.stars,
     req.query.img,
+    req.query.releaseYear,
+    req.query.genre,
     res
   );
+});
+
+app.post("/removeMovie", (req, res) => {
+  //req  parameters:  userName ,movieName. remove movie
+  console.log(req.query.userName + "  " + req.query.movieName);
+  removeMovie(req.query.userName, req.query.movieName, res);
 });
 
 app.get("/movie", (req, res) => {
@@ -499,8 +609,8 @@ app.get("/movie", (req, res) => {
 });
 
 app.get("/allMovies", (req, res) => {
-  //req  parameters:  none
-  getAllMovies(res);
+  //req  parameters:  userName
+  getAllMovies(req.query.userName, res);
 });
 
 app.get("/firstMovies", (req, res) => {
@@ -525,20 +635,21 @@ app.get("/moviesByGenre", (req, res) => {
 
 app.get("/moviesByRY", (req, res) => {
   //req  parameters:  start, end. this func check if a start=<releaseYear<=end, if dont find return empty arr
-  getMoviesByYear(req.query.start,req.query.end , res);
+  getMoviesByYear(req.query.start, req.query.end, res);
 });
 
 app.get("/watchList", (req, res) => {
   //req  parameters:  userName. if dont find return empty arr
-  getWatchListByUserName(req.query.userName , res);
+  getWatchListByUserName(req.query.userName, res);
 });
 
 app.get("/movStatics", (req, res) => {
-  //req  parameters:  none. if dont exist movie in genre the res dont contain this genre. 
+  //req  parameters:  none. if dont exist movie in genre the res dont contain this genre.
   groupByGenre(res);
 });
 
 app.get("/userStatics", (req, res) => {
-  //req  parameters:  none. if dont exist movie in genre the res dont contain this genre. 
+  //req  parameters:  none. this func return json contains key:date value: count of how many users signs up at
+  //everyday last week if at specific day there is 0 signs up this date will not be included at the response json.
   groupBySignupDate(res);
 });
