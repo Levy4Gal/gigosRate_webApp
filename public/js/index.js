@@ -7,7 +7,7 @@ $(document).ready(() => {
     $("#content").load("views/admin.html");
   }
 
-  if (route == "home") $("#content").load("views/watchList.html");
+  if (route == "watchlist-view") $("#content").load("views/watchList.html");
 
   if (route == "moviepage") $("#content").load("views/moviePage.html");
   console.log(route);
