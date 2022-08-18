@@ -75,14 +75,9 @@ function displayMovies(movies, e) {
 
 function moveToMovie(e) {
   let movieName = e.target.name;
-  window.localStorage.setItem("movieName", movieName);
   console.log(movieName);
-  let doc = document.getElementById("content");
-  doc.replaceChildren();
-  let div = document.createElement("div");
-  div.setAttribute("id", "movieCard");
-  doc.appendChild(div);
-  $("#movieCard").load("views/moviePage.html", () => {});
+  const url = "http://localhost:8080/moviepage?moviename=" + movieName;
+  window.location = url;
 }
 
 function addToWatch(e) {

@@ -9,7 +9,7 @@ $(document).ready(() => {
 
   if (route == "watchlist-view") $("#content").load("views/watchList.html");
 
-  if (route == "moviepage") $("#content").load("views/moviePage.html");
+  if (route.includes("moviepage")) $("#content").load("views/moviePage.html");
   console.log(route);
 });
  
