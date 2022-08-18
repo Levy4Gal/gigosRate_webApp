@@ -1,8 +1,13 @@
 $(document).ready(function () {
+  var userName;
+  if (ClientUser != null) addHelloUser();
+  //document.getElementById("showAll").setAttribute("onclick", "showAll()");
   const movieContent = document.getElementById("movieContent");
   const body = document.getElementById("body");
   async function fetchAllMovies() {
-    let res = await fetch("http://localhost:8080/allMovies");
+    let url = "http://localhost:8080/allMovies";
+    if (userName != null) url += "?userName=" + userName;
+    let res = await fetch(url);
     const movies = await res.json();
     return movies;
   }
@@ -15,13 +20,45 @@ $(document).ready(function () {
 
     alert(inputString);
   });
+
+  function addHelloUser() {
+    userName = ClientUser.userName;
+    let div = document.getElementById("HelloUser");
+    let p = document.createElement("p");
+    p.setAttribute("id", "helloUser");
+    div.appendChild(p);
+    p.innerHTML = "Hello " + userName;
+    let head = document.getElementById("headLine");
+    head.innerHTML = "Our best picks for you";
+  }
+
+  $(".showAll").click(function () {
+    let head = document.getElementById("headLine");
+    head.innerHTML = "GigosRate - rate the best movies out there!";
+    async function fetchAllMovies() {
+      let url = "http://localhost:8080/allMovies";
+      let res = await fetch(url);
+      const movies = await res.json();
+      return movies;
+    }
+
+    fetchAllMovies().then((movies) => {
+      displayMovies(movies, movieContent);
+    });
+  });
 });
 
 function displayMovies(movies, e) {
+  let tmp = JSON.parse(movies[0].rate);
+
+  console.log(tmp.totalRate);
   e.replaceChildren();
   let imgOpenTemp = "<img class='img' name= '";
   let imgSrc = "' src='"; // append img url + imgCloseTemp
-  let imgCloseTemp = " 'onclick = 'moveToMovie(event)' >";
+  let star = "<span class=" + "'fa fa-star checked'" + "></span>";
+  let rateOpen = "<span class=rate>";
+  let rateClose = "</span>";
+  let imgCloseTemp = " 'onclick = 'moveToMoviePage(event)' >";
   let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
   let movieDivCloseTemp = "</html>";
   let movieSpanOpenTemp = "<div class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
@@ -37,8 +74,9 @@ function displayMovies(movies, e) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
     }
+    // let tmp = JSON.parse(movies[i].rate);
     let name = movies[i].movieName;
-
+    let rate = rateOpen + 3.5 + rateClose;
     let text = textOpenTemp + name + textCloseTemp;
     let img = imgOpenTemp + name + imgSrc + movies[i].img + imgCloseTemp;
     let movie =
@@ -48,6 +86,8 @@ function displayMovies(movies, e) {
       addToCartOpen +
       name +
       addToCartClose +
+      star +
+      rate +
       movieSpanCloseTemp;
     tmpArray.push(movie);
     if (tmpArray.length == 4) {
@@ -73,16 +113,11 @@ function displayMovies(movies, e) {
   }
 }
 
-function moveToMovie(e) {
+function moveToMoviePage(e) {
   let movieName = e.target.name;
-  window.localStorage.setItem("movieName", movieName);
   console.log(movieName);
-  let doc = document.getElementById("content");
-  doc.replaceChildren();
-  let div = document.createElement("div");
-  div.setAttribute("id", "movieCard");
-  doc.appendChild(div);
-  $("#movieCard").load("views/moviePage.html", () => {});
+  const url = "http://localhost:8080/moviepage?moviename=" + movieName;
+  window.location = url;
 }
 
 function addToWatch(e) {
@@ -95,24 +130,11 @@ function addToWatch(e) {
     ClientUser.userName;
   Http.open("POST", url);
   Http.send();
-
-  async function getWatch(userName) {
-    let url = "http://localhost:8080/watchList?userName=" + userName;
-    const res = await fetch(url);
-    const movies = await res.json();
-    console.log(movies);
-    return movies;
-  }
-
-  getWatch(ClientUser.userName).then((movies) => {
-    let text = "Hello " + ClientUser.userName + "! here is your watch list";
-    const p = document.getElementById("headLine");
-    p.textContent = text;
-    movieContent.replaceChildren();
-    displayMovies(movies, body);
-  });
 }
+
 function displayGenre() {
+  let head = document.getElementById("headLine");
+  head.innerHTML = "GigosRate - rate the best movies out there!";
   let x = document.getElementById("genre").value;
   if (x === "all genres") {
     async function fetchAllMovies() {
@@ -139,6 +161,8 @@ function displayGenre() {
 }
 
 function displayByYear() {
+  let head = document.getElementById("headLine");
+  head.innerHTML = "GigosRate - rate the best movies out there!";
   let x = document.getElementById("year").value;
   if (x === "all years") {
     async function fetchAllMovies() {
@@ -172,5 +196,28 @@ function displayByYear() {
         displayMovies(movies, movieContent);
       });
     }
+  }
+}
+
+function topPicks() {
+  if (ClientUser == null) {
+    alert("Log in required");
+    return;
+  } else {
+    userName = ClientUser.userName;
+    let p = document.getElementById("helloUser");
+    p.innerHTML = "Hello " + userName;
+    let head = document.getElementById("headLine");
+    head.innerHTML = "Our best picks for you";
+    async function fetchAllMovies() {
+      let url = "http://localhost:8080/allMovies";
+      if (userName != null) url += "?userName=" + userName;
+      let res = await fetch(url);
+      const movies = await res.json();
+      return movies;
+    }
+    fetchAllMovies().then((movies) => {
+      displayMovies(movies, movieContent);
+    });
   }
 }

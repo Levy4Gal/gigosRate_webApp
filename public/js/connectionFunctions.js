@@ -1,7 +1,6 @@
 function SignUpPage() {
-  $(document).ready(function () {
-    $("#content").load("views/SignUp.html");
-  });
+  const url = "http://localhost:8080/sign-up";
+  window.location = url;
 }
 
 function SignInPage() {
@@ -11,11 +10,62 @@ function SignInPage() {
 }
 
 function AdminPage() {
-  $("#content").load("views/admin.html");
+  // $("#content").load("views/admin.html");
+  const url = "http://localhost:8080/admin";
+  window.location = url;
 }
 
 function MainPageSwitch(){
-  $("#content").load("views/main.html");
+  // $("#content").load("views/main.html");
+  const url = "http://localhost:8080";
+  window.location = url;
+}
+
+$(document).ready(() => {
+  console.log('check if the user is refreshed');
+  if(sessionStorage.getItem('user')!=null){
+    console.log('after user refresh');
+    ClientUser = JSON.parse(sessionStorage.getItem('user'));
+    console.log('inside the after refresh');
+    console.log(ClientUser);
+    if(ClientUser!=null){
+      $("#sign-up").remove();
+      $("#sign-in").remove();
+      if(ClientUser.isAdmin==true){
+        $("#top-bar").append(
+          '<li id="admin" onclick="AdminPage()"><a>Admin</a></li>'
+        );
+      }
+      $("#top-bar").append(
+        '<li id="sign-out" onclick="ShowLi()"><a>Sign out</a></li>'
+      );
+      $("#top-bar").append(
+        // '<li id="watch list" onclick="watchList()"><a>WatchList</a></li>'
+        '<li id="watch list"><a href="watchlist-view">WatchList</a></li>'
+
+      );
+    }
+  }
+  
+});
+
+function ShowLi() {
+  if(ClientUser.isAdmin==true){
+    $("#admin").remove();  
+  }
+  $("#sign-out").remove();
+  $("[id='watch list']").remove();
+
+  $("#top-bar").append(
+    '<li id="sign-up" onclick="SignUpPage()"><a>Sign up</a></li>'
+  );
+  $("#top-bar").append(
+    '<li id="sign-in" onclick="SignInPage()"><a>Sign in</a></li>'
+  );
+  sessionStorage.removeItem('user');
+  ClientUser = null;
+  MainPageSwitch();
+  // remove admin
 }
 
 
@@ -99,6 +149,8 @@ socket.on("sign-up", function (data) {
   console.log("inside the sign-up on of the client");
   if (data.is_valid == true) {
     console.log("client is now sign-up");
+    const url = "http://localhost:8080";
+    window.location = url;
     // HideLi();
   } else {
     console.log("client is already signed up");
@@ -138,41 +190,41 @@ socket.on("getUser", function (data) {
   }
 });
 
-socket.on("addMovie", function (data) {
-  console.log("inside the addMovie on of the client");
-  if (data.result == true) {
-    console.log("movie added");
-    // HideLi();
-  } else {
-    console.log("movie already exist");
-  }
-});
+// socket.on("addMovie", function (data) {
+//   console.log("inside the addMovie on of the client");
+//   if (data.result == true) {
+//     console.log("movie added");
+//     // HideLi();
+//   } else {
+//     console.log("movie already exist");
+//   }
+// });
 
-function addMovie(
-  userName,
-  movieName,
-  description,
-  locations,
-  trailer,
-  rate,
-  duration,
-  director,
-  stars,
-  img
-) {
-  socket.emit("addMovie", {
-    userName: userName,
-    movieName: movieName,
-    description: description,
-    locations: locations,
-    trailer: trailer,
-    rate: rate,
-    duration: duration,
-    director: director,
-    stars: stars,
-    img: img,
-  });
-}
+// function addMovie(
+//   userName,
+//   movieName,
+//   description,
+//   locations,
+//   trailer,
+//   rate,
+//   duration,
+//   director,
+//   stars,
+//   img
+// ) {
+//   socket.emit("addMovie", {
+//     userName: userName,
+//     movieName: movieName,
+//     description: description,
+//     locations: locations,
+//     trailer: trailer,
+//     rate: rate,
+//     duration: duration,
+//     director: director,
+//     stars: stars,
+//     img: img,
+//   });
+// }
 
 // function myFunc() {
 //   addMovie(
