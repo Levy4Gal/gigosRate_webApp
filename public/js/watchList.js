@@ -1,8 +1,9 @@
 +$(document).ready(function () {
+  const client = ClientUser.userName;
   const movieContent = document.getElementById("movieContent");
   const body = document.getElementById("body");
   async function getWatch() {
-    let url = "http://localhost:8080/watchList?userName=Guy12";
+    let url = "http://localhost:8080/watchList?userName=" + client;
     const res = await fetch(url);
     console.log(res);
     const movies = await res.json();
@@ -11,7 +12,7 @@
   }
 
   getWatch().then((movies) => {
-    let text = "Hello Guy" + "! here is your watch list";
+    let text = "Hello " + client + "! here is your watch list";
     const p = document.getElementById("headLine");
     p.textContent = text;
     movieContent.replaceChildren();

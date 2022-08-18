@@ -1,8 +1,20 @@
 $(document).ready(function () {
+  var userName;
+  if (ClientUser != null) {
+    userName = ClientUser.userName;
+    let div = document.getElementById("HelloUser");
+    let p = document.createElement("p");
+    div.appendChild(p);
+    p.innerHTML = "Hello " + userName;
+    let head = document.getElementById("headLine");
+    head.innerHTML = "Here are our best picks for you";
+  }
   const movieContent = document.getElementById("movieContent");
   const body = document.getElementById("body");
   async function fetchAllMovies() {
-    let res = await fetch("http://localhost:8080/allMovies");
+    let url = "http://localhost:8080/allMovies";
+    if (userName != null) url += "?userName=" + userName;
+    let res = await fetch(url);
     const movies = await res.json();
     return movies;
   }
@@ -84,12 +96,17 @@ function addToWatch(e) {
   let movieName = e.target.name;
   const Http = new XMLHttpRequest();
   const url =
-    "http://localhost:8080/addToWl?movieName=" + movieName + "&userName=Guy12";
+    "http://localhost:8080/addToWl?movieName=" +
+    movieName +
+    "&userName=" +
+    ClientUser.userName;
   Http.open("POST", url);
   Http.send();
 }
 
 function displayGenre() {
+  let head = document.getElementById("headLine");
+  head.innerHTML = "GigosRate - rate the best movies out there!";
   let x = document.getElementById("genre").value;
   if (x === "all genres") {
     async function fetchAllMovies() {
@@ -116,6 +133,8 @@ function displayGenre() {
 }
 
 function displayByYear() {
+  let head = document.getElementById("headLine");
+  head.innerHTML = "GigosRate - rate the best movies out there!";
   let x = document.getElementById("year").value;
   if (x === "all years") {
     async function fetchAllMovies() {
