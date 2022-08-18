@@ -3,6 +3,10 @@ $(document).ready(function(){
     const fixedStars  =[...document.getElementsByClassName("fa fa-star")];
     const ratingStars = [...document.getElementsByClassName("rating__star")];
 
+    fetchMovieByName().then((movie) => {
+        loadPageFromDB(movie);
+    });
+
     async function fetchMovieByName(name){
         let movieJason;
         let url = "http://localhost:8080/movie?movieName=" + "John Wick 2";
@@ -10,11 +14,7 @@ $(document).ready(function(){
         const movie = await movieJason.json();
         return movie;
     }
-    fetchMovieByName().then((movie) => {
-        loadPageFromDB(movie);
-       
-    });
-
+    
     function loadPageFromDB(item){
         //intilze all data//
         //all data should intilize from DB//
@@ -24,8 +24,9 @@ $(document).ready(function(){
         document.getElementById("director").innerHTML ="Director: " + item.director;
         document.getElementById("writer").innerHTML ="Writer: " + item.writer;
         document.getElementById("stars").innerHTML ="Stars: " + item.stars;
-        document.getElementById("image").setAttribute("src" ,item.img); 
-        
+        document.getElementById("image").setAttribute("src" ,item.img);
+        document.getElementById("movie").setAttribute("data" ,item.trailer);
+         
         toFixedRate(fixedStars,item);//load static fixed stars
         executeRating(ratingStars,item);//activate rating stars
         let locations = [];
@@ -34,7 +35,6 @@ $(document).ready(function(){
             initLocations(locations,map);
         });//initialization map with markers
     }
-    // loadPageFromDB();
    
     function toFixedRate(stars , item){//intalize active stars///
         const starClassActive = "fa fa-star checked";
@@ -126,12 +126,28 @@ $(document).ready(function(){
 });
 
 function addToList(){
+    const movieName = document.getElementById('movieName');
+    alert(movieName);
+    addToWatch(movieName);
+}
+
+function addToWatch(e) {
+    let movieName = e.target.name;
+    const Http = new XMLHttpRequest();
+    const url =
+      "http://localhost:8080/addToWl?movieName=" +
+      movieName +
+      "&userName=" +
+      ClientUser.userName;
+    Http.open("POST", url);
+    Http.send();
     alert("movie added to watch list");
 }
 
 function scrollToTop() {
     $(window).scrollTop(0);
 }
+
 
 ////item example//
 // const item = {id:1,
