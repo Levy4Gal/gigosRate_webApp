@@ -107,6 +107,7 @@ $(document).ready(function(){
             center:center
         }
         var map = await new google.maps.Map(document.getElementById('map') ,option);
+        // alert(center.lat+","+center.lng );
         return map;
     }    
         
@@ -132,12 +133,11 @@ $(document).ready(function(){
 
 function addToList(){
     const movieName = document.getElementById('movieName');
-    alert(movieName);
-    addToWatch(movieName);
+    addToWatch();
 }
 
-function addToWatch(e) {
-    let movieName = e.target.name;
+function addToWatch() {
+    let movieName = "John Wick 2";
     const Http = new XMLHttpRequest();
     const url =
       "http://localhost:8080/addToWl?movieName=" +
