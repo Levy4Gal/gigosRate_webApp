@@ -19,7 +19,8 @@
   cursor: pointer;
 }
 
-.searchButton{
+
+.searchButton, .buttonSelect, .showAll{ 
   background-color: gray;
   color: #ffffff;
   padding: 8px 16px;
