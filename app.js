@@ -116,6 +116,10 @@ app.get("/sign-up", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
+app.get("/about", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/views/index.html"));
+});
+
 // app.listen(port, () => console.info("Listening on port " ,port));
 
 //-----------DataBase Functions------------//
