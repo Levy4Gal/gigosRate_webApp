@@ -143,9 +143,12 @@ function getUser(username) {
       '<li id="sign-out" onclick="ShowLi()"><a>Sign out</a></li>'
     );
     $("#top-bar").append(
-      '<li id="watch list" onclick="watchList()"><a>WatchList</a></li>'
+      // '<li id="watch list" onclick="watchList()"><a>WatchList</a></li>'
+      '<li id="watch list"><a href="watchlist-view">WatchList</a></li>'
     );
-    mainPage();
+    const url = "http://localhost:8080";
+    window.location = url;
+    // mainPage();
     // if its admin show admin
   }
 
