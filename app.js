@@ -534,6 +534,29 @@ async function groupBySignupDate(res){
   res.send(groups);
 }
 
+function getCountry(country, res){
+  const map = client.db("gigos").collection("map");
+  var doc = {
+    'name':'map'
+  }
+  map.findOne(doc, async function (err, result) {
+    if (err) throw err;
+    if(result != null){
+      var countrysArr = result.map.split("&");
+      for(var i = 0; i<countrysArr.length; i++){
+        var countryJson = JSON.parse(countrysArr[i]);
+        if(countryJson['country'] == country){
+          var returnJson = {
+            'lng':countryJson['longitude'],
+            'lat':countryJson['latitude']
+          }
+          res.send(returnJson);
+        }
+      }
+    }
+  })
+}
+
 app.post("/signUp", (req, res) => {
   //req  parameters:  userName and password.isAdmin is false always if the user name is already exist return res = "this user name is not available"
   createUser(req.query.userName, req.query.password, res);
@@ -629,4 +652,9 @@ app.get("/userStatics", (req, res) => {
   //req  parameters:  none. this func return json contains key:date value: count of how many users signs up at 
   //everyday last week if at specific day there is 0 signs up this date will not be included at the response json. 
   groupBySignupDate(res);
+});
+
+app.get("/country", (req, res) => {
+  //req  parameters: country.  
+  getCountry(req.query.country, res);
 });
