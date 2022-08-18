@@ -49,9 +49,15 @@ $(document).ready(function () {
 });
 
 function displayMovies(movies, e) {
+  let tmp = JSON.parse(movies[0].rate);
+
+  console.log(tmp.totalRate);
   e.replaceChildren();
   let imgOpenTemp = "<img class='img' name= '";
   let imgSrc = "' src='"; // append img url + imgCloseTemp
+  let star = "<span class=" + "'fa fa-star checked'" + "></span>";
+  let rateOpen = "<span class=rate>";
+  let rateClose = "</span>";
   let imgCloseTemp = " 'onclick = 'moveToMoviePage(event)' >";
   let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
   let movieDivCloseTemp = "</html>";
@@ -68,8 +74,9 @@ function displayMovies(movies, e) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
     }
+    // let tmp = JSON.parse(movies[i].rate);
     let name = movies[i].movieName;
-
+    let rate = rateOpen + 3.5 + rateClose;
     let text = textOpenTemp + name + textCloseTemp;
     let img = imgOpenTemp + name + imgSrc + movies[i].img + imgCloseTemp;
     let movie =
@@ -79,6 +86,8 @@ function displayMovies(movies, e) {
       addToCartOpen +
       name +
       addToCartClose +
+      star +
+      rate +
       movieSpanCloseTemp;
     tmpArray.push(movie);
     if (tmpArray.length == 4) {

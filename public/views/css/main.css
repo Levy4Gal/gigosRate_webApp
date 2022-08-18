@@ -110,3 +110,13 @@
   transform: scale(1.1);
   filter: blur(2px);
 }
+
+.checked {
+  color: orange;
+  padding: 4%;
+  
+}
+
+.rate {
+  font-size: large;
+}
