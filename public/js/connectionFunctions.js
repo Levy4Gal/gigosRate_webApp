@@ -18,6 +18,55 @@ function MainPageSwitch(){
   $("#content").load("views/main.html");
 }
 
+$(document).ready(() => {
+  console.log('check if the user is refreshed');
+  if(sessionStorage.getItem('user')!=null){
+    console.log('after user refresh');
+    // if(ClientUser == null){
+    //   return;
+    // }
+    ClientUser = JSON.parse(sessionStorage.getItem('user'));
+    console.log('inside the after refresh');
+    console.log(ClientUser);
+    if(ClientUser!=null){
+      $("#sign-up").remove();
+      $("#sign-in").remove();
+      // if admin add li of admin
+      if(ClientUser.isAdmin==true){
+        $("#top-bar").append(
+          '<li id="admin" onclick="AdminPage()"><a>Admin</a></li>'
+        );
+      }
+      $("#top-bar").append(
+        '<li id="sign-out" onclick="ShowLi()"><a>Sign out</a></li>'
+      );
+      $("#top-bar").append(
+        '<li id="watch list" onclick="watchList()"><a>WatchList</a></li>'
+      );
+    }
+  }
+  
+});
+
+function ShowLi() {
+  if(ClientUser.isAdmin==true){
+    $("#admin").remove();  
+  }
+  $("#sign-out").remove();
+  $("[id='watch list']").remove();
+
+  $("#top-bar").append(
+    '<li id="sign-up" onclick="SignUpPage()"><a>Sign up</a></li>'
+  );
+  $("#top-bar").append(
+    '<li id="sign-in" onclick="SignInPage()"><a>Sign in</a></li>'
+  );
+  sessionStorage.removeItem('user');
+  ClientUser = null;
+  MainPageSwitch();
+  // remove admin
+}
+
 
 var socket = io.connect("http://localhost:8080");
 console.log("client connected");

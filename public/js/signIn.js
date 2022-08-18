@@ -127,6 +127,9 @@ function getUser(username) {
   }
 
   function HideLi() {
+    sessionStorage.setItem('user',JSON.stringify(ClientUser));
+    console.log(sessionStorage.getItem('user'));
+    console.log('saved the session of the user')
     // $('#top-bar')
     $("#sign-up").remove();
     $("#sign-in").remove();
