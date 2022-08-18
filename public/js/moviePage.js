@@ -15,6 +15,7 @@ $(document).ready(function(){
         return movie;
     }
     
+
     function loadPageFromDB(item){
         //intilze all data//
         //all data should intilize from DB//
@@ -24,9 +25,11 @@ $(document).ready(function(){
         document.getElementById("director").innerHTML ="Director: " + item.director;
         document.getElementById("writer").innerHTML ="Writer: " + item.writer;
         document.getElementById("stars").innerHTML ="Stars: " + item.stars;
+
         document.getElementById("image").setAttribute("src" ,item.img);
         document.getElementById("movie").setAttribute("data" ,item.trailer);
          
+
         toFixedRate(fixedStars,item);//load static fixed stars
         executeRating(ratingStars,item);//activate rating stars
         let locations = [];
@@ -35,6 +38,8 @@ $(document).ready(function(){
             initLocations(locations,map);
         });//initialization map with markers
     }
+
+
    
     function toFixedRate(stars , item){//intalize active stars///
         const starClassActive = "fa fa-star checked";
@@ -149,15 +154,4 @@ function scrollToTop() {
 }
 
 
-////item example//
-// const item = {id:1,
-    //     name: "John Wick 2",
-    //     duration:"122 minutes" ,
-    //     description:"After returning to the criminal underworld to repay a debt John Wick discovers that a large bounty has been put on his life.",
-    //     director:"Chad Stahelski",
-    //     writer:"Derek Kolstad" ,
-    //     stars:"keanu reevas , Chad Stahelski" ,
-    //     grade:3.5 ,
-    //     numOfVoters :2 ,
-    //     markers : [{lat:42.4668 ,lng:-70.9495},{lat:40.4668,lng:-71.9495}] 
-    // };
+
