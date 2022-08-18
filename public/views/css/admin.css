@@ -14,6 +14,7 @@
     height: 50%;
     padding-top: 10%;
 }
+textarea { height: auto; }
 .actions{
     display: flex;
     flex-flow: column;
@@ -80,7 +81,7 @@
 .addMovie{
     display: flex;
     flex-flow: column;
-    height: 100vh;
+    /* height: 100vh; */
     justify-content: center;
 }
 .title{

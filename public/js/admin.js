@@ -145,7 +145,7 @@ function onAddMovie(){
     var img= $('#imgLink').val();
     var releaseYear = $('#releaseYear').val();
     var genre = $('#genre').val();
-    httpPostAsync(`http://localhost:8080/addMovie?userName=inon&movieName=${movieName}&description=${movieDesc}&locations=${locations}&trailer=${trailer}&rate=0&duration=${duration}&director=${director}&stars=${stars}&img=${img}&releaseYear=${releaseYear}&genre=${genre}`,"",(value) => console.log(value))
+    httpPostAsync(`http://localhost:8080/addMovie?userName=Inon&movieName=${movieName}&description=${movieDesc}&locations=${locations}&trailer=${trailer}&rate=0&duration=${duration}&director=${director}&stars=${stars}&img=${img}&releaseYear=${releaseYear}&genre=${genre}`,"",(value) => console.log(value))
     //var json = `{   "movieName":"${movieName}",   "movieDescription":"${movieDesc}",   "locations":"${locations}",   "trailer":"${trailer}",   "duration":"${duration}",   "director":"${director}",   "stars":"${stars}",   "img":"${img}" }`;
     // console.log(JSON.parse(json));
 }
