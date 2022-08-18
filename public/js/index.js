@@ -19,6 +19,10 @@ $(document).ready(() => {
   if (route == "sign-up") {
     $("#content").load("views/signUp.html");
   }
+
+  if (route == "about") {
+    $("#content").load("views/about.html");
+  }
 });
  
 //

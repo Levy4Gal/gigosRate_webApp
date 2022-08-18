@@ -94,6 +94,7 @@ $(document).ready(function(){
             zoom:5,
             center:centerCoord
         }
+
         let map = await new google.maps.Map(document.getElementById('map') ,option);
         // return map;
     }    
