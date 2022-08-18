@@ -12,3 +12,5 @@ $(document).ready(() => {
   if (route == "moviepage") $("#content").load("views/moviePage.html");
   console.log(route);
 });
+ 
+//
