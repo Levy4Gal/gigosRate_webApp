@@ -10,10 +10,34 @@
     height: 100vh;
 
 }
-#myChart{
+.chartSelction{
+    display: flex;
+    flex-flow: row;
+    color: white;
+}
+.selectedChartOption{
+    padding: 15px;
+    border: 1px solid black;
+    color: #47b5df;
+    background-color: white;
+    margin: 5px;
+    text-decoration: underline;
+    cursor: pointer;
+
+}
+.chartOption{
+    padding: 15px;
+    border: 1px solid black;
+    background-color: white;
+    color: black;
+    margin: 5px;
+    cursor: pointer;
+
+}
+/* #myChart{
     height: 50%;
     padding-top: 10%;
-}
+} */
 textarea { height: auto; }
 .actions{
     display: flex;
@@ -83,6 +107,7 @@ textarea { height: auto; }
     flex-flow: column;
     /* height: 100vh; */
     justify-content: center;
+    padding-bottom: 40px
 }
 .title{
     font-size: 36px;
@@ -115,3 +140,71 @@ textarea { height: auto; }
 .addBtn:hover{
     cursor: pointer;
 }
+
+
+div#chartContainer {
+    width: 1000px;
+    height: 600px;
+    margin: auto;
+  }
+  
+
+svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .bar {
+    fill: #47b5ff;
+  }
+  
+  text {
+    font-size: 12px;
+    fill: #fff;
+  }
+  
+  path {
+    stroke: gray;
+  }
+  
+  line {
+    stroke: gray;
+  }
+  
+  line#limit {
+    stroke: #FED966;
+    stroke-width: 3;
+    stroke-dasharray: 3 6;
+  }
+  
+  .grid path {
+    stroke-width: 0;
+  }
+  
+  .grid .tick line {
+    stroke: #9FAAAE;
+    stroke-opacity: 0.3;
+  }
+  
+  text.divergence {
+    font-size: 14px;
+    fill: #2F4A6D;
+  }
+  
+  text.value {
+    font-size: 14px;
+  }
+  
+  text.title {
+    font-size: 22px;
+    font-weight: 600;
+  }
+  
+  text.label {
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+  text.source {
+    font-size: 10px;
+  }
