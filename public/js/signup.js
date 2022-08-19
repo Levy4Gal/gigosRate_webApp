@@ -24,10 +24,10 @@ function mySignUp3(){
       var SignUpLabel = document.getElementById("value");
       if(SignUpLabel == null){
         console.log("here");
-      $("#Sign-Up-Respond").append("<p id=\"value\">username/password are incorrect.</p>");
+      $("#Sign-Up-Respond").append('<p id=value>Passwords are not match.</p>');
       }
       else{
-        $("p#value").text("username/password are incorrect.");
+        $("p#value").text("Passwords are not match.");
       }
       return;
     }
