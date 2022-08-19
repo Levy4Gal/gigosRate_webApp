@@ -1,38 +1,39 @@
-+$(document).ready(function () {
-  const client = ClientUser.userName;
-  const movieContent = document.getElementById("movieContent");
-  const body = document.getElementById("body");
-  async function getWatch() {
-    let url = "http://localhost:8080/watchList?userName=" + client;
-    const res = await fetch(url);
-    console.log(res);
-    const movies = await res.json();
-    console.log(movies);
-    return movies;
+async function fetchMovies(movieName) {
+  let url;
+  if (movieName != null) {
+    console.log(movieName[1]);
+    url = "http://localhost:8080/searchMovie?";
+    if (movieName[0] != null) url += "movieName=" + movieName[0];
+    if (movieName[1] != null) url += "&genre=" + movieName[1];
+    if (movieName[2] != null) url += "&startYear=" + movieName[2];
+    if (movieName[3] != null) url += "&endYear=" + movieName[3];
+  } else {
+    url = "http://localhost:8080/allMovies";
   }
+  console.log(url);
 
-  getWatch().then((movies) => {
-    let text = "Hello " + client + "! here is your watch list";
-    const p = document.getElementById("headLine");
-    p.textContent = text;
-    movieContent.replaceChildren();
-    displayMovies(movies, body);
-  });
-});
+  let res = await fetch(url);
+  const movies = await res.json();
+  console.log(movies);
+  return movies;
+}
 
 function displayMovies(movies, e) {
   e.replaceChildren();
   let imgOpenTemp = "<img class='img' name= '";
   let imgSrc = "' src='"; // append img url + imgCloseTemp
-  let imgCloseTemp = " 'onclick = 'moveToMovie(event)' >";
+  let star = "<span class=" + "'fa fa-star checked'" + "></span>";
+  let rateOpen = "<span class=rate>";
+  let rateClose = "</span>";
+  let imgCloseTemp = " 'onclick = 'moveToMoviePage(event)' >";
   let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
   let movieDivCloseTemp = "</html>";
   let movieSpanOpenTemp = "<div class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
   let movieSpanCloseTemp = "</div>";
   let textOpenTemp = "<p class = 'text'>"; // append movie name + textCloseTemp
   let textCloseTemp = "</p>";
-  let addToCartOpen = "<p><button onclick= 'removeFromWatch(event)' name ='";
-  let addToCartClose = "'>Remove from Watch List</button></p>";
+  let addToCartOpen = "<p><button onclick= 'addToWatch(event)' name ='";
+  let addToCartClose = "'>Add to Watch List</button></p>";
   let div = null;
   let tmpArray = [];
   for (let i = 0; i < movies.length; i++) {
@@ -40,8 +41,10 @@ function displayMovies(movies, e) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
     }
+    let totalRate = Number(JSON.parse(movies[i].rate).totalRate);
+    totalRate = totalRate.toFixed(1);
     let name = movies[i].movieName;
-
+    let rate = rateOpen + totalRate + rateClose;
     let text = textOpenTemp + name + textCloseTemp;
     let img = imgOpenTemp + name + imgSrc + movies[i].img + imgCloseTemp;
     let movie =
@@ -51,6 +54,8 @@ function displayMovies(movies, e) {
       addToCartOpen +
       name +
       addToCartClose +
+      star +
+      rate +
       movieSpanCloseTemp;
     tmpArray.push(movie);
     if (tmpArray.length == 4) {
@@ -74,14 +79,4 @@ function displayMovies(movies, e) {
     movieDiv += movieDivCloseTemp;
     div.innerHTML = movieDiv;
   }
-}
-
-function removeFromWatch(e) {
-  let movieName = e.target.name;
-  console.log(movieName);
-  //   const Http = new XMLHttpRequest();
-  //   const url =
-  //     "http://localhost:8080/addToWl?movieName=" + movieName + "&userName=Guy12";
-  //   Http.open("POST", url);
-  //   Http.send();
 }
