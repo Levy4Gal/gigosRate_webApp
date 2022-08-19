@@ -4,23 +4,9 @@ $(document).ready(function () {
   //document.getElementById("showAll").setAttribute("onclick", "showAll()");
   const movieContent = document.getElementById("movieContent");
   const body = document.getElementById("body");
-  async function fetchAllMovies() {
-    let url = "http://localhost:8080/allMovies";
-    if (userName != null) url += "?userName=" + userName;
-    let res = await fetch(url);
-    const movies = await res.json();
-    return movies;
-  }
-  fetchAllMovies().then((movies) => {
+  fetchMovies().then((movies) => {
     displayMovies(movies, movieContent);
   });
-  $(".searchButton").click(function () {
-    var inputString = $(".movie-search").val();
-    $(".movie-search").val("");
-
-    alert(inputString);
-  });
-
   function addHelloUser() {
     userName = ClientUser.userName;
     let div = document.getElementById("HelloUser");
@@ -35,81 +21,11 @@ $(document).ready(function () {
   $(".showAll").click(function () {
     let head = document.getElementById("headLine");
     head.innerHTML = "GigosRate - rate the best movies out there!";
-    async function fetchAllMovies() {
-      let url = "http://localhost:8080/allMovies";
-      let res = await fetch(url);
-      const movies = await res.json();
-      return movies;
-    }
-
-    fetchAllMovies().then((movies) => {
+    fetchMovies().then((movies) => {
       displayMovies(movies, movieContent);
     });
   });
 });
-
-function displayMovies(movies, e) {
-  e.replaceChildren();
-  let imgOpenTemp = "<img class='img' name= '";
-  let imgSrc = "' src='"; // append img url + imgCloseTemp
-  let star = "<span class=" + "'fa fa-star checked'" + "></span>";
-  let rateOpen = "<span class=rate>";
-  let rateClose = "</span>";
-  let imgCloseTemp = " 'onclick = 'moveToMoviePage(event)' >";
-  let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
-  let movieDivCloseTemp = "</html>";
-  let movieSpanOpenTemp = "<div class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
-  let movieSpanCloseTemp = "</div>";
-  let textOpenTemp = "<p class = 'text'>"; // append movie name + textCloseTemp
-  let textCloseTemp = "</p>";
-  let addToCartOpen = "<p><button onclick= 'addToWatch(event)' name ='";
-  let addToCartClose = "'>Add to Watch List</button></p>";
-  let div = null;
-  let tmpArray = [];
-  for (let i = 0; i < movies.length; i++) {
-    if (i % 4 == 0) {
-      div = document.createElement("div");
-      div.setAttribute("class", "movieRow");
-    }
-    let totalRate = Number(JSON.parse(movies[i].rate).totalRate);
-    totalRate = totalRate.toFixed(1);
-    let name = movies[i].movieName;
-    let rate = rateOpen + totalRate + rateClose;
-    let text = textOpenTemp + name + textCloseTemp;
-    let img = imgOpenTemp + name + imgSrc + movies[i].img + imgCloseTemp;
-    let movie =
-      movieSpanOpenTemp +
-      img +
-      text +
-      addToCartOpen +
-      name +
-      addToCartClose +
-      star +
-      rate +
-      movieSpanCloseTemp;
-    tmpArray.push(movie);
-    if (tmpArray.length == 4) {
-      e.appendChild(div);
-      let movieDiv = movieDivOpenTemp;
-      while (tmpArray.length != 0) {
-        movieDiv += tmpArray.pop();
-      }
-      movieDiv += movieDivCloseTemp;
-      div.innerHTML = movieDiv;
-    }
-  }
-  if (tmpArray.length != 0) {
-    div = document.createElement("div");
-    div.setAttribute("class", "movieRow");
-    e.appendChild(div);
-    let movieDiv = movieDivOpenTemp;
-    while (tmpArray.length != 0) {
-      movieDiv += tmpArray.pop();
-    }
-    movieDiv += movieDivCloseTemp;
-    div.innerHTML = movieDiv;
-  }
-}
 
 function moveToMoviePage(e) {
   let movieName = e.target.name;
@@ -130,70 +46,51 @@ function addToWatch(e) {
   Http.send();
 }
 
-function displayGenre() {
+function displaySorted() {
   let head = document.getElementById("headLine");
   head.innerHTML = "GigosRate - rate the best movies out there!";
-  let x = document.getElementById("genre").value;
-  if (x === "all genres") {
-    async function fetchAllMovies() {
-      let res = await fetch("http://localhost:8080/allMovies");
-      const movies = await res.json();
-      return movies;
-    }
-
-    fetchAllMovies().then((movies) => {
+  let genre = document.getElementById("genre").value;
+  let year = document.getElementById("year").value;
+  if (genre === "all genres" && year === "all years") {
+    fetchMovies().then((movies) => {
       displayMovies(movies, movieContent);
     });
   } else {
-    async function fetchByGenre(genre) {
-      let urlAndGenre = "http://localhost:8080/moviesByGenre?genre=" + genre;
-      const res = await fetch(urlAndGenre);
-      const movies = await res.json();
-      console.log(movies);
-      return movies;
+    let arr = new Array(4);
+    if (year != "all years") {
+      if (year.includes("-")) {
+        let yearArr = year.split("-");
+        arr[2] = yearArr[0];
+        arr[3] = yearArr[1];
+      } else {
+        arr[2] = year;
+        arr[3] = year;
+      }
     }
-    fetchByGenre(x).then((movies) => {
+    if (genre != "all genres") {
+      arr[1] = genre;
+    }
+    fetchMovies(arr).then((movies) => {
       displayMovies(movies, movieContent);
     });
   }
 }
 
-function displayByYear() {
-  let head = document.getElementById("headLine");
-  head.innerHTML = "GigosRate - rate the best movies out there!";
-  let x = document.getElementById("year").value;
-  if (x === "all years") {
-    async function fetchAllMovies() {
-      let res = await fetch("http://localhost:8080/allMovies");
-      const movies = await res.json();
-      return movies;
-    }
-
-    fetchAllMovies().then((movies) => {
+function searchName() {
+  let name = document.getElementById("search").value;
+  // $(".movie-search").val("");
+  let genre = (document.getElementById("genre").options.selectedIndex = 0);
+  let year = (document.getElementById("year").options.selectedIndex = 0);
+  if (name != null) {
+    let arr = new Array(4);
+    arr[0] = name;
+    fetchMovies(arr).then((movies) => {
       displayMovies(movies, movieContent);
     });
   } else {
-    async function fetchByYear(startYear, endYear) {
-      let urlAndYears =
-        "http://localhost:8080/moviesByRY?start=" +
-        startYear +
-        "&end=" +
-        endYear;
-      let res = await fetch(urlAndYears);
-      const movies = await res.json();
-      return movies;
-    }
-    if (x.includes("-")) {
-      let yearArr = x.split("-");
-      fetchByYear(yearArr[0], yearArr[1]).then((movies) => {
-        displayMovies(movies, movieContent);
-      });
-    } else {
-      fetchByYear(x, x).then((movies) => {
-        let e = document.getElementById("movieContent");
-        displayMovies(movies, movieContent);
-      });
-    }
+    fetchMovies().then((movies) => {
+      displayMovies(movies, movieContent);
+    });
   }
 }
 
