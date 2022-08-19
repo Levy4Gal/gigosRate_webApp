@@ -289,7 +289,7 @@ function removeMovie(userName, movieName, res) {
   const user = {
     userName: userName,
   };
-  users.findOne(user, function (err, result) {
+  users.findOne(user, async function (err, result) {
     if (err) throw err;
     if (result != null) {
       //check if user exist
@@ -302,6 +302,28 @@ function removeMovie(userName, movieName, res) {
           if (err) throw err;
           console.log(" document(s) deleted");
         });
+        usersArr = await users.find().toArray();
+        for(let i = 0; i< usersArr.length; i++){
+          if(usersArr[i].watchList.includes(movieName)){//if the movie is in the watchList of the user
+              let tmpArr = usersArr[i].watchList;
+              let newArr = [];
+              for(let j = 0; j<tmpArr.length; j++){//delete the movie from watchList
+                if(tmpArr[j] != movieName){
+                  newArr.push(tmpArr[j]);
+                }
+              }
+              const options = { upsert: true };
+              const updateDoc = {//set the new watchList
+                $set: {
+                  watchList: newArr
+                }
+              };
+              let userToUpdate = {//user object to update
+                'userName': usersArr[i].userName
+              };
+              await users.updateOne(userToUpdate, updateDoc, options);//update
+          }
+        }
       }
     }
   });
@@ -569,6 +591,33 @@ async function groupBySignupDate(res) {
   res.send(groups);
 }
 
+function getCountry(country, res){
+  const map = client.db("gigos").collection("map");
+  var doc = {
+    'name':'map'
+  }
+  map.findOne(doc, async function (err, result) {
+    if (err) throw err;
+    if(result != null){
+      var countrysArr = result.map.split("&");
+      for(var i = 0; i<countrysArr.length; i++){
+        var countryJson = JSON.parse(countrysArr[i]);
+        if(countryJson['country'] == country){
+          var returnJson = {
+            'lng':countryJson['longitude'],
+            'lat':countryJson['latitude']
+          }
+          res.send(returnJson);
+        }
+      }
+    }
+  })
+}
+
+/*********************************************************
+=================GET/POST handlers========================
+**********************************************************/
+
 app.post("/signUp", (req, res) => {
   //req  parameters:  userName and password.isAdmin is false always if the user name is already exist return res = "this user name is not available"
   createUser(req.query.userName, req.query.password, res);
@@ -611,7 +660,6 @@ app.post("/addMovie", (req, res) => {
 
 app.post("/removeMovie", (req, res) => {
   //req  parameters:  userName ,movieName. remove movie
-  console.log(req.query.userName + "  " + req.query.movieName);
   removeMovie(req.query.userName, req.query.movieName, res);
 });
 
@@ -665,3 +713,9 @@ app.get("/userStatics", (req, res) => {
   //everyday last week if at specific day there is 0 signs up this date will not be included at the response json.
   groupBySignupDate(res);
 });
+
+app.get("/country", (req, res) => {
+  //req  parameters: country.  
+  getCountry(req.query.country, res);
+});
+
