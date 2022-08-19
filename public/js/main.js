@@ -49,9 +49,6 @@ $(document).ready(function () {
 });
 
 function displayMovies(movies, e) {
-  let tmp = JSON.parse(movies[0].rate);
-
-  console.log(tmp.totalRate);
   e.replaceChildren();
   let imgOpenTemp = "<img class='img' name= '";
   let imgSrc = "' src='"; // append img url + imgCloseTemp
@@ -74,9 +71,10 @@ function displayMovies(movies, e) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
     }
-    // let tmp = JSON.parse(movies[i].rate);
+    let totalRate = Number(JSON.parse(movies[i].rate).totalRate);
+    totalRate = totalRate.toFixed(1);
     let name = movies[i].movieName;
-    let rate = rateOpen + 3.5 + rateClose;
+    let rate = rateOpen + totalRate + rateClose;
     let text = textOpenTemp + name + textCloseTemp;
     let img = imgOpenTemp + name + imgSrc + movies[i].img + imgCloseTemp;
     let movie =
