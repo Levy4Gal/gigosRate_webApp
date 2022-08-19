@@ -5,28 +5,36 @@ $(document).ready(function(){
     const fixedStars  =[...document.getElementsByClassName("fa fa-star")];
     const ratingStars = [...document.getElementsByClassName("rating__star")];
 
-
-    let thisPageUrl = window.location.href;
-    let urlSplit = [];
-    urlSplit = thisPageUrl.split("moviename=");
-    let query = urlSplit[1];
-    let querySplit = [];
-    querySplit = query.split("%20");
-    movieName = querySplit.join(" ");
-
+    movieName = getMovieName();
     fetchMovieByName(movieName).then((movie) => {
         loadPageFromDB(movie);
     });
-
+    
+    function getMovieName(){
+        let thisPageUrl = window.location.href;
+        let urlSplit = [];
+        urlSplit = thisPageUrl.split("moviename=");
+        let query = urlSplit[1];
+        let querySplit = [];
+        querySplit = query.split("%20");
+        movieName = querySplit.join(" ");
+        return movieName;
+    }
+    
     async function fetchMovieByName(movieName){
         let url = "http://localhost:8080/movie?movieName=" + movieName;
+        alert(movieName);
         let movieJason = await fetch(url);
         const movie = await movieJason.json();
         return movie;
     }
     
     function loadPageFromDB(item){
-
+        // https://www.youtube.com/watch?v=G1-r1Sgzgls
+        // https://www.youtube.com/embed/G1-r1Sgzgls?autoplay=1
+        let finalUrl;
+        let url =fixUrl(item.trailer);
+        
         document.getElementById("movieName").innerHTML = item.movieName;
         document.getElementById("description").innerHTML ="Description: " + item.description;
         document.getElementById("duration").innerHTML = "Duration: " + item.duration;
@@ -34,18 +42,24 @@ $(document).ready(function(){
         document.getElementById("writer").innerHTML ="Writer: " + item.writer;
         document.getElementById("stars").innerHTML ="Stars: " + item.stars;
         document.getElementById("image").setAttribute("src" ,item.img);
-        document.getElementById("movie").setAttribute("data" ,item.trailer);
+        document.getElementById("movie").setAttribute("data" ,url);
          
-        showStarsFromDBrate(fixedStars,item);//load static fixed stars
-        rateStars(ratingStars,item);//activate rating stars
-        let locations = [];
-        locations = item.locations;
-        initMap(locations);
-        // initMap(locations).then((map)=>{
-        //     initLocations(locations,map);});
+        showStarsFromDBrate(fixedStars,item);
+        rateStars(ratingStars,item);
+
+        // let locations = [];
+        // locations = item.locations;
+        // initMap();
     }
 
-    function showStarsFromDBrate(stars , item){//intalize active stars///
+    function fixUrl(url){
+        let splitUrl = [];
+        splitUrl = url.split("watch?v=");
+        finalUrl = splitUrl.join("embed/");
+        finalUrl = finalUrl.concat('' ,'?autoplay=1');
+        return finalUrl;
+    }
+    function showStarsFromDBrate(stars , item){
         const starClassActive = "fa fa-star checked";
         const starClassInactive = "fa fa-star-o";
         const halfStarClass = "fa fa-star-half-full";
@@ -88,47 +102,15 @@ $(document).ready(function(){
                     for (i; i < starsLength; ++i) stars[i].className = starClassInactive;
                 }
                 changeRateInDB(clientRate);
-                fetchMovieByName().then((movie) => {
+                fetchMovieByName(movieName).then((movie) => {
                     showStarsFromDBrate(fixedStars,movie)
                 });
+                console.log(movie);
             };
         });
     }
-
-    async function initMap(locations){
-        let center = findeCenter(locations);
-        var centerCoord = new google.maps.LatLng(center.lat , center.lng);
-        var option = {
-            zoom:5,
-            center:centerCoord
-        }
-
-        let map = await new google.maps.Map(document.getElementById('map') ,option);
-        // return map;
-    }    
-        
-    function initLocations(locations,map){
-        for (let i = 0; i < locations.length ; i++) {
-            var option = {
-                position:new google.maps.LatLng(locations[i][0] ,locations[i][1]),
-                map:map
-            };
-            let marker = new google.maps.Marker(option);
-            marker.setMap(map);
-        }
-    }
-    function findeCenter(locations){
-        let latSum=0 ,lngSum=0;
-        let locationsAmount = locations.length;
-        for(let i=0 ; i < locationsAmount ;i++){
-            latSum += locations[i][0];
-            lngSum += locations[i][1];
-        }
-        let center ={lat:latSum/=locationsAmount , lng:lngSum/=locationsAmount};
-        return center;
-    }
-
     
+ 
 });
 
 function addToWatch() {
@@ -162,9 +144,37 @@ function scrollToTop() {
     $(window).scrollTop(0);
 }
 
-// let newRate; 
-// let numOfVoters = item.numOfVoters;
-// newRate = ((rate*numOfVoters)+clientRate)/ (numOfVoters+1);
-// if(newRate>5){
-//newRate = 5;} 
 
+
+// async function initMap(locations){
+    //     let center = findeCenter(locations);
+    //     var centerCoord = new google.maps.LatLng(center.lat , center.lng);
+    //     var option = {
+    //         zoom:5,
+    //         center:centerCoord
+    //     }
+
+    //     // let map = await new google.maps.Map(document.getElementById("map"),option);
+    //     // let infoWindow = new google.maps.InfoWindow();  
+    //   }    
+        
+    // function initLocations(locations,map){
+    //     for (let i = 0; i < locations.length ; i++) {
+    //         var option = {
+    //             position:new google.maps.LatLng(locations[i][0] ,locations[i][1]),
+    //             map:map
+    //         };
+    //         let marker = new google.maps.Marker(option);
+    //         marker.setMap(map);
+    //     }
+    // }
+    // function findeCenter(locations){
+    //     let latSum=0 ,lngSum=0;
+    //     let locationsAmount = locations.length;
+    //     for(let i=0 ; i < locationsAmount ;i++){
+    //         latSum += locations[i][0];
+    //         lngSum += locations[i][1];
+    //     }
+    //     let center ={lat:latSum/=locationsAmount , lng:lngSum/=locationsAmount};
+    //     return center;
+    // }
