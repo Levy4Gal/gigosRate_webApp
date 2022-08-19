@@ -1,21 +1,29 @@
-// const { json } = require("body-parser");
 
+var movieName;
 $(document).ready(function(){
     
     const fixedStars  =[...document.getElementsByClassName("fa fa-star")];
     const ratingStars = [...document.getElementsByClassName("rating__star")];
 
-    fetchMovieByName().then((movie) => {
+
+    let thisPageUrl = window.location.href;
+    let urlSplit = [];
+    urlSplit = thisPageUrl.split("moviename=");
+    let query = urlSplit[1];
+    let querySplit = [];
+    querySplit = query.split("%20");
+    movieName = querySplit.join(" ");
+
+    fetchMovieByName(movieName).then((movie) => {
         loadPageFromDB(movie);
     });
 
-    async function fetchMovieByName(name){
-        let url = "http://localhost:8080/movie?movieName=" + "John Wick 2";
+    async function fetchMovieByName(movieName){
+        let url = "http://localhost:8080/movie?movieName=" + movieName;
         let movieJason = await fetch(url);
         const movie = await movieJason.json();
         return movie;
     }
-    
     
     function loadPageFromDB(item){
 
@@ -67,16 +75,16 @@ $(document).ready(function(){
         const starsLength = stars.length;   
         let i;
         let rate = parseFloat(item.rate);
-        // alert(rate);
         let clientRate;
         stars.map((star) => {
             star.onclick = () => {
                 i = stars.indexOf(star);
-                clientRate = i+1;        
-
+                        
                 if (star.className === starClassInactive) {
+                    clientRate = i+1;
                     for (i; i >= 0; --i) stars[i].className = starClassActive;
                 } else {
+                    clientRate = i;
                     for (i; i < starsLength; ++i) stars[i].className = starClassInactive;
                 }
                 changeRateInDB(clientRate);
@@ -119,10 +127,12 @@ $(document).ready(function(){
         let center ={lat:latSum/=locationsAmount , lng:lngSum/=locationsAmount};
         return center;
     }
+
+    
 });
 
 function addToWatch() {
-    let movieName = "John Wick 2";
+    alert(movieName);
     const Http = new XMLHttpRequest();
     const url =
       "http://localhost:8080/addToWl?movieName=" +
@@ -135,7 +145,6 @@ function addToWatch() {
 }
 
 function changeRateInDB(rate) {
-    let movieName = "John Wick 2";
     const Http = new XMLHttpRequest();
     const url =
       "http://localhost:8080/rate?movieName=" +
