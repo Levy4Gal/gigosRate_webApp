@@ -713,6 +713,35 @@ async function search(movieName, genre, startYear, endYear,res){
   res.send(filterMovies);
 }
 
+function removeFromWl(userName, movieName){
+  const users = client.db("gigos").collection("users");
+  const user = {
+    userName:userName
+  }
+  users.findOne(user, async function (err, result) {
+    if (err) throw err;
+    if(result != null){
+      let tmpArr = result.watchList;
+      let newArr = [];
+      for(let j = 0; j<tmpArr.length; j++){//delete the movie from watchList
+        if(tmpArr[j] != movieName){
+          newArr.push(tmpArr[j]);
+        }
+      }
+      const options = { upsert: true };
+      const updateDoc = {//set the new watchList
+        $set: {
+          'watchList': newArr
+        }
+      };
+      let userToUpdate = {//user object to update
+        'userName': userName
+      };
+      await users.updateOne(userToUpdate, updateDoc, options);//update
+    }
+  });
+}
+
 /*********************************************************
 =================GET/POST handlers========================
 **********************************************************/
@@ -792,6 +821,11 @@ app.post("/rate", (req, res) => {
 app.post("/addToWl", (req, res) => {
   //req  parameters:  movieName, userName. if the movie is already exist in the watchList this func do nothing
   addToWatchList(req.query.userName, req.query.movieName);
+});
+
+app.post("/removeFromWl", (req, res) => {
+  //req  parameters:  movieName, userName. if the movie is exist in the watchList this func remove him, else
+  removeFromWl(req.query.userName, req.query.movieName);
 });
 
 app.get("/moviesByGenre", (req, res) => {
