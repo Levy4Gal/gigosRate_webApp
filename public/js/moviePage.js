@@ -109,8 +109,10 @@ $(document).ready(function(){
             };
         });
     }
+
     
  
+
 });
 
 function addToWatch() {
