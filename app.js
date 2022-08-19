@@ -157,17 +157,20 @@ function createUser(userName, password, res) {
   });
 }
 
-function removeUser(adminName ,userNameToDelete, res) {
+function removeUser(adminName, userNameToDelete, res) {
   const users = client.db("gigos").collection("users");
   const admin = {
-    userName:adminName
-  }
+    userName: adminName,
+  };
   users.findOne(admin, function (err, result) {
     if (err) throw err;
-    if (result != null) {//check if user exist
-      if(result.isAdmin == true){//check if user is admin
+    if (result != null) {
+      //check if user exist
+      if (result.isAdmin == true) {
+        //check if user is admin
         var myquery = { userName: userNameToDelete };
-        users.remove(myquery, function(err, obj) {//remove user
+        users.remove(myquery, function (err, obj) {
+          //remove user
           if (err) throw err;
           console.log(" document(s) deleted");
         });
@@ -281,21 +284,46 @@ function addMovie(
   });
 }
 
-function removeMovie(userName ,movieName, res) {
+function removeMovie(userName, movieName, res) {
   const users = client.db("gigos").collection("users");
   const user = {
-    userName:userName
-  }
-  users.findOne(user, function (err, result) {
+    userName: userName,
+  };
+  users.findOne(user, async function (err, result) {
     if (err) throw err;
-    if (result != null) {//check if user exist
-      if(result.isAdmin == true){//check if user is admin
+    if (result != null) {
+      //check if user exist
+      if (result.isAdmin == true) {
+        //check if user is admin
         const movies = client.db("gigos").collection("movies");
         var myquery = { movieName: movieName };
-        movies.remove(myquery, function(err, obj) {//remove movie
+        movies.remove(myquery, function (err, obj) {
+          //remove movie
           if (err) throw err;
           console.log(" document(s) deleted");
         });
+        usersArr = await users.find().toArray();
+        for(let i = 0; i< usersArr.length; i++){
+          if(usersArr[i].watchList.includes(movieName)){//if the movie is in the watchList of the user
+              let tmpArr = usersArr[i].watchList;
+              let newArr = [];
+              for(let j = 0; j<tmpArr.length; j++){//delete the movie from watchList
+                if(tmpArr[j] != movieName){
+                  newArr.push(tmpArr[j]);
+                }
+              }
+              const options = { upsert: true };
+              const updateDoc = {//set the new watchList
+                $set: {
+                  watchList: newArr
+                }
+              };
+              let userToUpdate = {//user object to update
+                'userName': usersArr[i].userName
+              };
+              await users.updateOne(userToUpdate, updateDoc, options);//update
+          }
+        }
       }
     }
   });
@@ -586,14 +614,18 @@ function getCountry(country, res){
   })
 }
 
+/*********************************************************
+=================GET/POST handlers========================
+**********************************************************/
+
 app.post("/signUp", (req, res) => {
   //req  parameters:  userName and password.isAdmin is false always if the user name is already exist return res = "this user name is not available"
   createUser(req.query.userName, req.query.password, res);
 });
 
 app.post("/removeUser", (req, res) => {
-  //get the parameters:  adminName, toDelete . adminName - is the user commit the act, toDelete - is the user that need to delete 
-  removeUser(req.query.adminName,req.query.toDelete, res);
+  //get the parameters:  adminName, toDelete . adminName - is the user commit the act, toDelete - is the user that need to delere
+  removeUser(req.query.adminName, req.query.toDelete, res);
 });
 
 app.get("/authenticateUsre", (req, res) => {
@@ -628,8 +660,7 @@ app.post("/addMovie", (req, res) => {
 
 app.post("/removeMovie", (req, res) => {
   //req  parameters:  userName ,movieName. remove movie
-  console.log(req.query.userName + "  " + req.query.movieName);
-  removeMovie(req.query.userName , req.query.movieName, res);
+  removeMovie(req.query.userName, req.query.movieName, res);
 });
 
 app.get("/movie", (req, res) => {
@@ -687,3 +718,4 @@ app.get("/country", (req, res) => {
   //req  parameters: country.  
   getCountry(req.query.country, res);
 });
+
