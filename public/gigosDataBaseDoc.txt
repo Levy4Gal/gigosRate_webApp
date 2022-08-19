@@ -39,13 +39,22 @@ find return empty arr. V
 json contains key:date value: count of how many users signs up at everyday last week 
 if at specific day there is 0 signs up this date will not be included at the response json. V
 
-15. remove movie by movieName - path: post http://localhost:8080/removeMovie ,   parameters:  userName ,movieName. V
+15. remove movie by movieName - path: post http://localhost:8080/removeMovie ,   parameters:  userName ,movieName.
+the function remove the movie from movies and all the watch lists that includes this movie. V
 
 16. remove user by userName - path: post http://localhost:8080/removeUser , parameters:  adminName, toDelete .
  adminName - is the user commit the act, toDelete - is the user that need to delete. V
 
-17. this path get name and return coordinate - path: get http://localhost:8080/country , parameters:  country .
- return json { 'lng':12, 'lat':-2 }. V  
+17. this path get name and return coordinate - path: get http://localhost:8080/country ,
+ parameters:  country .return json { 'lng':12, 'lat':-2 }. V  
+
+18. this path get parameters to search movies and return arr of movies
+ - path: get http://localhost:8080/searchMovie , parameters:  movieName, genre, startYear,
+  endYear. if the not exist return empty arr, else return arr of movies json. V  
+
+19. this path movie from watch list of user
+ - path: post http://localhost:8080/removeFromWl ,parameters:  movieName, userName.
+  if the movie is exist in the watchList this func remove him, else do nothing. V  
 
 movieJson: 
 

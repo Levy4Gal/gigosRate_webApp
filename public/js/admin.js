@@ -1,50 +1,54 @@
 
 //initial load
-addJS_Node (null, "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js", null, showAddedUsersLastWeekStatistics);
 
 var displayedMovies;
 var displayUsers; // needs to add
 var lastWeekUsers;
 var moviesByGenere;
+var userStatisticsData;
+var userStatLargest;
+var movieGenreData;
 let onUsers = false;
+let userChart = true;
 
 $( document ).ready(function() {
     httpGetAsync("http://localhost:8080/firstMovies?num=8",handleMovies);
-    // httpGetAsync()
+    httpGetAsync("http://localhost:8080/userStatics",handleUserStatics);
+    httpGetAsync("http://localhost:8080/movStatics",handleMovieStatics);
 });
 
 
 //statistics  
-function showAddedUsersLastWeekStatistics(){
-    $( document ).ready(function() {
-        //user creation stats
-            var ctx = document.getElementById("myChart").getContext('2d');
-            var xValues = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday","Saturday"];
-            var yValues = [55, 49, 44, 24, 15,3,40];
-            var barColors = ["#47B5FF", "#47B5FF","#47B5FF","#47B5FF","#47B5FF","#47B5FF","#47B5FF"];
-            let c = new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: xValues,
-                datasets: [{
-                backgroundColor: barColors,
-                data: yValues,
-                fontColor: "white"
-                }]
-            },
-            options: {
-                legend: {display: false},
+// function showAddedUsersLastWeekStatistics(){
+//     $( document ).ready(function() {
+//         //user creation stats
+//             var ctx = document.getElementById("myChart").getContext('2d');
+//             var xValues = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday","Saturday"];
+//             var yValues = [55, 49, 44, 24, 15,3,40];
+//             var barColors = ["#47B5FF", "#47B5FF","#47B5FF","#47B5FF","#47B5FF","#47B5FF","#47B5FF"];
+//             let c = new Chart(ctx, {
+//             type: "bar",
+//             data: {
+//                 labels: xValues,
+//                 datasets: [{
+//                 backgroundColor: barColors,
+//                 data: yValues,
+//                 fontColor: "white"
+//                 }]
+//             },
+//             options: {
+//                 legend: {display: false},
                 
-                title: {
-                display: true,
-                text: "Weekly User Creation",
-                fontColor: "white"
-                }
-            }
-            }); 
-        });
+//                 title: {
+//                 display: true,
+//                 text: "Weekly User Creation",
+//                 fontColor: "white"
+//                 }
+//             }
+//             }); 
+//         });
     
-}
+// }
 
 
 function handleMovies(movies){
@@ -150,18 +154,52 @@ function onAddMovie(){
     // console.log(JSON.parse(json));
 }
 
+function changeChart(uChart){
+    userChart = uChart;
+    if(userChart){
+        createUserBarChart(userStatisticsData,userStatLargest + 5);
+        $("#userChartOption").removeClass();
+        $("#genreChartOption").removeClass();
+        $("#userChartOption").addClass("selectedChartOption");
+        $("#genreChartOption").addClass("chartOption");
 
-function addJS_Node (text, s_URL, funcToRun, runOnLoad) {
-    var D                                   = document;
-    var scriptNode                          = D.createElement ('script');
-    if (runOnLoad) {
-        scriptNode.addEventListener ("load", runOnLoad, false);
     }
-    scriptNode.type                         = "text/javascript";
-    if (text)       scriptNode.textContent  = text;
-    if (s_URL)      scriptNode.src          = s_URL;
-    if (funcToRun)  scriptNode.textContent  = '(' + funcToRun.toString() + ')()';
+    else
+    {
+        createPieChart(movieGenreData);
+        $("#userChartOption").removeClass();
+        $("#genreChartOption").removeClass();
+        $("#userChartOption").addClass("chartOption");
+        $("#genreChartOption").addClass("selectedChartOption");
+    }    
+}
 
-    var targ = D.getElementsByTagName ('head')[0] || D.body || D.documentElement;
-    targ.appendChild (scriptNode);
+function handleUserStatics(res){
+    // res = res.sort(custom_sort);
+    userStatisticsData = JSON.parse(res);
+    userStatLargest = 0;
+    for(let i=0; i<userStatisticsData.length;i++){
+        if(userStatisticsData[i].count > userStatLargest)
+            largest = userStatisticsData[i].count;
+    }
+    userStatisticsData = userStatisticsData.sort((a, b) => {
+        var parts = a._id.split("/");
+        var dtA = new Date(parseInt(parts[2], 10),
+                  parseInt(parts[1], 10) - 1,
+                  parseInt(parts[0], 10));
+
+        var parts = b._id.split("/");
+
+        var dtB = new Date(parseInt(parts[2], 10),
+            parseInt(parts[1], 10) - 1,
+            parseInt(parts[0], 10));
+
+        return dtA - dtB;
+      });
+    createUserBarChart(userStatisticsData,userStatLargest+5);
+}
+
+function handleMovieStatics(res){
+    movieGenreData = JSON.parse(res);
+    console.log(movieGenreData);
 }
