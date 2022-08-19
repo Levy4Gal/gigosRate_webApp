@@ -1,5 +1,6 @@
 
 var movieName;
+
 $(document).ready(function(){
     
     const fixedStars  =[...document.getElementsByClassName("fa fa-star")];
@@ -8,6 +9,7 @@ $(document).ready(function(){
     movieName = getMovieName();
     fetchMovieByName(movieName).then((movie) => {
         loadPageFromDB(movie);
+        addLocations(movie);
     });
     
     function getMovieName(){
@@ -23,18 +25,13 @@ $(document).ready(function(){
     
     async function fetchMovieByName(movieName){
         let url = "http://localhost:8080/movie?movieName=" + movieName;
-        alert(movieName);
         let movieJason = await fetch(url);
         const movie = await movieJason.json();
         return movie;
     }
     
     function loadPageFromDB(item){
-        // https://www.youtube.com/watch?v=G1-r1Sgzgls
-        // https://www.youtube.com/embed/G1-r1Sgzgls?autoplay=1
-        let finalUrl;
-        let url =fixUrl(item.trailer);
-        
+      
         document.getElementById("movieName").innerHTML = item.movieName;
         document.getElementById("description").innerHTML ="Description: " + item.description;
         document.getElementById("duration").innerHTML = "Duration: " + item.duration;
@@ -42,14 +39,11 @@ $(document).ready(function(){
         document.getElementById("writer").innerHTML ="Writer: " + item.writer;
         document.getElementById("stars").innerHTML ="Stars: " + item.stars;
         document.getElementById("image").setAttribute("src" ,item.img);
+        let url =fixUrl(item.trailer);
         document.getElementById("movie").setAttribute("data" ,url);
          
         showStarsFromDBrate(fixedStars,item);
         rateStars(ratingStars,item);
-
-        // let locations = [];
-        // locations = item.locations;
-        // initMap();
     }
 
     function fixUrl(url){
@@ -66,6 +60,7 @@ $(document).ready(function(){
         const starsLength = stars.length;
         var rateJson =JSON.parse(item.rate);
         var rate =Number.parseFloat(rateJson['totalRate']);
+        rate = rate.toFixed(1);
         let boolienFlag = false;
         document.getElementById("rate").innerHTML = rate;
         var roundRate =  Math.floor(rate);
@@ -109,14 +104,9 @@ $(document).ready(function(){
             };
         });
     }
-
-    
- 
-
 });
 
 function addToWatch() {
-    alert(movieName);
     const Http = new XMLHttpRequest();
     const url =
       "http://localhost:8080/addToWl?movieName=" +
@@ -142,41 +132,51 @@ function changeRateInDB(rate) {
     alert("rate have changed");
 }
 
+async function getCoordsFromCountryName(country){
+    let url =
+    "http://localhost:8080/country?country=" + country;
+    let coordsJason = await fetch(url);
+    const coords = await coordsJason.json();
+    return coords;
+}
+
+var map;
+function initMap() {
+    var options = {
+        zoom: 2,
+        center: {lat: 40.52, lng: 34.34}
+    }
+    map = new google.maps.Map(document.getElementById('map'), options); 
+}
+
+function addLocations(item){
+    locations = [];
+    locations = item.locations.split(",");
+    for (let i = 0; i < locations.length; i++) {
+        getCoordsFromCountryName(locations[i]).then((coords)=>{
+            var location = new google.maps.Marker({
+                position:coords,
+                map:map
+            });
+        }); 
+    } 
+}
+
 function scrollToTop() {
     $(window).scrollTop(0);
 }
 
-
-
-// async function initMap(locations){
-    //     let center = findeCenter(locations);
-    //     var centerCoord = new google.maps.LatLng(center.lat , center.lng);
-    //     var option = {
-    //         zoom:5,
-    //         center:centerCoord
-    //     }
-
-    //     // let map = await new google.maps.Map(document.getElementById("map"),option);
-    //     // let infoWindow = new google.maps.InfoWindow();  
-    //   }    
-        
-    // function initLocations(locations,map){
-    //     for (let i = 0; i < locations.length ; i++) {
-    //         var option = {
-    //             position:new google.maps.LatLng(locations[i][0] ,locations[i][1]),
-    //             map:map
-    //         };
-    //         let marker = new google.maps.Marker(option);
-    //         marker.setMap(map);
-    //     }
-    // }
-    // function findeCenter(locations){
-    //     let latSum=0 ,lngSum=0;
-    //     let locationsAmount = locations.length;
-    //     for(let i=0 ; i < locationsAmount ;i++){
-    //         latSum += locations[i][0];
-    //         lngSum += locations[i][1];
-    //     }
-    //     let center ={lat:latSum/=locationsAmount , lng:lngSum/=locationsAmount};
-    //     return center;
-    // }
+// async function findeCenter(locations){
+//     let latSum=0 ,lngSum=0;
+//     let locationsAmount = locations.length;
+//     for(let i=0 ; i < locationsAmount ;i++){
+//         getCoordsFromCountryName(locations[i]).then((coords)=>{
+//             latSum += coords.lat;
+//             lngSum += coords.lng;
+//         });
+       
+//     }
+//     let center ={lat:(latSum/=locationsAmount) , lng:(lngSum/=locationsAmount)};
+//     console.log(center);
+//     return center;
+// }           
