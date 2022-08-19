@@ -52,6 +52,10 @@ the function remove the movie from movies and all the watch lists that includes 
  - path: get http://localhost:8080/searchMovie , parameters:  movieName, genre, startYear,
   endYear. if the not exist return empty arr, else return arr of movies json. V  
 
+18. this path movie from watch list of user
+ - path: post http://localhost:8080/removeFromWl ,parameters:  movieName, userName.
+  if the movie is exist in the watchList this func remove him, else do nothing. V  
+
 movieJson: 
 
     {
