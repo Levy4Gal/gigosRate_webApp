@@ -114,9 +114,9 @@ textarea { height: auto; }
     text-align: center;
 }
 .displayRow{
-    display: flex;
-    flex-flow: row;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 30% 70%;
+    /* align-items: center; */
     margin-top: 20px;
 }
 .addName{
@@ -129,7 +129,7 @@ textarea { height: auto; }
 .addBtn{
     align-self: center;
     border: 1px solid black;
-    margin-top: 20px;
+    margin-top: 40px;
     padding: 10px;
     width: 100%;
     text-align: center;

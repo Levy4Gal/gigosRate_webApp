@@ -39,7 +39,7 @@ const sample = [
     }
   ];
 
-function createPieChart(){
+function createPieChart(genreData){
 d3.selectAll("svg > *").remove();
 
 // set the dimensions and margins of the graph
@@ -55,22 +55,25 @@ var svg = d3.select('svg')
     .attr("width", width)
     .attr("height", height)
   .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    .attr("transform", "translate(" + (width/2 + margin) + "," + (height / 2 + margin) + ")");
 
 // Create dummy data
 var data = {a: 9, b: 20, c:30, d:8, e:12}
-
 // set the color scale
 var color = d3.scaleOrdinal()
-  .domain(data)
+  .domain(genreData.map((g)=> g._id))
   .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"])
 
 // Compute the position of each group on the pie:
 var pie = d3.pie()
   .value(function(d) {return d.value; })
-var data_ready = pie(d3.entries(data))
+var data_ready = pie(d3.entries(genreData.map(g => g.count)));
 
+for(let i =0; i< data_ready.length; i++){
 
+    data_ready[i].data.key = genreData[data_ready[i].data.key]._id;
+}
+console.log(data_ready);
 // The arc generator
 var arc = d3.arc()
   .innerRadius(radius * 0.5)         // This is the size of the donut hole
@@ -94,7 +97,7 @@ var outerArc = d3.arc()
     .style("stroke-width", "2px")
     .style("opacity", 0.7)
 
-  // Add the polylines between chart and labels:
+  // Add the polylines between chart and labels: - polylines
 svg
 .selectAll('allPolylines')
 .data(data_ready)
@@ -105,6 +108,9 @@ svg
   .attr("stroke-width", 1)
   .attr('points', function(d) {
     var posA = arc.centroid(d) // line insertion in the slice
+    posA[0] = posA[0] * 1.15;
+    posA[1] = posA[1] * 1.15;
+
     var posB = outerArc.centroid(d) // line break: we use the other arc generator that has been built only for that
     var posC = outerArc.centroid(d); // Label position = almost the same as posB
     var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2 // we need the angle to see if the X position will be at the extreme right or extreme left
@@ -112,13 +118,13 @@ svg
     return [posA, posB, posC]
   })
 
-// Add the polylines between chart and labels:
+// Add the polylines between chart and labels: - text
 svg
 .selectAll('allLabels')
 .data(data_ready)
 .enter()
 .append('text')
-  .text( function(d) { console.log(d.data.key) ; return d.data.key } )
+  .text( function(d) { console.log(d.data) ; return d.data.key } )
   .attr('transform', function(d) {
       var pos = outerArc.centroid(d);
       var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
@@ -128,7 +134,32 @@ svg
   .style('text-anchor', function(d) {
       var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
       return (midangle < Math.PI ? 'start' : 'end')
+  });
+
+  svg
+.selectAll('allLabels')
+.data(data_ready)
+.enter()
+.append('text')
+  .text( function(d) { console.log(d.data) ; return d.data.value } )
+  .attr('transform', function(d) {
+      var pos = arc.centroid(d);
+      
+      return 'translate(' + pos + ')';
   })
+  .style('text-anchor', function(d) {
+      var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+      return (midangle < Math.PI ? 'start' : 'end')
+  });
+
+
+
+  svg.append('text')
+      .attr('class', 'title')
+      .attr('x',  0)
+      .attr('y', -(height  / 2) + 20)
+      .attr('text-anchor', 'middle')
+      .text('Movies By Genre');
 }
 
 

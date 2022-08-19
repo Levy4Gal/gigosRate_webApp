@@ -7,12 +7,14 @@ var lastWeekUsers;
 var moviesByGenere;
 var userStatisticsData;
 var userStatLargest;
+var movieGenreData;
 let onUsers = false;
 let userChart = true;
 
 $( document ).ready(function() {
     httpGetAsync("http://localhost:8080/firstMovies?num=8",handleMovies);
     httpGetAsync("http://localhost:8080/userStatics",handleUserStatics);
+    httpGetAsync("http://localhost:8080/movStatics",handleMovieStatics);
 });
 
 
@@ -164,7 +166,7 @@ function changeChart(uChart){
     }
     else
     {
-        createPieChart();
+        createPieChart(movieGenreData);
         $("#userChartOption").removeClass();
         $("#genreChartOption").removeClass();
         $("#userChartOption").addClass("chartOption");
@@ -192,16 +194,12 @@ function handleUserStatics(res){
             parseInt(parts[1], 10) - 1,
             parseInt(parts[0], 10));
 
-        // var dateA = Date.parse(a._id);
-        // var dateB = new Date(b._id);
-        // console.log(dtA);
-        // console.log(a);
         return dtA - dtB;
       });
-    console.log(userStatisticsData);
     createUserBarChart(userStatisticsData,userStatLargest+5);
 }
 
-function custom_sort(a, b) {
-    return new Date(a.lastUpdated).getTime() - new Date(b.lastUpdated).getTime();
+function handleMovieStatics(res){
+    movieGenreData = JSON.parse(res);
+    console.log(movieGenreData);
 }
