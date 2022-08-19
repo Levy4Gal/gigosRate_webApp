@@ -41,34 +41,18 @@
                 <span class="rating__star far fa-star"></span>
             </div>
             <div class="tooltip">
-                <button id="addToList" onclick="addToList()"><i class="fa-solid fa-list-check"></i></button>
+                <button id="addToWatch" onclick="addToWatch()"><i class="fa-solid fa-list-check"></i></button>
                 <span class="tooltiptext">Add to watch list</span>
               </div>
             
         </div>
-        
-        <!-- https://drive.google.com/file/d/1c7eOgZPml1ufxQWDL16dTT8nn6kV2mYM/view?usp=sharing -->
-
-        <!-- https://drive.google.com/file/d//view?usp=sharing -->
-<!-- "https://drive.google.com/uc?export=view&id=1c7eOgZPml1ufxQWDL16dTT8nn6kV2mYM" -->
-        
-        
+      
         <div id="middle">
-            <!-- movie image -->
             <img id="image">
-            <!-- ///////video////// -->
-
             <object id="movie" 
-
                 controls autoplay 
                 width='540' height='420'>
             </object>
-            
-            
-            <!-- <video class="video" width="540" height="420" controls autoplay >
-                <source src="video.mp4" type="video/mp4">
-                <source src="movie.ogg" type="video/ogg">
-            </video> -->
         </div>
     
         <div id = "movieData">
@@ -94,11 +78,13 @@
             </iframe>        
         </div>
     
+        <!-- ////////////////////////////////////////////////////// -->
         <div id="map"></div>
-        <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2MhSzwkJdU50VOmGdqaiyHAMIZ_y12ok&callback=initMap&v=weekly"
-            defer>
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2MhSzwkJdU50VOmGdqaiyHAMIZ_y12ok&callback=initMap">      
         </script>
+        <!-- ////////////////////////////////////////////////////// -->
+
 
         <div id="mapTitle"> <i class="fa-solid fa-map-location-dot"></i> Check out where this movie was filmed <i class="fa-solid fa-map-location-dot"></i> </div>
         
@@ -107,6 +93,3 @@
         </button>
     </body>
 </div>
-
-
-
