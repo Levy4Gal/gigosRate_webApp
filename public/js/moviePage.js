@@ -142,9 +142,10 @@ async function getCoordsFromCountryName(country){
 
 var map;
 function initMap() {
+    let worldCenter = {lat: 40.52, lng: 34.34};
     var options = {
         zoom: 2,
-        center: {lat: 40.52, lng: 34.34}
+        center: worldCenter
     }
     map = new google.maps.Map(document.getElementById('map'), options); 
 }
