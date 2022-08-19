@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="/js/main.js"></script>
+    <script src="/js/fetch.js"></script>
     <link rel="stylesheet" href="views/css/main.css"  />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link
@@ -25,7 +26,7 @@
   <div id="body">
     <div class="filter-bar">
       <div class="custom-select">
-        <select id="genre" class="select" onchange="displayGenre()">
+        <select id="genre" class="select" onchange="displaySorted()">
           <option value="all genres">All genres</option>
           <option value="action">Action</option>
           <option value="drama">Drama</option>
@@ -34,7 +35,7 @@
           <option value="biography">Biography</option>
         </select>
 
-        <select id="year" class="select" onchange="displayByYear()">
+        <select id="year" class="select" onchange="displaySorted()">
           <option value="all years">All the years</option>
           <option value="2022">2022</option>
           <option value="2020-2021">2020-2021</option>
@@ -47,8 +48,8 @@
         <button class="showAll" id="showAll">Show all movies</button>
       </div>
       <div>
-        <input type="search" class="movie-search""  placeholder="enter movie name" >
-        <button class="searchButton"">Search</button>
+        <input id = "search" type="search" class="movie-search""  placeholder="enter movie name" >
+        <button id= "searchButton"class="searchButton" onclick="searchName()">Search</button>
       </div>
       </div>  
     </div>
