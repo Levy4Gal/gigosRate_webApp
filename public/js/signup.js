@@ -1,3 +1,4 @@
+// Checks if the passwords are the same.
 function passwordCheck(pas1,pas2){
     if(pas1!=pas2){
         return false;   
@@ -5,6 +6,7 @@ function passwordCheck(pas1,pas2){
     return true;
 }
 
+// Send sign up request to the server socket io.
 function SignUp(_username,_password,_isAdmin){
     socket.emit("sign-up", {
         username: _username,
@@ -13,8 +15,8 @@ function SignUp(_username,_password,_isAdmin){
       });
 }
 
-
-function mySignUp3(){
+// Takse the values from the sign up page and send them to the server -> DB adds the new user.
+function SignUpButton(){
     console.log("pressed sign up 3");
     _username = document.getElementById("username").value;
     _password = document.getElementById("firstPassword").value;
@@ -23,7 +25,7 @@ function mySignUp3(){
         console.log("username/password are incorrect");
       var SignUpLabel = document.getElementById("value");
       if(SignUpLabel == null){
-        console.log("here");
+        console.log("here"); 
       $("#Sign-Up-Respond").append('<p id=value>Passwords are not match.</p>');
       }
       else{
@@ -37,8 +39,6 @@ function mySignUp3(){
         " password is:" +
         _password
     );
-    // console.log(username);
-    // console.log(password);
     is_Admin = false;
     SignUp(_username,_password,is_Admin);
     console.log("sent sign-up emit");

@@ -12,8 +12,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
-// mine
-var http = require("http"); //
+var http = require("http"); 
 var server = http.createServer(app); //
 var io = require("socket.io")(server); //
 server.listen(port); //
