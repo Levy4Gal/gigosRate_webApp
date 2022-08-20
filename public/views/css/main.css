@@ -59,8 +59,9 @@
   .movieDiv {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     max-width: 250px;
-    /* margin:  */
     text-align: center;
+    justify-content: center;
+    align-items: center;
     font-family: arial;
     padding: 3%;
   }
@@ -98,7 +99,7 @@
 
 .img {
     
-  width: 250px;
+  width: 200px;
   border-radius: 5%;
   cursor: pointer;
   object-position: top;
@@ -113,10 +114,17 @@
 
 .checked {
   color: orange;
-  padding: 4%;
+  padding: 1%;
   
 }
 
 .rate {
   font-size: large;
+  padding-left: 4%;
+  }
+
+
+
+.watch-list{
+  margin-top:5% ;
 }
