@@ -98,7 +98,7 @@ app.post("/login", (req, res) => {
 
 //Admin test
 app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/views/index.html"));
+  res.sendFile(path.join(__dirname, "public/views/admin.html"));
 });
 
 app.get("/moviepage", (req, res) => {
@@ -332,20 +332,6 @@ function removeMovie(userName, movieName, res) {
   });
 }
 
-function getMovie(movieName, res) {
-  //helper function for signup
-  const movies = client.db("gigos").collection("movies");
-  const movie = {
-    movieName: movieName,
-  };
-  movies.findOne(movie, function (err, result) {
-    if (err) throw err;
-    if (result != null) {
-      res.send(result);
-    } else res.send("this movie is not exist");
-  });
-}
-
 async function getAllMovies(userName, res) {
   //helper function for signup
   var movies = await client.db("gigos").collection("movies").find().toArray();
@@ -512,20 +498,6 @@ async function getMoviesByGenre(genre, res) {
   res.send(genreArr);
 }
 
-async function getMoviesByYear(startYear, endYear, res) {
-  var movies = await client.db("gigos").collection("movies").find().toArray();
-  var filterMov = [];
-  let start = Number.parseInt(startYear);
-  let end = Number.parseInt(endYear);
-  for (let i = 0; i < movies.length; i++) {
-    let relYear = Number.parseInt(movies[i].releaseYear);
-    if (relYear >= start && relYear <= end) {
-      filterMov.push(movies[i]);
-    }
-  }
-  res.send(filterMov);
-}
-
 async function getWatchListByUserName(userName, res) {
   const users = client.db("gigos").collection("users");
   const user = {
@@ -646,7 +618,7 @@ async function search(movieName, genre, startYear, endYear,res){
     }
 
     
-    /*--------find by movie year------- */
+    /*--------find by movie genre------- */
     if(genre != null){
       for (let i = 0; i < moviesArr.length; i++) {
         if (moviesArr[i].genre == genre) {
@@ -798,11 +770,6 @@ app.get("/searchMovie", (req, res) => {
      req.query.startYear, req.query.endYear, res);
 });
 
-app.get("/movie", (req, res) => {
-  //req  parameters:  movieName. if the movie is not exist return res = "this movie is not exist", else return the movie
-  getMovie(req.query.movieName, res);
-});
-
 app.get("/allMovies", (req, res) => {
   //req  parameters:  userName
   getAllMovies(req.query.userName, res);
@@ -824,18 +791,13 @@ app.post("/addToWl", (req, res) => {
 });
 
 app.post("/removeFromWl", (req, res) => {
-  //req  parameters:  movieName, userName. if the movie is exist in the watchList this func remove him, else
+  //req  parameters:  movieName, userName. if the movie is exist in the watchList this func remove him, else do nothing
   removeFromWl(req.query.userName, req.query.movieName);
 });
 
 app.get("/moviesByGenre", (req, res) => {
   //req  parameters:  genre. if dont find return empty arr
   getMoviesByGenre(req.query.genre, res);
-});
-
-app.get("/moviesByRY", (req, res) => {
-  //req  parameters:  start, end. this func check if a start=<releaseYear<=end, if dont find return empty arr
-  getMoviesByYear(req.query.start, req.query.end, res);
 });
 
 app.get("/watchList", (req, res) => {
