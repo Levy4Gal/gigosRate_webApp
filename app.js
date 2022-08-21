@@ -121,6 +121,10 @@ app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
+app.get("/contact", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/views/index.html"));
+});
+
 // app.listen(port, () => console.info("Listening on port " ,port));
 
 /**************************************************
@@ -227,8 +231,7 @@ function getUser(userName, res) {
     } else {
       console.log("user found");
       io.sockets.emit("getUser", { user: result });
-      if(res)
-        res.send(result)
+      if (res) res.send(result);
     }
   });
 }
@@ -307,25 +310,29 @@ function removeMovie(userName, movieName, res) {
           console.log(" document(s) deleted");
         });
         usersArr = await users.find().toArray();
-        for(let i = 0; i< usersArr.length; i++){
-          if(usersArr[i].watchList.includes(movieName)){//if the movie is in the watchList of the user
-              let tmpArr = usersArr[i].watchList;
-              let newArr = [];
-              for(let j = 0; j<tmpArr.length; j++){//delete the movie from watchList
-                if(tmpArr[j] != movieName){
-                  newArr.push(tmpArr[j]);
-                }
+        for (let i = 0; i < usersArr.length; i++) {
+          if (usersArr[i].watchList.includes(movieName)) {
+            //if the movie is in the watchList of the user
+            let tmpArr = usersArr[i].watchList;
+            let newArr = [];
+            for (let j = 0; j < tmpArr.length; j++) {
+              //delete the movie from watchList
+              if (tmpArr[j] != movieName) {
+                newArr.push(tmpArr[j]);
               }
-              const options = { upsert: true };
-              const updateDoc = {//set the new watchList
-                $set: {
-                  watchList: newArr
-                }
-              };
-              let userToUpdate = {//user object to update
-                'userName': usersArr[i].userName
-              };
-              await users.updateOne(userToUpdate, updateDoc, options);//update
+            }
+            const options = { upsert: true };
+            const updateDoc = {
+              //set the new watchList
+              $set: {
+                watchList: newArr,
+              },
+            };
+            let userToUpdate = {
+              //user object to update
+              userName: usersArr[i].userName,
+            };
+            await users.updateOne(userToUpdate, updateDoc, options); //update
           }
         }
       }
@@ -567,118 +574,154 @@ async function groupBySignupDate(res) {
   res.send(groups);
 }
 
-function getCountry(country, res){
+function getCountry(country, res) {
   const map = client.db("gigos").collection("map");
   var doc = {
-    'name':'map'
-  }
+    name: "map",
+  };
   map.findOne(doc, async function (err, result) {
     if (err) throw err;
-    if(result != null){
+    if (result != null) {
       var countrysArr = result.map.split("&");
-      for(var i = 0; i<countrysArr.length; i++){
+      for (var i = 0; i < countrysArr.length; i++) {
         var countryJson = JSON.parse(countrysArr[i]);
-        if(countryJson['country'] == country){
+        if (countryJson["country"] == country) {
           var returnJson = {
-            'lng':countryJson['longitude'],
-            'lat':countryJson['latitude']
-          }
+            lng: countryJson["longitude"],
+            lat: countryJson["latitude"],
+          };
           res.send(returnJson);
         }
       }
     }
-  })
+  });
 }
 
-async function search(movieName, genre, startYear, endYear,res){
-    const movies = client.db("gigos").collection("movies");
-    var moviesByNameArr = [];
-    var moviesByYearArr = [];
-    var moviesByGenreArr = [];
-    var moviesArr = await movies.find().toArray();
+async function search(movieName, genre, startYear, endYear, res) {
+  const movies = client.db("gigos").collection("movies");
+  var moviesByNameArr = [];
+  var moviesByYearArr = [];
+  var moviesByGenreArr = [];
+  var moviesArr = await movies.find().toArray();
 
-    /*-----find by movie name-------*/
-    if(movieName != null){
-      for (let i = 0; i < moviesArr.length; i++) {
-        if (moviesArr[i].movieName.includes(movieName)) {
-          moviesByNameArr.push(i);
-        }
+  /*-----find by movie name-------*/
+  if (movieName != null) {
+    for (let i = 0; i < moviesArr.length; i++) {
+      if (moviesArr[i].movieName.includes(movieName)) {
+        moviesByNameArr.push(i);
       }
     }
+  }
 
-    /*--------find by movie year------- */
-    if(startYear != null && endYear != null){
-      let start = Number.parseInt(startYear);
-      let end = Number.parseInt(endYear);
-      for (let i = 0; i < moviesArr.length; i++) {
-        let relYear = Number.parseInt(moviesArr[i].releaseYear);
-        if (relYear >= start && relYear <= end) {
-          moviesByYearArr.push(i);
-        }
+  /*--------find by movie year------- */
+  if (startYear != null && endYear != null) {
+    let start = Number.parseInt(startYear);
+    let end = Number.parseInt(endYear);
+    for (let i = 0; i < moviesArr.length; i++) {
+      let relYear = Number.parseInt(moviesArr[i].releaseYear);
+      if (relYear >= start && relYear <= end) {
+        moviesByYearArr.push(i);
       }
     }
+  }
 
-    
-    /*--------find by movie genre------- */
-    if(genre != null){
-      for (let i = 0; i < moviesArr.length; i++) {
-        if (moviesArr[i].genre == genre) {
-          moviesByGenreArr.push(i);
-        }
+  /*--------find by movie genre------- */
+  if (genre != null) {
+    for (let i = 0; i < moviesArr.length; i++) {
+      if (moviesArr[i].genre == genre) {
+        moviesByGenreArr.push(i);
       }
     }
+  }
 
-    /*-------------Intersection------------*/
-      
-    var filterMovies = [];
-    if((startYear != null && endYear != null) && movieName != null && genre != null){
+  /*-------------Intersection------------*/
+
+  var filterMovies = [];
+  if (
+    startYear != null &&
+    endYear != null &&
+    movieName != null &&
+    genre != null
+  ) {
     /*case that search by all the params*/
-        for(let i = 0; i<moviesArr.length; i++){
-          if(moviesByGenreArr.includes(i) && moviesByYearArr.includes(i) && moviesByNameArr.includes(i)){
-            filterMovies.push(moviesArr[i]);
-          }
-        }
-    }else if((startYear == null && endYear == null) && movieName != null && genre != null){
-        /*case that search by the params: movieName and genre*/
-      for(let i = 0; i<moviesArr.length; i++){
-        if(moviesByGenreArr.includes(i) && moviesByNameArr.includes(i)){
-          filterMovies.push(moviesArr[i]);
-        }
+    for (let i = 0; i < moviesArr.length; i++) {
+      if (
+        moviesByGenreArr.includes(i) &&
+        moviesByYearArr.includes(i) &&
+        moviesByNameArr.includes(i)
+      ) {
+        filterMovies.push(moviesArr[i]);
       }
-    }else if((startYear != null && endYear != null) && movieName == null && genre != null){
-      /*case that search by the params: year and genre*/
-      for(let i = 0; i<moviesArr.length; i++){
-        if(moviesByGenreArr.includes(i) && moviesByYearArr.includes(i)){
-          filterMovies.push(moviesArr[i]);
-        }
+    }
+  } else if (
+    startYear == null &&
+    endYear == null &&
+    movieName != null &&
+    genre != null
+  ) {
+    /*case that search by the params: movieName and genre*/
+    for (let i = 0; i < moviesArr.length; i++) {
+      if (moviesByGenreArr.includes(i) && moviesByNameArr.includes(i)) {
+        filterMovies.push(moviesArr[i]);
       }
-
-  }else if((startYear != null && endYear != null) && movieName != null && genre == null){
+    }
+  } else if (
+    startYear != null &&
+    endYear != null &&
+    movieName == null &&
+    genre != null
+  ) {
+    /*case that search by the params: year and genre*/
+    for (let i = 0; i < moviesArr.length; i++) {
+      if (moviesByGenreArr.includes(i) && moviesByYearArr.includes(i)) {
+        filterMovies.push(moviesArr[i]);
+      }
+    }
+  } else if (
+    startYear != null &&
+    endYear != null &&
+    movieName != null &&
+    genre == null
+  ) {
     /*case that search by the params: movieName and year*/
-    for(let i = 0; i<moviesArr.length; i++){
-      if(moviesByYearArr.includes(i) && moviesByNameArr.includes(i)){
+    for (let i = 0; i < moviesArr.length; i++) {
+      if (moviesByYearArr.includes(i) && moviesByNameArr.includes(i)) {
         filterMovies.push(moviesArr[i]);
       }
     }
-
-  }else if((startYear == null && endYear == null) && movieName == null && genre!= null){
+  } else if (
+    startYear == null &&
+    endYear == null &&
+    movieName == null &&
+    genre != null
+  ) {
     /*case that search by the params: genre*/
-    for(let i = 0; i<moviesArr.length; i++){
-      if(moviesByGenreArr.includes(i)){
+    for (let i = 0; i < moviesArr.length; i++) {
+      if (moviesByGenreArr.includes(i)) {
         filterMovies.push(moviesArr[i]);
       }
     }
-  }else if((startYear == null && endYear == null) && movieName != null && genre == null){
+  } else if (
+    startYear == null &&
+    endYear == null &&
+    movieName != null &&
+    genre == null
+  ) {
     /*case that search by the params: movieName*/
-    for(let i = 0; i<moviesArr.length; i++){
-      if(moviesByNameArr.includes(i)){
+    for (let i = 0; i < moviesArr.length; i++) {
+      if (moviesByNameArr.includes(i)) {
         filterMovies.push(moviesArr[i]);
       }
     }
-  }else if((startYear != null && endYear != null) && movieName == null && genre == null){
+  } else if (
+    startYear != null &&
+    endYear != null &&
+    movieName == null &&
+    genre == null
+  ) {
     /*case that search by the params: year*/
-    for(let i = 0; i<moviesArr.length; i++){
-      if(moviesByYearArr.includes(i)){
+    for (let i = 0; i < moviesArr.length; i++) {
+      if (moviesByYearArr.includes(i)) {
         filterMovies.push(moviesArr[i]);
       }
     }
@@ -686,31 +729,34 @@ async function search(movieName, genre, startYear, endYear,res){
   res.send(filterMovies);
 }
 
-function removeFromWl(userName, movieName){
+function removeFromWl(userName, movieName) {
   const users = client.db("gigos").collection("users");
   const user = {
-    userName:userName
-  }
+    userName: userName,
+  };
   users.findOne(user, async function (err, result) {
     if (err) throw err;
-    if(result != null){
+    if (result != null) {
       let tmpArr = result.watchList;
       let newArr = [];
-      for(let j = 0; j<tmpArr.length; j++){//delete the movie from watchList
-        if(tmpArr[j] != movieName){
+      for (let j = 0; j < tmpArr.length; j++) {
+        //delete the movie from watchList
+        if (tmpArr[j] != movieName) {
           newArr.push(tmpArr[j]);
         }
       }
       const options = { upsert: true };
-      const updateDoc = {//set the new watchList
+      const updateDoc = {
+        //set the new watchList
         $set: {
-          'watchList': newArr
-        }
+          watchList: newArr,
+        },
       };
-      let userToUpdate = {//user object to update
-        'userName': userName
+      let userToUpdate = {
+        //user object to update
+        userName: userName,
       };
-      await users.updateOne(userToUpdate, updateDoc, options);//update
+      await users.updateOne(userToUpdate, updateDoc, options); //update
     }
   });
 }
@@ -767,8 +813,13 @@ app.post("/removeMovie", (req, res) => {
 app.get("/searchMovie", (req, res) => {
   /*req  parameters:  movieName, genre, startYear, endYear.
    if the not exist return empty arr, else return arr of movies json.*/
-  search(req.query.movieName,req.query.genre,
-     req.query.startYear, req.query.endYear, res);
+  search(
+    req.query.movieName,
+    req.query.genre,
+    req.query.startYear,
+    req.query.endYear,
+    res
+  );
 });
 
 app.get("/allMovies", (req, res) => {
@@ -818,7 +869,6 @@ app.get("/userStatics", (req, res) => {
 });
 
 app.get("/country", (req, res) => {
-  //req  parameters: country.  
+  //req  parameters: country.
   getCountry(req.query.country, res);
 });
-
