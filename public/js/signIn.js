@@ -144,7 +144,7 @@ function getUser(username) {
     );
     $("#top-bar").append(
       // '<li id="watch list" onclick="watchList()"><a>WatchList</a></li>'
-      '<li id="watch list"><a href="watchlist-view">WatchList</a></li>'
+      '<li id="watch-list"><a href="watchlist-view">WatchList</a></li>'
     );
     const url = "http://localhost:8080";
     window.location = url;
