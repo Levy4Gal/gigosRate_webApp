@@ -24,7 +24,7 @@ $(document).ready(function(){
     }
     
     async function fetchMovieByName(movieName){
-        let url = "http://localhost:8080/movie?movieName=" + movieName;
+        let url = "http://localhost:8080/movie?searchMovie=" + movieName;
         let movieJason = await fetch(url);
         const movie = await movieJason.json();
         return movie;
