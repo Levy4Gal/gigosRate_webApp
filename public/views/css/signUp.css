@@ -1,7 +1,7 @@
 body {
   background-color:#273636;
   /* font-size: 1.6rem; */
-  font-family: "Open Sans", sans-serif;
+  /* font-family: "Open Sans", sans-serif; */
   color: #2b3e51;
 }
 
@@ -74,6 +74,7 @@ input {
   height: 60px;
   line-height: 60px;
   border-radius: 4px;
+  cursor: pointer;
 }
 
 input[type="text"],
