@@ -12,8 +12,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
-// mine
-var http = require("http"); //
+var http = require("http"); 
 var server = http.createServer(app); //
 var io = require("socket.io")(server); //
 server.listen(port); //
@@ -206,7 +205,7 @@ function autheticateUser(userName, password, res) {
       // res.send(JSON.parse(
       //   '{"isExist": "false"}'
       // ))
-      console.log("client isnt valid and cant log in");
+      console.log("client isnt valid and cant log in");use
       io.sockets.emit("login", { is_valid: false });
     }
   });
@@ -230,8 +229,9 @@ function getUser(userName, res) {
       return;
     } else {
       console.log("user found");
-      io.sockets.emit("getUser", { user: result });
-      if (res) res.send(result);
+      if (res){ res.send(result);
+        return;
+      }      
     }
   });
 }
