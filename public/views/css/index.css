@@ -69,7 +69,6 @@
   }
   
   .active {
-    background-color: #47b5df;
     max-height: 53px;
     cursor: pointer;
   }
