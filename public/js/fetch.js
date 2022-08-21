@@ -1,7 +1,6 @@
 async function fetchMovies(movieName) {
   let url;
   if (movieName != null) {
-    console.log(movieName[1]);
     url = "http://localhost:8080/searchMovie?";
     if (movieName[0] != null) url += "movieName=" + movieName[0];
     if (movieName[1] != null) url += "&genre=" + movieName[1];
@@ -11,6 +10,13 @@ async function fetchMovies(movieName) {
     url = "http://localhost:8080/allMovies";
   }
   let res = await fetch(url);
+  const movies = await res.json();
+  return movies;
+}
+
+async function fetchWatch() {
+  let url = "http://localhost:8080/watchList?userName=" + ClientUser.userName;
+  const res = await fetch(url);
   const movies = await res.json();
   return movies;
 }
@@ -97,4 +103,15 @@ function addWatchListButton() {
 function resetPicks() {
   let genre = (document.getElementById("genre").options.selectedIndex = 0);
   let year = (document.getElementById("year").options.selectedIndex = 0);
+}
+function moveToMoviePage(e) {
+  let movieName = e.target.name;
+  const url = "http://localhost:8080/moviepage?moviename=" + movieName;
+  window.location = url;
+}
+
+function setWatchHeadLine() {
+  let text = "Hello " + ClientUser.userName + "! here is your watch list";
+  const p = document.getElementById("headLine");
+  p.textContent = text;
 }
