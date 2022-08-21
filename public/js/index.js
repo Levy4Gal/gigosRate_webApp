@@ -23,6 +23,9 @@ $(document).ready(() => {
   if (route == "about") {
     $("#content").load("views/about.html");
   }
+
+  if (route == "contact") {
+    $("#content").load("views/contact.html");
+  }
 });
- 
-//
+
