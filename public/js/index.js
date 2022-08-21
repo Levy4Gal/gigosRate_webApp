@@ -23,6 +23,19 @@ $(document).ready(() => {
   if (route == "about") {
     $("#content").load("views/about.html");
   }
+
+  if (route == "contact") {
+    $("#content").load("views/contact.html");
+  }
+
+  //load img to canvas
+  var canvas = document.getElementById("myCanvas");
+  context = canvas.getContext("2d");
+  var markerObj = new Image();
+
+  markerObj.onload = function() {
+      context.drawImage(markerObj, 95, 50,106,53);
+  };
+  markerObj.src = '/img/gigosRateIcon.ico';
 });
- 
-//
+
