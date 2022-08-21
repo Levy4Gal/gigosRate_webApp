@@ -247,7 +247,6 @@ function addMovie(
   description,
   locations,
   trailer,
-  rate,
   duration,
   director,
   stars,
@@ -262,12 +261,13 @@ function addMovie(
   const user = {
     userName: userName,
   };
+  const rate = {'totalRate':0};
   const movie = {
     movieName: movieName,
     description: description,
     locations: locations,
     trailer: trailer,
-    rate: rate,
+    'rate': JSON.stringify(rate),
     duration: duration,
     director: director,
     stars: stars,
@@ -791,7 +791,7 @@ app.get("/user", (req, res) => {
 });
 
 app.post("/addMovie", (req, res) => {
-  //req  parameters:  user name, movieName, description, locations, trailer, rate,duration, director, stars, img,
+  //req  parameters:  user name, movieName, description, locations, trailer,duration, director, stars, img,
   //releaseYear, genre. if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none
   addMovie(
     req.query.userName,
@@ -799,7 +799,6 @@ app.post("/addMovie", (req, res) => {
     req.query.description,
     req.query.locations,
     req.query.trailer,
-    req.query.rate,
     req.query.duration,
     req.query.director,
     req.query.stars,
@@ -826,6 +825,7 @@ app.get("/searchMovie", (req, res) => {
     res
   );
 });
+
 
 app.get("/allMovies", (req, res) => {
   //req  parameters:  userName
