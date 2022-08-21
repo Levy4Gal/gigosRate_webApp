@@ -24,6 +24,10 @@ $(document).ready(() => {
     $("#content").load("views/about.html");
   }
 
+  if (route == "contact") {
+    $("#content").load("views/contact.html");
+  }
+
   //load img to canvas
   var canvas = document.getElementById("myCanvas");
   context = canvas.getContext("2d");
@@ -34,5 +38,4 @@ $(document).ready(() => {
   };
   markerObj.src = '/img/gigosRateIcon.ico';
 });
- 
-//
+
