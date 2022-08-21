@@ -227,7 +227,8 @@ function getUser(userName, res) {
     } else {
       console.log("user found");
       io.sockets.emit("getUser", { user: result });
-      res.send(result)
+      if(res)
+        res.send(result)
     }
   });
 }

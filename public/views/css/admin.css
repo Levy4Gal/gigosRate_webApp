@@ -23,7 +23,7 @@
     color: #47b5df;
     background-color: white;
     margin: 5px;
-    text-decoration: underline;
+    font-weight: bold;
     cursor: pointer;
 
 }
@@ -70,7 +70,7 @@ textarea { height: auto; }
 .selectetOption{
     padding: 10px;  
     cursor: pointer;
-    text-decoration: underline;
+    font-weight: bold;
     color:#47B5FF;
 }
 .list{
