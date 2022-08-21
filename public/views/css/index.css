@@ -64,5 +64,11 @@
   }
   
   .active {
-    background-color: #04AA6D;
+    background-color: #47b5df;
+  }
+  #admin{
+    cursor: pointer;
+  }
+  #sign-out{
+    cursor: pointer;
   }
