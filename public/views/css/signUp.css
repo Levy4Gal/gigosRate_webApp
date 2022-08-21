@@ -78,7 +78,7 @@ input {
 
 input[type="text"],
 input[type="password"],
-input[type="password"] {
+input[type="password"]{
   width: 100%;
   padding: 0 0 0 10px;
   margin: 0;
@@ -171,5 +171,9 @@ input[type="submit"]:hover {
   width: 100%;
   padding: 10px 0;
   border-radius: 0 0 4px 4px;
+}
+
+#value{
+  margin-bottom: 10px;
 }
 
