@@ -1,50 +1,22 @@
 // addJS_Node (null, "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js", null, showAddedUsersLastWeekStatistics);
 // addJS_Node (null, "https://d3js.org/d3.v4.min.js", null, createUserBarChart);
-
-const sample = [
-    {
-      Day: 'Sunday',
-      value: 90,
-      color: '#000000'
-    },
-    {
-        Day: 'Monday',
-      value: 75.1,
-      color: '#00a2ee'
-    },
-    {
-        Day: 'Tuesday',
-      value: 68.0,
-      color: '#fbcb39'
-    },
-    {
-        Day: 'Wednsday',
-      value: 67.0,
-      color: '#007bc8'
-    },
-    {
-        Day: 'Thursday',
-      value: 65.6,
-      color: '#65cedb'
-    },
-    {
-        Day: 'Friday',
-      value: 65.1,
-      color: '#ff6e52'
-    },
-    {
-        Day: 'Saturday',
-      value: 61.9,
-      color: '#f9de3f'
-    }
-  ];
+var userChartActive = true;
+var lastUsersData;
+var lastLargestData;
+var lastGenreData;
 
 function createPieChart(genreData){
 d3.selectAll("svg > *").remove();
 
+userChartActive = false;
+lastGenreData = genreData;
+
 // set the dimensions and margins of the graph
+
+currentWidth = parseInt(d3.select('svg').style('width'), 10);
+
 const margin = 50;
-const width = 1000 - 2 * margin;
+const width = currentWidth - 2 * margin;
 const height = 600 - 2 * margin;
 
 // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
@@ -54,6 +26,7 @@ var radius = Math.min(width, height) / 2 - margin
 var svg = d3.select('svg')
     .attr("width", width)
     .attr("height", height)
+    // .attr("viewBox", `0 0 ${height} ${width}`)
   .append("g")
     .attr("transform", "translate(" + (width/2 + margin) + "," + (height / 2 + margin) + ")");
 
@@ -73,7 +46,6 @@ for(let i =0; i< data_ready.length; i++){
 
     data_ready[i].data.key = genreData[data_ready[i].data.key]._id;
 }
-console.log(data_ready);
 // The arc generator
 var arc = d3.arc()
   .innerRadius(radius * 0.5)         // This is the size of the donut hole
@@ -124,7 +96,7 @@ svg
 .data(data_ready)
 .enter()
 .append('text')
-  .text( function(d) { console.log(d.data) ; return d.data.key } )
+  .text( function(d) { return d.data.key } )
   .attr('transform', function(d) {
       var pos = outerArc.centroid(d);
       var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
@@ -141,7 +113,7 @@ svg
 .data(data_ready)
 .enter()
 .append('text')
-  .text( function(d) { console.log(d.data) ; return d.data.value } )
+  .text( function(d) { return d.data.value } )
   .attr('transform', function(d) {
       var pos = arc.centroid(d);
       
@@ -169,11 +141,17 @@ svg
 function createUserBarChart(users,largestValue){
     d3.selectAll("svg > *").remove();
 
+    userChartActive = true;
+    lastUsersData = users;
+    lastLargestData = largestValue;
+
+
     const svg = d3.select('svg');
     const svgContainer = d3.select('#chartContainer');
     
+    currentWidth = parseInt(svg.style('width'), 10);
     const margin = 80;
-    const width = 1000 - 2 * margin;
+    const width = currentWidth - 2 * margin;
     const height = 600 - 2 * margin;
   
     const chart = svg.append('g')
@@ -335,4 +313,15 @@ function createUserBarChart(users,largestValue){
     
         var targ = D.getElementsByTagName ('head')[0] || D.body || D.documentElement;
         targ.appendChild (scriptNode);
+    }
+
+    window.addEventListener('resize', handleResize );
+
+    function handleResize(){
+        if(userChartActive){
+            createUserBarChart(lastUsersData,lastLargestData);
+        }
+        else{
+            createPieChart(lastGenreData);
+        }
     }
