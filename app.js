@@ -124,6 +124,10 @@ app.get("/contact", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
+app.get("/news", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/views/index.html"));
+});
+
 // app.listen(port, () => console.info("Listening on port " ,port));
 
 /**************************************************
@@ -231,7 +235,8 @@ function getUser(userName, res) {
       console.log("user found");
       if (res){ res.send(result);
         return;
-      }      
+      }
+      io.sockets.emit("getUser", { user: result });      
     }
   });
 }

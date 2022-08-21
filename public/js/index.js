@@ -28,6 +28,11 @@ $(document).ready(() => {
     $("#content").load("views/contact.html");
   }
 
+  
+  if (route == "news") {
+    $("#content").load("views/news.html");
+  }
+
   //load img to canvas
   var canvas = document.getElementById("myCanvas");
   context = canvas.getContext("2d");
