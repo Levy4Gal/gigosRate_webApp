@@ -26,15 +26,9 @@ $(document).ready(function () {
   });
 });
 
-function moveToMoviePage(e) {
-  let movieName = e.target.name;
-  console.log(movieName);
-  const url = "http://localhost:8080/moviepage?moviename=" + movieName;
-  window.location = url;
-}
+
 
 function addToWatch(e) {
-  console.log(e.target);
   let movieName = e.target.name;
   const Http = new XMLHttpRequest();
   const url =
