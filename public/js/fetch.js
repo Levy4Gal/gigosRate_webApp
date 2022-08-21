@@ -1,7 +1,6 @@
 async function fetchMovies(movieName) {
   let url;
   if (movieName != null) {
-    console.log(movieName[1]);
     url = "http://localhost:8080/searchMovie?";
     if (movieName[0] != null) url += "movieName=" + movieName[0];
     if (movieName[1] != null) url += "&genre=" + movieName[1];
@@ -10,11 +9,15 @@ async function fetchMovies(movieName) {
   } else {
     url = "http://localhost:8080/allMovies";
   }
-  console.log(url);
-
   let res = await fetch(url);
   const movies = await res.json();
-  console.log(movies);
+  return movies;
+}
+
+async function fetchWatch() {
+  let url = "http://localhost:8080/watchList?userName=" + ClientUser.userName;
+  const res = await fetch(url);
+  const movies = await res.json();
   return movies;
 }
 
@@ -28,12 +31,11 @@ function displayMovies(movies, e) {
   let imgCloseTemp = " 'onclick = 'moveToMoviePage(event)' >";
   let movieDivOpenTemp = "<html>"; // append movie + movieDivCloseTemp
   let movieDivCloseTemp = "</html>";
-  let movieSpanOpenTemp = "<div class ='movieDiv'>"; // append img + text + movieSpanCloseTemp
+  let movieSpanOpenTemp = "<div class ='movieDiv' name='"; // append img + text + movieSpanCloseTemp
   let movieSpanCloseTemp = "</div>";
   let textOpenTemp = "<p class = 'text'>"; // append movie name + textCloseTemp
   let textCloseTemp = "</p>";
-  let addToCartOpen = "<p><button onclick= 'addToWatch(event)' name ='";
-  let addToCartClose = "'>Add to Watch List</button></p>";
+
   let div = null;
   let tmpArray = [];
   for (let i = 0; i < movies.length; i++) {
@@ -41,22 +43,16 @@ function displayMovies(movies, e) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
     }
+
     let totalRate = Number(JSON.parse(movies[i].rate).totalRate);
     totalRate = totalRate.toFixed(1);
     let name = movies[i].movieName;
+    let movieDivName = movieSpanOpenTemp + name + "'>";
     let rate = rateOpen + totalRate + rateClose;
-    let text = textOpenTemp + name + textCloseTemp;
+    let text = "<span>" + textOpenTemp + name + textCloseTemp + "</span>";
+    let rateSpan = "<span class='rateSpan'>" + star + rate + "</span>";
     let img = imgOpenTemp + name + imgSrc + movies[i].img + imgCloseTemp;
-    let movie =
-      movieSpanOpenTemp +
-      img +
-      text +
-      addToCartOpen +
-      name +
-      addToCartClose +
-      star +
-      rate +
-      movieSpanCloseTemp;
+    let movie = movieDivName + img + text + rateSpan + movieSpanCloseTemp;
     tmpArray.push(movie);
     if (tmpArray.length == 4) {
       e.appendChild(div);
@@ -79,4 +75,43 @@ function displayMovies(movies, e) {
     movieDiv += movieDivCloseTemp;
     div.innerHTML = movieDiv;
   }
+  addWatchListButton();
+}
+
+function addWatchListButton() {
+  let route = window.location.href;
+  let arr = document.getElementsByClassName("movieDiv");
+  for (let i = 0; i < arr.length; i++) {
+    let name = arr[i].getAttribute("name");
+    let button = document.createElement("button");
+    let span = document.createElement("span");
+    span.setAttribute("class", "watchList");
+    span.appendChild(button);
+    button.setAttribute("class", "watch-list");
+    button.setAttribute("name", name);
+    if (route.includes("watch")) {
+      button.setAttribute("onclick", "removeFromWatch(event)");
+      button.innerHTML = "Remove From Watch List";
+    } else {
+      button.setAttribute("onclick", "addToWatch(event)");
+      button.innerHTML = "Add to Watch List";
+    }
+    arr[i].appendChild(span);
+  }
+}
+
+function resetPicks() {
+  let genre = (document.getElementById("genre").options.selectedIndex = 0);
+  let year = (document.getElementById("year").options.selectedIndex = 0);
+}
+function moveToMoviePage(e) {
+  let movieName = e.target.name;
+  const url = "http://localhost:8080/moviepage?moviename=" + movieName;
+  window.location = url;
+}
+
+function setWatchHeadLine() {
+  let text = "Hello " + ClientUser.userName + "! here is your watch list";
+  const p = document.getElementById("headLine");
+  p.textContent = text;
 }

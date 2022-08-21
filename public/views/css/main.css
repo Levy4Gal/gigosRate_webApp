@@ -7,7 +7,7 @@
 }
 
 .custom-select select {
-  background-color: gray;
+  background-color: #c19544;
 }
 
 
@@ -21,7 +21,7 @@
 
 
 .searchButton, .buttonSelect, .showAll{ 
-  background-color: gray;
+  background-color: #c19544;
   color: #ffffff;
   padding: 8px 16px;
   border: 1px solid transparent;
@@ -49,6 +49,7 @@
   
 
   .headLine{
+    font-family: OCR A Std, monospace;
     text-align: center;
     color: white;
     /* padding: 1%; */
@@ -59,10 +60,13 @@
   .movieDiv {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     max-width: 250px;
-    /* margin:  */
+    max-height: 450px;
     text-align: center;
+    justify-content: center;
+    align-items: center;
     font-family: arial;
     padding: 3%;
+    margin: 1%;
   }
   
   .movieDiv button{
@@ -84,7 +88,9 @@
   
 .text {
   color: grey;
-  font-size: 22px;
+  font-size: 20px;
+  
+
 }
 .movieRow {
   overflow: hidden;
@@ -98,7 +104,8 @@
 
 .img {
     
-  width: 250px;
+  width: 200px;
+  height: 300px;
   border-radius: 5%;
   cursor: pointer;
   object-position: top;
@@ -113,10 +120,18 @@
 
 .checked {
   color: orange;
-  padding: 4%;
+  padding: 1%;
   
 }
 
 .rate {
   font-size: large;
+  padding-left: 4%;
+  }
+
+
+
+.watch-list{
+  margin-top:5% ;
+
 }

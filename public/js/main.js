@@ -14,11 +14,10 @@ $(document).ready(function () {
     p.setAttribute("id", "helloUser");
     div.appendChild(p);
     p.innerHTML = "Hello " + userName;
-    let head = document.getElementById("headLine");
-    head.innerHTML = "Our best picks for you";
   }
 
   $(".showAll").click(function () {
+    resetPicks();
     let head = document.getElementById("headLine");
     head.innerHTML = "GigosRate - rate the best movies out there!";
     fetchMovies().then((movies) => {
@@ -27,12 +26,7 @@ $(document).ready(function () {
   });
 });
 
-function moveToMoviePage(e) {
-  let movieName = e.target.name;
-  console.log(movieName);
-  const url = "http://localhost:8080/moviepage?moviename=" + movieName;
-  window.location = url;
-}
+
 
 function addToWatch(e) {
   let movieName = e.target.name;
@@ -79,8 +73,7 @@ function displaySorted() {
 function searchName() {
   let name = document.getElementById("search").value;
   // $(".movie-search").val("");
-  let genre = (document.getElementById("genre").options.selectedIndex = 0);
-  let year = (document.getElementById("year").options.selectedIndex = 0);
+  resetPicks();
   if (name != null) {
     let arr = new Array(4);
     arr[0] = name;
@@ -95,6 +88,7 @@ function searchName() {
 }
 
 function topPicks() {
+  resetPicks();
   if (ClientUser == null) {
     alert("Log in required");
     return;

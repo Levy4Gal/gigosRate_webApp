@@ -8,12 +8,14 @@
 .statistics{
     padding-top: 5%;
     height: 100vh;
+    width: 80%;
 
 }
 .chartSelction{
     display: flex;
     flex-flow: row;
     color: white;
+    margin-left: 8%;
 }
 .selectedChartOption{
     padding: 15px;
@@ -21,7 +23,7 @@
     color: #47b5df;
     background-color: white;
     margin: 5px;
-    text-decoration: underline;
+    font-weight: bold;
     cursor: pointer;
 
 }
@@ -39,6 +41,7 @@
     padding-top: 10%;
 } */
 textarea { height: auto; }
+
 .actions{
     display: flex;
     flex-flow: column;
@@ -67,7 +70,7 @@ textarea { height: auto; }
 .selectetOption{
     padding: 10px;  
     cursor: pointer;
-    text-decoration: underline;
+    font-weight: bold;
     color:#47B5FF;
 }
 .list{
@@ -143,9 +146,11 @@ textarea { height: auto; }
 
 
 div#chartContainer {
-    width: 1000px;
-    height: 600px;
+    width: 100%;
+    height: 100%;
     margin: auto;
+    display: flex;
+    justify-content: center;
   }
   
 
