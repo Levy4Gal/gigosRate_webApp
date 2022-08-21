@@ -24,10 +24,11 @@ $(document).ready(function(){
     }
     
     async function fetchMovieByName(movieName){
-        let url = "http://localhost:8080/movie?searchMovie=" + movieName;
+        let url = "http://localhost:8080/searchMovie?movieName=" + movieName;
+        console.log(url);
         let movieJason = await fetch(url);
         const movie = await movieJason.json();
-        return movie;
+        return movie[0];
     }
     
     function loadPageFromDB(item){

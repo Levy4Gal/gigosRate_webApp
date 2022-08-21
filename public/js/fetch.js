@@ -38,7 +38,7 @@ function displayMovies(movies, e) {
 
   let div = null;
   let tmpArray = [];
-  for (let i = 0; i < movies.length; i++) {
+  for (let i = 0; i < movies.length && i < 20; i++) {
     if (i % 4 == 0) {
       div = document.createElement("div");
       div.setAttribute("class", "movieRow");
