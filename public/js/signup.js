@@ -1,4 +1,4 @@
-// Checks if the passwords are the same..
+// Checks if the passwords are the same.
 function passwordCheck(pas1,pas2){
     if(pas1!=pas2){
         return false;   
