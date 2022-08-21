@@ -16,6 +16,11 @@
   
   .navBar {
     grid-area: navBar;
+    height: 50px;
+  }
+
+  #top-bar{
+    height: 100%;
   }
 
   #content{
@@ -55,7 +60,7 @@
     display: block;
     color: white;
     text-align: center;
-    padding: 14px 16px;
+    padding: 16px;
     text-decoration: none;
   }
   
@@ -65,6 +70,8 @@
   
   .active {
     background-color: #47b5df;
+    max-height: 53px;
+    cursor: pointer;
   }
   #admin{
     cursor: pointer;
