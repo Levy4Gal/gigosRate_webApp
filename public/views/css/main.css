@@ -88,7 +88,9 @@
   
 .text {
   color: grey;
-  font-size: 22px;
+  font-size: 20px;
+  
+
 }
 .movieRow {
   overflow: hidden;
@@ -131,4 +133,5 @@
 
 .watch-list{
   margin-top:5% ;
+
 }
