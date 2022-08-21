@@ -119,6 +119,7 @@ socket.on("getUser", function (data) {
     console.log("user found");
     ClientUser = data.user;
     if(ClientUser!=null){
+      console.log(ClientUser.userName);
       HideLi();
     }
     console.log("user name is: "+ ClientUser.userName);
