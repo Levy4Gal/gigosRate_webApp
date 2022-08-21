@@ -98,7 +98,7 @@ app.post("/login", (req, res) => {
 
 //Admin test
 app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/views/admin.html"));
+  res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
 app.get("/moviepage", (req, res) => {
@@ -225,9 +225,9 @@ function getUser(userName, res) {
       io.sockets.emit("getUser", { user: null });
       return;
     } else {
-      // res.send(result)
       console.log("user found");
       io.sockets.emit("getUser", { user: result });
+      res.send(result)
     }
   });
 }

@@ -12,54 +12,24 @@ let onUsers = false;
 let userChart = true;
 
 $( document ).ready(function() {
-    httpGetAsync("http://localhost:8080/firstMovies?num=8",handleMovies);
+    httpGetAsync("http://localhost:8080/firstMovies?num=10",handleMovies);
     httpGetAsync("http://localhost:8080/userStatics",handleUserStatics);
     httpGetAsync("http://localhost:8080/movStatics",handleMovieStatics);
 });
-
-
-//statistics  
-// function showAddedUsersLastWeekStatistics(){
-//     $( document ).ready(function() {
-//         //user creation stats
-//             var ctx = document.getElementById("myChart").getContext('2d');
-//             var xValues = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday","Saturday"];
-//             var yValues = [55, 49, 44, 24, 15,3,40];
-//             var barColors = ["#47B5FF", "#47B5FF","#47B5FF","#47B5FF","#47B5FF","#47B5FF","#47B5FF"];
-//             let c = new Chart(ctx, {
-//             type: "bar",
-//             data: {
-//                 labels: xValues,
-//                 datasets: [{
-//                 backgroundColor: barColors,
-//                 data: yValues,
-//                 fontColor: "white"
-//                 }]
-//             },
-//             options: {
-//                 legend: {display: false},
-                
-//                 title: {
-//                 display: true,
-//                 text: "Weekly User Creation",
-//                 fontColor: "white"
-//                 }
-//             }
-//             }); 
-//         });
-    
-// }
 
 
 function handleMovies(movies){
     displayedMovies= JSON.parse(movies);
     displayLoadedMovies();
 }
-
+function handleSearchedUser(user){
+    displayUsers = JSON.parse(user);
+    displayLoadedUser();
+}
 function handleSearchedMovie(movie){
     if(movie != "this movie is not exist"){
         displayedMovies = [];
-        displayedMovies.push(JSON.parse(movie));
+        displayedMovies = JSON.parse(movie);
         displayLoadedMovies();    
     }
     else{
@@ -67,30 +37,28 @@ function handleSearchedMovie(movie){
         displayLoadedMovies();    
     }
 }
+
+function displayLoadedUser(){
+    if(onUsers && displayUsers!=null){
+        $(".list").empty();
+        let line =         `          <div class="line">
+        <div class="name"> ${displayUsers.userName}</div>
+        <img class="delete" src="img/deleteIcon.png" />
+      </div>`;
+        $(".list").append(line);
+
+    }
+}
+
 function displayLoadedMovies(){
     $( document ).ready(function() {
         if(!onUsers){
             $(".list").empty();
-            for(let i=0; i<displayedMovies.length;i++){
+            for(let i=0; i<displayedMovies.length && i<10;i++){
                 let line =         `          <div class="line">
                 <div class="name"> ${displayedMovies[i].movieName}</div>
                 <img class="edit" src="img/editIcon.png"/>
-                <img class="delete" src="img/deleteIcon.png" />
-              </div>`;
-                $(".list").append(line);
-            }        
-        }
-    });
-}
-function displayLoadedUsers(){
-    $( document ).ready(function() {
-        if(onUsers){
-            $(".list").empty();
-            for(let i=0; i<displayUsers.length;i++){
-                let line =         `          <div class="line">
-                <div class="name"> ${displayUsers[i].userName}</div>
-                <img class="edit" src="img/editIcon.png"/>
-                <img class="delete" src="img/deleteIcon.png" />
+                <img id="${displayedMovies[i].movieName}" onclick="deleteMovie(this.id)" class="delete" src="img/deleteIcon.png" />
               </div>`;
                 $(".list").append(line);
             }        
@@ -98,20 +66,29 @@ function displayLoadedUsers(){
     });
 }
 
+function deleteMovie(name){
+    httpPostAsync(`http://localhost:8080/removeMovie?userName=Inon&movieName=${name}`,"",search);
+}
 
 function changeOnUsers(state){
     onUsers = state;
     // console.log(onUsers);
     if(onUsers){
-        displayLoadedUsers();
+        $('.list').empty();
+        $("#moviesOption").removeClass();
+        $("#usersOption").removeClass();
+        $("#moviesOption").addClass("innerOption");
+        $("#usersOption").addClass("selectetOption");
+
     }
-    else displayLoadedMovies();
+    else {
+        displayLoadedMovies();
+        $("#moviesOption").removeClass();
+        $("#usersOption").removeClass();
+        $("#usersOption").addClass("innerOption");
+        $("#moviesOption").addClass("selectetOption");
 
-    $("#moviesOption").toggleClass("selectetOption");
-    $("#moviesOption").toggleClass("innerOption");
-    $("#usersOption").toggleClass("selectetOption");
-    $("#usersOption").toggleClass("innerOption");
-
+    }
 }
 
 $( document ).ready(function() {
@@ -131,9 +108,12 @@ $( document ).ready(function() {
     var txt =  $('#searchInput').val();
     if(!onUsers){
         if(txt != "")
-            httpGetAsync(`http://localhost:8080/movie?movieName=${txt}`,handleSearchedMovie);
+            httpGetAsync(`http://localhost:8080/searchMovie?movieName=${txt}`,handleSearchedMovie);
         else 
-            httpGetAsync("http://localhost:8080/firstMovies?num=8",handleMovies);
+            httpGetAsync("http://localhost:8080/firstMovies?num=10",handleMovies);
+    }
+    else{
+        httpGetAsync(`http://localhost:8080/user?userName=${txt}`,handleSearchedUser);
     }
     // console.log(txt);
 }
@@ -149,7 +129,20 @@ function onAddMovie(){
     var img= $('#imgLink').val();
     var releaseYear = $('#releaseYear').val();
     var genre = $('#genre').val();
-    httpPostAsync(`http://localhost:8080/addMovie?userName=Inon&movieName=${movieName}&description=${movieDesc}&locations=${locations}&trailer=${trailer}&rate=0&duration=${duration}&director=${director}&stars=${stars}&img=${img}&releaseYear=${releaseYear}&genre=${genre}`,"",(value) => console.log(value))
+    httpPostAsync(`http://localhost:8080/addMovie?userName=Inon&movieName=${movieName}&description=${movieDesc}&locations=${locations}&trailer=${trailer}&rate=0&duration=${duration}&director=${director}&stars=${stars}&img=${img}&releaseYear=${releaseYear}&genre=${genre}`,"",
+    function (value){
+        alert(value);
+        $('#movieName').val() = "";
+        $('#movieDescription').val() = "";
+        $('#locations').val()= "";
+        $('#trailerLink').val() = "";
+        $('#duration').val() = "";
+        $('#director').val() = "";
+        $('#stars').val() = "";
+        $('#imgLink').val() = "";
+        $('#releaseYear').val() = "";
+        $('#genre').val() = "";
+    });
     //var json = `{   "movieName":"${movieName}",   "movieDescription":"${movieDesc}",   "locations":"${locations}",   "trailer":"${trailer}",   "duration":"${duration}",   "director":"${director}",   "stars":"${stars}",   "img":"${img}" }`;
     // console.log(JSON.parse(json));
 }
@@ -201,5 +194,4 @@ function handleUserStatics(res){
 
 function handleMovieStatics(res){
     movieGenreData = JSON.parse(res);
-    console.log(movieGenreData);
 }
