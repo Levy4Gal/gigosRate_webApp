@@ -39,8 +39,8 @@ $(document).ready(() => {
   var markerObj = new Image();
 
   markerObj.onload = function() {
-      context.drawImage(markerObj, 95, 50,106,53);
+      context.drawImage(markerObj, 75, 30,150,90);
   };
-  markerObj.src = '/img/gigosRateIcon.ico';
+  markerObj.src = '/img/gigos_logo.png';
 });
 
