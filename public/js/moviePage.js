@@ -6,10 +6,15 @@ $(document).ready(function(){
     const fixedStars  =[...document.getElementsByClassName("fa fa-star")];
     const ratingStars = [...document.getElementsByClassName("rating__star")];
 
+    const facebookBtn = document.querySelector(".facebook-btn");
+    const twitterBtn = document.querySelector(".twitter-btn");
+    const whatsappBtn = document.querySelector(".whatsapp-btn");
+
     movieName = getMovieName();
     fetchMovieByName(movieName).then((movie) => {
         loadPageFromDB(movie);
         addLocations(movie);
+        initSocials();
     });
     
     function getMovieName(){
@@ -25,7 +30,6 @@ $(document).ready(function(){
     
     async function fetchMovieByName(movieName){
         let url = "http://localhost:8080/searchMovie?movieName=" + movieName;
-        console.log(url);
         let movieJason = await fetch(url);
         const movie = await movieJason.json();
         return movie[0];
@@ -37,7 +41,6 @@ $(document).ready(function(){
         document.getElementById("description").innerHTML ="Description: " + item.description;
         document.getElementById("duration").innerHTML = "Duration: " + item.duration;
         document.getElementById("director").innerHTML ="Director: " + item.director;
-        document.getElementById("writer").innerHTML ="Writer: " + item.writer;
         document.getElementById("stars").innerHTML ="Stars: " + item.stars;
         document.getElementById("image").setAttribute("src" ,item.img);
         let url =fixUrl(item.trailer);
@@ -45,6 +48,14 @@ $(document).ready(function(){
          
         showStarsFromDBrate(fixedStars,item);
         rateStars(ratingStars,item);
+    }
+
+    function initSocials(){
+        let url = 'https://www.facebook.com/Gigos-Rate-104140762405866';
+        let postTitle = encodeURI("Hi everyone, please check this out:");
+        facebookBtn.setAttribute("href" ,`https://www.facebook.com/sharer.php?u=${url}` );
+        twitterBtn.setAttribute("href" , `https://twitter.com/share?url=${url}&text=[post-title]`);
+        whatsappBtn.setAttribute("href" , `https://api.whatsapp.com/send?text=${postTitle} ${url}`);
     }
 
     function fixUrl(url){
@@ -88,35 +99,43 @@ $(document).ready(function(){
         let clientRate;
         stars.map((star) => {
             star.onclick = () => {
-                i = stars.indexOf(star);
-                        
-                if (star.className === starClassInactive) {
-                    clientRate = i+1;
-                    for (i; i >= 0; --i) stars[i].className = starClassActive;
-                } else {
-                    clientRate = i;
-                    for (i; i < starsLength; ++i) stars[i].className = starClassInactive;
+                if(ClientUser==null){
+                    alert("you must sign in first");
+                }else{
+                    i = stars.indexOf(star);       
+                    if (star.className === starClassInactive) {
+                        clientRate = i+1;
+                        for (i; i >= 0; --i) stars[i].className = starClassActive;
+                    } else {
+                        clientRate = i;
+                        for (i; i < starsLength; ++i) stars[i].className = starClassInactive;
+                    }
+                    changeRateInDB(clientRate);
+                    fetchMovieByName(movieName).then((movie) => {
+                        showStarsFromDBrate(fixedStars,movie)
+                    });
                 }
-                changeRateInDB(clientRate);
-                fetchMovieByName(movieName).then((movie) => {
-                    showStarsFromDBrate(fixedStars,movie)
-                });
-                console.log(movie);
             };
-        });
+        });   
+            
+        
     }
 });
 
 function addToWatch() {
-    const Http = new XMLHttpRequest();
-    const url =
-      "http://localhost:8080/addToWl?movieName=" +
-      movieName +
-      "&userName=" +
-      ClientUser.userName;
-    Http.open("POST", url);
-    Http.send();
-    alert("movie added to watch list");
+    if(ClientUser==null){
+        alert("you must sign in first");
+    }
+    else{
+        const Http = new XMLHttpRequest();
+        const url =
+          "http://localhost:8080/addToWl?movieName=" +
+          movieName +
+          "&userName=" +
+          ClientUser.userName;
+        Http.open("POST", url);
+        Http.send();
+    }
 }
 
 function changeRateInDB(rate) {
@@ -130,7 +149,6 @@ function changeRateInDB(rate) {
       rate;
     Http.open("POST", url);
     Http.send();
-    alert("rate have changed");
 }
 
 async function getCoordsFromCountryName(country){

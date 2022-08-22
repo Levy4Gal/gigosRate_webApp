@@ -381,7 +381,8 @@ async function getAllMovies(userName, res) {
           action: 0,
           drama: 0,
           comedy: 0,
-          documentary: 0,
+          biography: 0,
+          animation:0
         };
         for (var i = 0; i < filterMov.length; i++) {
           json[filterMov[i].genre] += 1;
