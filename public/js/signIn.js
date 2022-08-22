@@ -1,4 +1,4 @@
-// Send login request to the server socket io..
+// Send login request to the server socket io.
 function Login(_userame,_password,_isAdmin){
     socket.emit("login", {
         username: _userame,
@@ -9,12 +9,8 @@ function Login(_userame,_password,_isAdmin){
 
 // Takse the values from the sign in page and send them to the server -> DB check.
 function LoginButton(){
-    console.log("pressed login2");
     var username = document.getElementById("username").value;
     var password = document.getElementById("Password").value;
-    console.log(
-      "from index.js: username is: " + username + " password is:" + password
-    );
     var is_admin = false;
     Login(username,password,is_admin);
 }
@@ -51,8 +47,6 @@ function getUser(username) {
   // Save the user data if he refresh the page.
   function saveUserData(){
     sessionStorage.setItem('user',JSON.stringify(ClientUser));
-    console.log(sessionStorage.getItem('user'));
-    console.log('saved the session of the user')
   }
 
   // Show the labels after the user signed out.

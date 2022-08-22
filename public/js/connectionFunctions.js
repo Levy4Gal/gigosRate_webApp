@@ -1,6 +1,5 @@
 // Create first connection with the server socket io.
 var socket = io.connect("http://localhost:8080");
-console.log("client connected");
 
 // Switch the page into the sign up page.
 function SignUpPage() {
@@ -29,12 +28,8 @@ function MainPageSwitch(){
 
 // Checks if the user already logged after refresh/page swap.
 $(document).ready(() => {
-  console.log('check if the user is refreshed');
   if(sessionStorage.getItem('user')!=null){
-    console.log('after user refresh');
     ClientUser = JSON.parse(sessionStorage.getItem('user'));
-    console.log('inside the after refresh');
-    console.log(ClientUser);
     if(ClientUser!=null){
       $("#sign-up").remove();
       $("#sign-in").remove();
@@ -75,10 +70,8 @@ function ShowLi() {
 // Handle the login event from the server. 
 socket.on("login", function (data) {
   if (data.is_valid == true) {
-    console.log("client is valid");
     getUser(data.userName);
   } else {
-    console.log("client isn't valid");
     var SignInLabel = document.getElementById("value");
     if(SignInLabel == null){
       $("#respond").append("<p id=\"value\">username/password are incorrect.</p>");
@@ -88,17 +81,13 @@ socket.on("login", function (data) {
 
 // Handle the sign up event from the server. 
 socket.on("sign-up", function (data) {
-  console.log("inside the sign-up on of the client");
   if (data.is_valid == true) {
-    console.log("client is now sign-up");
     const url = "http://localhost:8080";
     window.location = url;
     // HideLi();
   } else {
-    console.log("client is already signed up");
     var SignUpLabel = document.getElementById("value");
     if(SignUpLabel == null){
-      console.log("here");
     $("#Sign-Up-Respond").append("<p id=\"value\">User already exist.</p>");
     }
     else{
@@ -112,19 +101,12 @@ var ClientUser;
 
 // Handle the getUser event from the server. 
 socket.on("getUser", function (data) {
-  console.log("inside the sign-up on of the client");
   if (data.user == null) {
-    console.log("user not found");
   } else {
-    console.log("user found");
     ClientUser = data.user;
     if(ClientUser!=null){
-      console.log(ClientUser.userName);
       HideLi();
     }
-    console.log("user name is: "+ ClientUser.userName);
-    console.log(ClientUser.password);
-    console.log(ClientUser.isAdmin);
   }
 });
 
