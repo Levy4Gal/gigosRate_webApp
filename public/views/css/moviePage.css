@@ -1,8 +1,6 @@
-body{
+body {
     display: block;
     background-color: #273636;
-    /* font-size: 1.6rem; */
-    /* font-family: Roboto; */
     border: 0.5px;
 
     background-repeat: no-repeat;
@@ -10,9 +8,7 @@ body{
     background-size: cover;
 }
 
-.firstTitle{
-    font-style:italic;
-    /* font: size 2.5rem; */
+.firstTitle {
     color:rgb(147, 142, 142);
     background-color: navy;
     size: 200cm;
@@ -21,23 +17,47 @@ body{
     text-align: center;
 }
 
-#movieName{
+#movieName {
     font-size: 300%;
     padding-left: 1ch;
+    color: whitesmoke;
 }
 
 .leaveAcomment{
-    margin: 3%;
-    font-size: 0.6rem;
-    color:whitesmoke;
-    font-family: "Open Sans", sans-serif;
-    padding: 0ch;
-    
-    background-color: rgb(79, 79, 79);
+    margin-left: 50%;
+    color:white;
+    font-size: medium;
+    flex-direction: row;
+    padding:1ch;
     opacity: 0.9;
 }
 
-.lastTitle{
+.leaveAcomment a i {
+    font-size: 32px;
+    color: white;
+    padding: 6%;
+    padding-right: 10ch;
+    margin: 15%;
+}
+
+.leaveAcomment a i:hover {
+    color:whitesmoke;
+    transition: 500ms;
+}
+
+.leaveAcomment .fa-facebook {
+    color: #1877f2;
+}
+
+.leaveAcomment .fa-twitter {
+    color: #1da1f2;
+}
+
+.leaveAcomment .fa-whatsapp {
+    color: #25d366;
+}
+
+.lastTitle {
     border-radius: 45px;
     border: none;
     background:none;
@@ -52,20 +72,22 @@ body{
     font-size: 1rem;
 }
 
-.trailer,.image{
+.trailer,.image {
   border-radius: 0%;
   padding-left: 2%;
 }
 
-.rating{
+ .rating {
     float:right;
-    position: sticky; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+    font-size: xx-large;
+    position: sticky; 
+    z-index: 1000;
     left: 0;
-    top: 0;
+    top: 80;
     width: 8%;
-    height: 100%; /* Full height */
-}
+    height: 100%;
+    size: 45ch;
+} 
 
 .tooltip {
     position: relative;
@@ -84,22 +106,20 @@ body{
     border-radius: 6px;
     padding: 1px 0;
     font-size: xx-small;
-    /* Position the tooltip */
     position: static;
     z-index: 1;
 }
   
 .tooltip:hover .tooltiptext {
     visibility: visible;
-    /* margin-right: auto; */
     text-align: left;
     float: left;
 }
 
-#addToWatch{
+#addToWatch {
     border: none;
     background:none;
-    font-size: x-large;
+    font-size: xx-large;
     float: right;
     border-color: none;
     color:  #da6f18b2;
@@ -108,33 +128,26 @@ body{
    padding-top: 8%;
 }
 
-#addToList:hover{
+#addToWatch:hover {
     background: none;
     color: white;
     border-radius: 7%;
+    transition: 500ms;
 }
 
-#rateTitle{
+#rateTitle {
    color:  #dabd18b2;
    text-shadow:5px 5px 5px black;
    text-align: center;
    outline-color: black;
 }
 
-#grade{
-    color:  #dabd18b2;
-   text-shadow:2px 2px 2px black;
+#rate {
+    color:  whitesmoke;
 }
-
-#rateButton{
-   font-size: 1.1rem;
-   background-color: rgb(99, 99, 240) ;
-   border: 0.01px solid black;
-   border-radius:60% ;
-   text-align: right; 
-} 
   
 .rating__star {
+ font-size: x-large;   
  cursor: pointer;
  color: #dabd18b2;
 }
@@ -143,9 +156,9 @@ body{
     filter: drop-shadow(1px 1px 4px gold);
  }
 
-.starsRating{
+.starsRating {
     text-align: right;
-    font-size: small;
+    font-size: medium;
 }
 
 .scroll {
@@ -160,30 +173,29 @@ body{
   color: black(13, 50, 88);
 }
 
-.scroll:hover{
+.scroll:hover {
     background: none;
     color: white;
 }
 
-#movieData{
-    margin: 3%;
+#movieData {
     font-size: 0.5rem;
     color:whitesmoke;
-    font-family: "Open Sans", sans-serif;
     background-color: black;
-    opacity: 0.7;
+    opacity: 0.6;
     padding: 0.2ch;
-    /* margin: auto; */
+    margin-bottom: 1%;
+    padding-left: 5ch;
+    width: 1020px;
 }
 
 #map {
-    height: 400px;
+    height: 380px;
     width: 94%;
-    border-radius: 15%;
     margin-left: 3%;
   }
 
-.mapouter{
+.mapouter {
     position:relative;
     text-align:right;
     height:240px;
@@ -204,7 +216,7 @@ body{
     border-radius: 25%;
 }
 
-#mapTitle{
+#mapTitle {
     border-radius: 45px;
     border: none;
     background:none;
@@ -219,41 +231,23 @@ body{
     color: whitesmoke;
 }
 
-.leaveAcomment{
-    font-size: 0.5rem;
-}
 
-.text {
-    background-color: black;
-    color: white    ;
-    font-size: 5vw; /* Responsive font size */
-    font-style:italic;
-    font-weight: bold;
-    margin: 0 auto; /* Center the text container */
-    padding: 15px;
-    width: 30%;
-    text-align: center; /* Center text */
-    position: absolute; /* Position text */
-    top: 10%;
-    left: 20%; 
-    transform: translate(-50%, -50%); /* Position text in the middle */
-    mix-blend-mode: multiply; /* This makes the cutout text possible */
-    border-radius: 80%;
-}
-
-.fa{
+.fa {
     color: #dabd18b2;
 }
 
-#image{
+#image {
     width:300px;
     height: 420px;
-    border-radius: 10%;
+    margin-bottom: 2%;
+
 }
 
-#movie{
-    border-radius: 10%;
-    margin-left: 1%;
+#movie {
+    margin-left: 2%;
+    margin-bottom: 2%;
+    width:720px;
+    height: 420px;
 }
 
 #middle{
@@ -261,8 +255,7 @@ body{
     background-color: rgb(0, 33, 71);
     margin-left: 35px;
     margin-right: 35px;
-    margin-bottom: 5px;
+    margin-bottom: 2%;
     opacity: 0.9;
-    border-radius: 10%;
 }
 
