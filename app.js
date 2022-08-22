@@ -150,8 +150,11 @@ function removeUser(adminName, userNameToDelete, res) {
         users.remove(myquery, function (err, obj) {
           //remove user
           if (err) throw err;
+          res.send("userName " + userNameToDelete + " is deleted");
           console.log(" document(s) deleted");
         });
+      }else{
+        res.send("you are not admin");
       }
     }
   });
@@ -209,7 +212,6 @@ function addMovie(
   genre,
   res
 ) {
-  //helper function for signup
   const users = client.db("gigos").collection("users");
   const movies = client.db("gigos").collection("movies");
   const user = {
@@ -227,7 +229,7 @@ function addMovie(
     stars: stars,
     img: img,
     releaseYear: releaseYear,
-    genre: genre,
+    genre: genre
   };
   users.findOne(user, function (err, result) {
     if (err) throw err;
@@ -235,14 +237,74 @@ function addMovie(
       movies.findOne(movie, function (err, result) {
         if (err) throw err;
         if (result != null) {
-          return;
+            res.send("this movie is already exist")
         } else {
-          console.log("insert new movie");
           movies.insertOne(movie);
+          res.send("insert movie: "  + movieName);
         }
         return;
       });
-    } else return null;
+    } else{
+      res.send("user is not admin")
+    }
+  });
+}
+
+async function updateMovie(
+  userName,oldName,newName,
+  description,locations,trailer,duration,director,
+  stars,img,releaseYear,genre,res
+) {
+  const users = client.db("gigos").collection("users");
+  const movies = client.db("gigos").collection("movies");
+  const user = {
+    userName: userName,
+  };
+  const movie = {
+    movieName: oldName
+  };
+  const moviesArr = await movies.find().toArray();
+  for(let i =0; i<moviesArr.length; i++){//validation test
+    if(moviesArr[i].movieName == newName){
+      res.send("new name is already exist");
+      return;
+    }
+  }
+  users.findOne(user, function (err, result) {
+    if (err) throw err;
+    if (result.isAdmin) {
+      movies.findOne(movie, async function (err, result) {
+        if (err) throw err;
+        if (result != null) {
+          const options = { upsert: true };
+          const updateDoc = {
+            //set the new movie
+            $set: {
+              movieName: newName,
+              description: description,
+              locations: locations,
+              trailer: trailer,
+              duration: duration,
+              director: director,
+              stars: stars,
+              img: img,
+              releaseYear: releaseYear,
+              genre: genre
+            }
+          };
+          const movieToUpdate = {
+            movieName: oldName
+          }
+          await movies.updateOne(movieToUpdate, updateDoc, options); //update
+          res.send("update movie: " + newName);
+        } else {
+          res.send("movie dont exist");
+        }
+        return;
+      });
+    } else{
+      res.send("user is not admin")
+    }
   });
 }
 
@@ -263,6 +325,7 @@ function removeMovie(userName, movieName, res) {
           //remove movie
           if (err) throw err;
           console.log(" document(s) deleted");
+          res.send(movieName + " is removed");
         });
         usersArr = await users.find().toArray();
         for (let i = 0; i < usersArr.length; i++) {
@@ -747,6 +810,26 @@ app.post("/addMovie", (req, res) => {
   addMovie(
     req.query.userName,
     req.query.movieName,
+    req.query.description,
+    req.query.locations,
+    req.query.trailer,
+    req.query.duration,
+    req.query.director,
+    req.query.stars,
+    req.query.img,
+    req.query.releaseYear,
+    req.query.genre,
+    res
+  );
+});
+
+app.post("/updateMovie", (req, res) => {
+  //req  parameters:  user name, oldName, newName, description, locations, trailer,duration, director, stars, img,
+  //releaseYear, genre. if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none
+  updateMovie(
+    req.query.userName,
+    req.query.oldName,
+    req.query.newName,
     req.query.description,
     req.query.locations,
     req.query.trailer,
