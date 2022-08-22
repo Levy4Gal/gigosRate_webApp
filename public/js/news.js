@@ -37,18 +37,22 @@ $(document).ready(() => {
 
   // Update the news html page.
 function updateArticles(){
-    updateAllArticles(1,2);
-    updateAllArticles(2,3);
-    updateAllArticles(3,4);
-    updateAllArticles(4,5);
-    updateAllArticles(5,6);
-    updateAllArticles(6,7);
-    updateAllArticles(7,8);
-    updateAllArticles(8,9);
-    popular(1,9);
-    popular(2,10);
-    popular(3,11);
-    popular(4,12);
+    updateAllArticles(1,0);
+    updateAllArticles(2,1);
+    updateAllArticles(3,2);
+    updateAllArticles(4,3);
+    updateAllArticles(5,4);
+    updateAllArticles(6,5);
+    updateAllArticles(7,6);
+    updateAllArticles(8,7);
+    var len = MovieArticles.length;
+    // Check if there are to many movies for the popular section.
+    for(var i=1,j=8;j<len;i++,j++){
+        popular(i,j);
+    }
+    for(var k=4;k>len-8;k--){
+        $("#pop" + k).remove();
+    }
 }
 
   // Update the news html page.

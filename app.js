@@ -13,62 +13,34 @@ app.get("/", (req, res) => {
 });
 
 var http = require("http"); 
-var server = http.createServer(app); //
-var io = require("socket.io")(server); //
-server.listen(port); //
+var server = http.createServer(app); 
+var io = require("socket.io")(server); 
+server.listen(port); 
 console.log("server strarted on port: " + port);
-// var socket = require('socket.io');
-// var io = socket.listen(app);
-io.sockets.on("connection", function (ClientSocket) {
-  console.log("connection");
 
+// ****************** Socket IO functions ****************\\
+io.sockets.on("connection", function (ClientSocket) {
+
+  // Event for login request.
   ClientSocket.on("login", function (data) {
-    console.log("got login");
     var _username = data.username;
     var password = data.password;
     var is_admin = data.is_admin;
-    console.log(_username + " logged in");
     autheticateUser(_username, password);
   });
 
+  // Event for sign up request.
   ClientSocket.on("sign-up", function (data) {
-    console.log("got sign-up");
     var _username = data.username;
     var password = data.password;
     var is_admin = data.is_admin;
     createUser(_username, password);
   });
 
+  // Event for get user request.
   ClientSocket.on("getUser", function (data) {
-    console.log('got "getUser"');
     var _username = data.username;
     getUser(_username);
-  });
-
-  ClientSocket.on("addMovie", function (data) {
-    console.log('got "addMovie"');
-    var userName = data.userName;
-    var movieName = data.movieName;
-    var description = data.description;
-    var locations = data.locations;
-    var trailer = data.trailer;
-    var rate = data.rate;
-    var duration = data.duration;
-    var director = data.director;
-    var stars = data.stars;
-    var img = data.img;
-    addMovie(
-      userName,
-      movieName,
-      description,
-      locations,
-      trailer,
-      rate,
-      duration,
-      director,
-      stars,
-      img
-    );
   });
 });
 
@@ -128,8 +100,6 @@ app.get("/news", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
-// app.listen(port, () => console.info("Listening on port " ,port));
-
 /**************************************************
  =================DataBase Functions===============
  **************************************************/
@@ -157,13 +127,11 @@ function createUser(userName, password, res) {
   users.findOne(valid, function (err, result) {
     if (err) throw err;
     if (result != null) {
-      // res.send("this user name is not available")
-      console.log("client alredy sign up before");
-      io.sockets.emit("sign-up", { is_valid: false }); //******
+      io.sockets.emit("sign-up", { is_valid: false }); 
       return;
-    } else console.log("client sign up NOW");
+    }
     users.insertOne(doc);
-    io.sockets.emit("sign-up", { is_valid: true }); //******
+    io.sockets.emit("sign-up", { is_valid: true }); 
   });
 }
 
@@ -200,16 +168,8 @@ function autheticateUser(userName, password, res) {
   users.findOne(doc, function (err, result) {
     if (err) throw err;
     if (result != null) {
-      // res.send(JSON.parse(
-      //   '{"isExist": "true"}'
-      // ))
-      console.log("client is valid and may log in");
       io.sockets.emit("login", { is_valid: true, userName: userName });
     } else {
-      // res.send(JSON.parse(
-      //   '{"isExist": "false"}'
-      // ))
-      console.log("client isnt valid and cant log in");use
       io.sockets.emit("login", { is_valid: false });
     }
   });
@@ -217,7 +177,6 @@ function autheticateUser(userName, password, res) {
 
 function getUser(userName, res) {
   //pull thr data from DB for the /get/user
-  console.log("inside getUser");
   const users = client.db("gigos").collection("users");
   const doc = {
     userName: userName,
@@ -225,14 +184,9 @@ function getUser(userName, res) {
   users.findOne(doc, function (err, result) {
     if (err) throw err;
     if (result == null) {
-      //   res.send(JSON.parse(
-      //     '{"userName": "this user is not exist"}'
-      //  ))
-      console.log("user not found");
       io.sockets.emit("getUser", { user: null });
       return;
     } else {
-      console.log("user found");
       if (res){ res.send(result);
         return;
       }
@@ -281,15 +235,11 @@ function addMovie(
       movies.findOne(movie, function (err, result) {
         if (err) throw err;
         if (result != null) {
-          console.log("this movie is already exist");
-          io.sockets.emit("addMovie", { result: false });
           return;
-          // res.send("this movie is already exist")
         } else {
           console.log("insert new movie");
           movies.insertOne(movie);
         }
-        io.sockets.emit("addMovie", { result: true });
         return;
       });
     } else return null;
