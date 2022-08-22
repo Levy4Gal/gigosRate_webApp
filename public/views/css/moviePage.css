@@ -9,7 +9,6 @@ body {
 }
 
 .firstTitle {
-    font-style:italic;
     color:rgb(147, 142, 142);
     background-color: navy;
     size: 200cm;
@@ -57,8 +56,6 @@ body {
 .leaveAcomment .fa-whatsapp {
     color: #25d366;
 }
-
-
 
 .lastTitle {
     border-radius: 45px;
@@ -148,16 +145,9 @@ body {
 #rate {
     color:  whitesmoke;
 }
-
-#rateButton {
-   font-size: 1.1rem;
-   background-color: rgb(99, 99, 240) ;
-   border: 0.01px solid black;
-   border-radius:60% ;
-   text-align: right; 
-} 
   
 .rating__star {
+ font-size: x-large;   
  cursor: pointer;
  color: #dabd18b2;
 }
@@ -168,7 +158,7 @@ body {
 
 .starsRating {
     text-align: right;
-    font-size: small;
+    font-size: medium;
 }
 
 .scroll {
@@ -191,7 +181,6 @@ body {
 #movieData {
     font-size: 0.5rem;
     color:whitesmoke;
-    font-family: "Open Sans", sans-serif;
     background-color: black;
     opacity: 0.6;
     padding: 0.2ch;
@@ -242,23 +231,6 @@ body {
     color: whitesmoke;
 }
 
-.text {
-    background-color: black;
-    color: white    ;
-    font-size: 5vw; /* Responsive font size */
-    font-style:italic;
-    font-weight: bold;
-    margin: 0 auto; /* Center the text container */
-    padding: 15px;
-    width: 30%;
-    text-align: center; /* Center text */
-    position: absolute; /* Position text */
-    top: 10%;
-    left: 20%; 
-    transform: translate(-50%, -50%); /* Position text in the middle */
-    mix-blend-mode: multiply; /* This makes the cutout text possible */
-    border-radius: 80%;
-}
 
 .fa {
     color: #dabd18b2;
@@ -267,7 +239,6 @@ body {
 #image {
     width:300px;
     height: 420px;
-    /* border-radius: 10%; */
     margin-bottom: 2%;
 
 }
@@ -285,7 +256,6 @@ body {
     margin-left: 35px;
     margin-right: 35px;
     margin-bottom: 2%;
-    /* margin-bottom: 5px; */
     opacity: 0.9;
 }
 
