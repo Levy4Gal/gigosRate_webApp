@@ -1,6 +1,6 @@
 
 //initial load
-
+var lastEditedLine;
 var displayedMovies;
 var displayUsers; // needs to add
 var lastWeekUsers;
@@ -55,9 +55,10 @@ function displayLoadedMovies(){
         if(!onUsers){
             $(".list").empty();
             for(let i=0; i<displayedMovies.length && i<10;i++){
-                let line =         `          <div class="line">
+                var nameWithoutSpaces = displayedMovies[i].movieName.replace(/\s/g,'');
+                let line =         `          <div id="line${nameWithoutSpaces}" class="line">
                 <div class="name"> ${displayedMovies[i].movieName}</div>
-                <img class="edit" src="img/editIcon.png"/>
+                <img id="${displayedMovies[i].movieName}" onclick="addEditMoviePanel(this.id)"  class="edit" src="img/editIcon.png"/>
                 <img id="${displayedMovies[i].movieName}" onclick="deleteMovie(this.id)" class="delete" src="img/deleteIcon.png" />
               </div>`;
                 $(".list").append(line);
@@ -68,6 +69,53 @@ function displayLoadedMovies(){
 
 function deleteMovie(name){
     httpPostAsync(`http://localhost:8080/removeMovie?userName=Inon&movieName=${name}`,"",search);
+}
+
+function addEditMoviePanel(movieName) {
+    var lineElementID = 'line'+movieName.replace(/\s/g,'');
+    console.log(lineElementID);
+
+    if($('.editContainer').length){
+        if(lastEditedLine == lineElementID){
+            $('.editContainer').remove();
+            return;
+        }
+        else
+        $('.editContainer').remove();
+    }
+
+    lastEditedLine = lineElementID;
+    $(`        <div class="editContainer">
+    <div class="editTitle">Edit Movie</div>
+    <div class="editData">
+      <div class="addName"> Movie name:</div>
+      <input id="editmovieName" class="movieInput" type="text" placeholder="Movie name.." name="movieName">
+      <div class="addName">Description:</div>
+      <textarea rows="4" cols="40" id="editmovieDescription" type="text" placeholder="Movie description.." name="movieDescription" 
+      style="width: 100%;"></textarea>
+      <div class="addName">Locations:</div>
+      <input id="editlocations" class="movieInput" type="text" placeholder="Locations.." name="locations">
+      <div class="name">Duration:</div>
+      <input id="editduration" class="movieInput" type="text" placeholder="Duration.." name="duration">
+      <div class="addName">Trailer link:</div>
+      <input id="edittrailerLink" class="movieInput" type="text" placeholder="Trailer.." name="trailer">
+      <div class="addName">Img link:</div>
+      <input id="editimgLink" class="movieInput" type="text" placeholder="Img.." name="imgLink">
+      <div class="addName">Director:</div>
+      <input id="editdirector" class="movieInput" type="text" placeholder="Director.." name="director">
+      <div class="addName">Stars:</div>
+      <input id="editstars" class="movieInput" type="text" placeholder="Stars.." name="stars">
+      <div class="addName">Release year: </div>
+      <input id="editreleaseYear" class="movieInput" type="text" placeholder="Release year.." name="releaseYear">
+      <div class="addName">Genre </div>
+      <input id="editgenre" class="movieInput" type="text" placeholder="Genre.." name="genre">  
+    </div>
+    <div onclick="onSaveEdit()" class="saveBtn">
+      Save Changes
+    </div>
+  </div>
+`).insertAfter(`#${lineElementID}`,httpGetAsync(`http://localhost:8080/searchMovie?movieName=${movieName}`,insertEditMovieFields));
+
 }
 
 function changeOnUsers(state){
@@ -194,4 +242,50 @@ function handleUserStatics(res){
 
 function handleMovieStatics(res){
     movieGenreData = JSON.parse(res);
+}
+
+function onSaveEdit(){
+    var movieName =  $('#editmovieName').val();
+    var movieDesc = $('#editmovieDescription').val();
+    var locations= $('#editlocations').val();
+    var trailer= $('#edittrailerLink').val();
+    var duration= $('#editduration').val();
+    var director= $('#editdirector').val();
+    var stars= $('#editstars').val();
+    var img= $('#editimgLink').val();
+    var releaseYear = $('#editreleaseYear').val();
+    var genre = $('#genre').val();
+    // httpPostAsync(`http://localhost:8080/addMovie?userName=Inon&movieName=${movieName}&description=${movieDesc}&locations=${locations}&trailer=${trailer}&rate=0&duration=${duration}&director=${director}&stars=${stars}&img=${img}&releaseYear=${releaseYear}&genre=${genre}`,"",
+    // function (value){
+    //     alert(value);
+    //     $('#movieName').val() = "";
+    //     $('#movieDescription').val() = "";
+    //     $('#locations').val()= "";
+    //     $('#trailerLink').val() = "";
+    //     $('#duration').val() = "";
+    //     $('#director').val() = "";
+    //     $('#stars').val() = "";
+    //     $('#imgLink').val() = "";
+    //     $('#releaseYear').val() = "";
+    //     $('#genre').val() = "";
+    // });
+
+}
+
+function insertEditMovieFields(movie){
+    $( document ).ready(function() {
+        var parsedMovie = JSON.parse(movie);
+        console.log(parsedMovie);
+        $('#editmovieName').val(parsedMovie[0].movieName);
+        $('#editmovieDescription').val(parsedMovie[0].description);
+        $('#editlocations').val(parsedMovie[0].locations);
+        $('#edittrailerLink').val(parsedMovie[0].trailer);
+        $('#editduration').val(parsedMovie[0].duration);
+        $('#editdirector').val(parsedMovie[0].director);
+        $('#editstars').val(parsedMovie[0].stars);
+        $('#editimgLink').val(parsedMovie[0].img);
+        $('#editreleaseYear').val(parsedMovie[0].releaseYear);
+        $('#editgenre').val(parsedMovie[0].genre);
+    
+    });
 }

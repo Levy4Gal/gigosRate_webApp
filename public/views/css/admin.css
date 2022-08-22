@@ -45,13 +45,18 @@ textarea { height: auto; }
 .actions{
     display: flex;
     flex-flow: column;
-    height: 100vh;
+    min-height: 100vh;
     align-items: center;
     width: 100%;
 }
 .search{
     display: flex;
     flex-flow: row;
+    width: 30%;
+    min-width: 200px
+}
+#searchInput{
+    width: 100%;
 }
 .icon{
     max-width: 30px;
@@ -62,6 +67,7 @@ textarea { height: auto; }
     display: flex;
     flex-flow: row;
     padding: 40px;
+    font-size: 20px;
 }
 .innerOption{
     padding: 10px;  
@@ -108,9 +114,9 @@ textarea { height: auto; }
 .addMovie{
     display: flex;
     flex-flow: column;
-    /* height: 100vh; */
+    min-height: 100vh;
     justify-content: center;
-    padding-bottom: 40px
+    /* padding-bottom: 40px */
 }
 .title{
     font-size: 36px;
@@ -128,10 +134,11 @@ textarea { height: auto; }
 .movieInput{
     width: 100%;
     max-height: 30px;
+    text-overflow: ellipsis;
 }
 .addBtn{
     align-self: center;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     margin-top: 40px;
     padding: 10px;
     width: 100%;
@@ -139,6 +146,8 @@ textarea { height: auto; }
     border-radius: 10px;
     color: #0c59c5;
     background-color: white;
+    font-weight: bold;
+    font-size: 18px;
 }
 .addBtn:hover{
     cursor: pointer;
@@ -212,4 +221,37 @@ svg {
   
   text.source {
     font-size: 10px;
+  }
+
+  .editContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: #2e3d46;
+    padding: 30px;
+    margin-top: 15px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 60%);
+  }
+  .editData{
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: 50px 50px 50px 50px;
+    align-items: center;
+  }
+  .editTitle{
+    font-size: 36px;
+    padding-bottom: 30px;
+  }
+
+  .saveBtn{
+    cursor: pointer;
+    width: 30%;
+    color: #47b5df;
+    background-color: white;
+    /* border: 1px solid black; */
+    border-radius: 10px;
+    font-weight: bold;
+    padding: 5px;
+    margin-top: 30px;
   }
