@@ -1,8 +1,6 @@
 body {
     display: block;
     background-color: #273636;
-    border: 0.5px;
-
     background-repeat: no-repeat;
     background-attachment:scroll;
     background-size: cover;
@@ -18,7 +16,7 @@ body {
 }
 
 #movieName {
-    font-size: 300%;
+    font-size: 60px;
     padding-left: 1ch;
     color: whitesmoke;
 }
@@ -46,6 +44,7 @@ body {
     font-size: 48px;
     color:whitesmoke;
     transition: 1.5s;
+    transform: rotate(360deg);
 }
 
 .leaveAcomment .fa-facebook {
@@ -123,7 +122,6 @@ body {
     border: none;
     background:none;
     font-size: 36px;
-    float: right;
     border-color: none;
     color:  #da6f18b2;
    text-shadow:5px 5px 5px black;
@@ -137,6 +135,7 @@ body {
     font-size: 48px; ;
     color:whitesmoke;
     transition: 1.5s;
+    transform: rotate(360deg);
 }
 
 #rateTitle {
@@ -148,6 +147,13 @@ body {
 
 #rate {
     color:  whitesmoke;
+    font-size: 36px;
+}
+
+.fa {
+    color: #dabd18b2;
+    font-size: 20px;
+    /* the stars next to movie name */
 }
   
 .rating__star {
@@ -162,7 +168,7 @@ body {
 
 .starsRating {
     text-align: right;
-    font-size: medium;
+    font-size: 18px;
 }
 
 .scroll {
@@ -236,11 +242,6 @@ body {
     width: 50%;
     margin-top: 2%;
     color: whitesmoke;
-}
-
-
-.fa {
-    color: #dabd18b2;
 }
 
 #image {
