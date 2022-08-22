@@ -26,18 +26,18 @@ $(document).ready(function () {
   });
 });
 
-
-
 function addToWatch(e) {
-  let movieName = e.target.name;
-  const Http = new XMLHttpRequest();
-  const url =
-    "http://localhost:8080/addToWl?movieName=" +
-    movieName +
-    "&userName=" +
-    ClientUser.userName;
-  Http.open("POST", url);
-  Http.send();
+  if (ClientUser != null) {
+    let movieName = e.target.name;
+    const Http = new XMLHttpRequest();
+    const url =
+      "http://localhost:8080/addToWl?movieName=" +
+      movieName +
+      "&userName=" +
+      ClientUser.userName;
+    Http.open("POST", url);
+    Http.send();
+  } else alert("Log in required");
 }
 
 function displaySorted() {
