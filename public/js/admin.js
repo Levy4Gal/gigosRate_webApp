@@ -1,6 +1,7 @@
 
 //initial load
 var lastEditedLine;
+var lastEditedMovieName;
 var displayedMovies;
 var displayUsers; // needs to add
 var lastWeekUsers;
@@ -68,10 +69,11 @@ function displayLoadedMovies(){
 }
 
 function deleteMovie(name){
-    httpPostAsync(`http://localhost:8080/removeMovie?userName=Inon&movieName=${name}`,"",search);
+    httpPostAsync(`http://localhost:8080/removeMovie?userName=${JSON.parse(sessionStorage.getItem('user')).userName}&movieName=${name}`,"",search);
 }
 
 function addEditMoviePanel(movieName) {
+    lastEditedMovieName = movieName;
     var lineElementID = 'line'+movieName.replace(/\s/g,'');
     console.log(lineElementID);
 
@@ -154,6 +156,9 @@ $( document ).ready(function() {
 
   function search(){
     var txt =  $('#searchInput').val();
+    if($('.editContainer').length){
+        $('.editContainer').remove();  
+    }        
     if(!onUsers){
         if(txt != "")
             httpGetAsync(`http://localhost:8080/searchMovie?movieName=${txt}`,handleSearchedMovie);
@@ -177,19 +182,19 @@ function onAddMovie(){
     var img= $('#imgLink').val();
     var releaseYear = $('#releaseYear').val();
     var genre = $('#genre').val();
-    httpPostAsync(`http://localhost:8080/addMovie?userName=Inon&movieName=${movieName}&description=${movieDesc}&locations=${locations}&trailer=${trailer}&rate=0&duration=${duration}&director=${director}&stars=${stars}&img=${img}&releaseYear=${releaseYear}&genre=${genre}`,"",
+    httpPostAsync(`http://localhost:8080/addMovie?userName=${JSON.parse(sessionStorage.getItem('user')).userName}&movieName=${movieName}&description=${movieDesc}&locations=${locations}&trailer=${trailer}&rate=0&duration=${duration}&director=${director}&stars=${stars}&img=${img}&releaseYear=${releaseYear}&genre=${genre}`,"",
     function (value){
         alert(value);
-        $('#movieName').val() = "";
-        $('#movieDescription').val() = "";
-        $('#locations').val()= "";
-        $('#trailerLink').val() = "";
-        $('#duration').val() = "";
-        $('#director').val() = "";
-        $('#stars').val() = "";
-        $('#imgLink').val() = "";
-        $('#releaseYear').val() = "";
-        $('#genre').val() = "";
+        $('#movieName').val("");
+        $('#movieDescription').val("");
+        $('#locations').val("");
+        $('#trailerLink').val("");
+        $('#duration').val("");
+        $('#director').val("");
+        $('#stars').val("");
+        $('#imgLink').val("");
+        $('#releaseYear').val("");
+        $('#genre').val("");
     });
     //var json = `{   "movieName":"${movieName}",   "movieDescription":"${movieDesc}",   "locations":"${locations}",   "trailer":"${trailer}",   "duration":"${duration}",   "director":"${director}",   "stars":"${stars}",   "img":"${img}" }`;
     // console.log(JSON.parse(json));
@@ -255,20 +260,10 @@ function onSaveEdit(){
     var img= $('#editimgLink').val();
     var releaseYear = $('#editreleaseYear').val();
     var genre = $('#genre').val();
-    // httpPostAsync(`http://localhost:8080/addMovie?userName=Inon&movieName=${movieName}&description=${movieDesc}&locations=${locations}&trailer=${trailer}&rate=0&duration=${duration}&director=${director}&stars=${stars}&img=${img}&releaseYear=${releaseYear}&genre=${genre}`,"",
-    // function (value){
-    //     alert(value);
-    //     $('#movieName').val() = "";
-    //     $('#movieDescription').val() = "";
-    //     $('#locations').val()= "";
-    //     $('#trailerLink').val() = "";
-    //     $('#duration').val() = "";
-    //     $('#director').val() = "";
-    //     $('#stars').val() = "";
-    //     $('#imgLink').val() = "";
-    //     $('#releaseYear').val() = "";
-    //     $('#genre').val() = "";
-    // });
+    httpPostAsync(`http://localhost:8080/updateMovie?userName=${JSON.parse(sessionStorage.getItem('user')).userName}&oldName=${lastEditedMovieName}&newName=movieName&description=${movieDesc}&locations=${locations}&trailer=${trailer}&rate=0&duration=${duration}&director=${director}&stars=${stars}&img=${img}&releaseYear=${releaseYear}&genre=${genre}`,"",
+    function (value){
+        alert(value);
+    });
 
 }
 
