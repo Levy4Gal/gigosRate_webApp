@@ -1,24 +1,9 @@
-body {
-    display: block;
-    background-color: #273636;
-    background-repeat: no-repeat;
-    background-attachment:scroll;
-    background-size: cover;
-}
-
-.firstTitle {
-    color:rgb(147, 142, 142);
-    background-color: navy;
-    size: 200cm;
-    width: 300px;
-    border-radius: 80%;
-    text-align: center;
-}
 
 #movieName {
     font-size: 60px;
     padding-left: 1ch;
     color: whitesmoke;
+    font-family: OCR A Std, monospace;
 }
 
 .leaveAcomment{
@@ -43,8 +28,7 @@ body {
 .leaveAcomment a i:hover {
     font-size: 48px;
     color:whitesmoke;
-    transition: 1.5s;
-    transform: rotate(360deg);
+    transition: 500ms;
 }
 
 .leaveAcomment .fa-facebook {
@@ -57,21 +41,6 @@ body {
 
 .leaveAcomment .fa-whatsapp {
     color: #25d366;
-}
-
-.lastTitle {
-    border-radius: 45px;
-    border: none;
-    background:none;
-    padding: none;
-    font-weight: bold;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-    margin-top: 2%;
-    color: whitesmoke;
-    font-size: 1rem;
 }
 
 .trailer,.image {
@@ -114,7 +83,7 @@ body {
   
 .tooltip:hover .tooltiptext {
     visibility: visible;
-    text-align: left;
+    text-align: right;
     float: left;
 }
 
@@ -134,8 +103,7 @@ body {
     border-radius: 7%;
     font-size: 48px; ;
     color:whitesmoke;
-    transition: 1.5s;
-    transform: rotate(360deg);
+    transition: 500ms;
 }
 
 #rateTitle {
@@ -148,6 +116,8 @@ body {
 #rate {
     color:  whitesmoke;
     font-size: 36px;
+    font-family: OCR A Std, monospace;
+
 }
 
 .fa {
@@ -255,14 +225,16 @@ body {
     margin-bottom: 2%;
     width:720px;
     height: 420px;
+    max-width: 100%!important;
+    max-height:100%!important ;
 }
 
 #middle{
     padding: 20px;  
-    background-color: rgb(0, 33, 71);
+    background-color: #162032;
     margin-left: 35px;
     margin-right: 35px;
     margin-bottom: 2%;
-    opacity: 0.9;
 }
+
 
