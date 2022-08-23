@@ -1,6 +1,6 @@
  body{
    margin: 0;
-   font-family: "Open Sans", "sans-serif", "Roboto";
+   /* font-family: "Open Sans", "sans-serif", "Roboto"; */
  }
  .main-container {
     display: grid;

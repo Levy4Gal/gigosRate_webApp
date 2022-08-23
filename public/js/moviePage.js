@@ -184,19 +184,4 @@ function addLocations(item){
 
 function scrollToTop() {
     $(window).scrollTop(0);
-}
-
-// async function findeCenter(locations){
-//     let latSum=0 ,lngSum=0;
-//     let locationsAmount = locations.length;
-//     for(let i=0 ; i < locationsAmount ;i++){
-//         getCoordsFromCountryName(locations[i]).then((coords)=>{
-//             latSum += coords.lat;
-//             lngSum += coords.lng;
-//         });
-       
-//     }
-//     let center ={lat:(latSum/=locationsAmount) , lng:(lngSum/=locationsAmount)};
-//     console.log(center);
-//     return center;
-// }           
+}     
