@@ -8,6 +8,7 @@
 .statistics{
     padding-top: 5%;
     height: 100vh;
+    min-height: 750px;
     width: 80%;
 
 }
