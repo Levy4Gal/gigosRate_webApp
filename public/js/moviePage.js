@@ -100,7 +100,7 @@ $(document).ready(function(){
         stars.map((star) => {
             star.onclick = () => {
                 if(ClientUser==null){
-                    alert("you must sign in first");
+                    alert("Log in required");
                 }else{
                     i = stars.indexOf(star);       
                     if (star.className === starClassInactive) {
@@ -124,7 +124,7 @@ $(document).ready(function(){
 
 function addToWatch() {
     if(ClientUser==null){
-        alert("you must sign in first");
+        alert("Log in required");
     }
     else{
         const Http = new XMLHttpRequest();
