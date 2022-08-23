@@ -13,62 +13,34 @@ app.get("/", (req, res) => {
 });
 
 var http = require("http"); 
-var server = http.createServer(app); //
-var io = require("socket.io")(server); //
-server.listen(port); //
+var server = http.createServer(app); 
+var io = require("socket.io")(server); 
+server.listen(port); 
 console.log("server strarted on port: " + port);
-// var socket = require('socket.io');
-// var io = socket.listen(app);
-io.sockets.on("connection", function (ClientSocket) {
-  console.log("connection");
 
+// ****************** Socket IO functions ****************\\
+io.sockets.on("connection", function (ClientSocket) {
+
+  // Event for login request.
   ClientSocket.on("login", function (data) {
-    console.log("got login");
     var _username = data.username;
     var password = data.password;
     var is_admin = data.is_admin;
-    console.log(_username + " logged in");
     autheticateUser(_username, password);
   });
 
+  // Event for sign up request.
   ClientSocket.on("sign-up", function (data) {
-    console.log("got sign-up");
     var _username = data.username;
     var password = data.password;
     var is_admin = data.is_admin;
     createUser(_username, password);
   });
 
+  // Event for get user request.
   ClientSocket.on("getUser", function (data) {
-    console.log('got "getUser"');
     var _username = data.username;
     getUser(_username);
-  });
-
-  ClientSocket.on("addMovie", function (data) {
-    console.log('got "addMovie"');
-    var userName = data.userName;
-    var movieName = data.movieName;
-    var description = data.description;
-    var locations = data.locations;
-    var trailer = data.trailer;
-    var rate = data.rate;
-    var duration = data.duration;
-    var director = data.director;
-    var stars = data.stars;
-    var img = data.img;
-    addMovie(
-      userName,
-      movieName,
-      description,
-      locations,
-      trailer,
-      rate,
-      duration,
-      director,
-      stars,
-      img
-    );
   });
 });
 
@@ -128,8 +100,6 @@ app.get("/news", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
-// app.listen(port, () => console.info("Listening on port " ,port));
-
 /**************************************************
  =================DataBase Functions===============
  **************************************************/
@@ -157,13 +127,11 @@ function createUser(userName, password, res) {
   users.findOne(valid, function (err, result) {
     if (err) throw err;
     if (result != null) {
-      // res.send("this user name is not available")
-      console.log("client alredy sign up before");
-      io.sockets.emit("sign-up", { is_valid: false }); //******
+      io.sockets.emit("sign-up", { is_valid: false }); 
       return;
-    } else console.log("client sign up NOW");
+    }
     users.insertOne(doc);
-    io.sockets.emit("sign-up", { is_valid: true }); //******
+    io.sockets.emit("sign-up", { is_valid: true }); 
   });
 }
 
@@ -182,8 +150,11 @@ function removeUser(adminName, userNameToDelete, res) {
         users.remove(myquery, function (err, obj) {
           //remove user
           if (err) throw err;
+          res.send("userName " + userNameToDelete + " is deleted");
           console.log(" document(s) deleted");
         });
+      }else{
+        res.send("you are not admin");
       }
     }
   });
@@ -200,16 +171,8 @@ function autheticateUser(userName, password, res) {
   users.findOne(doc, function (err, result) {
     if (err) throw err;
     if (result != null) {
-      // res.send(JSON.parse(
-      //   '{"isExist": "true"}'
-      // ))
-      console.log("client is valid and may log in");
       io.sockets.emit("login", { is_valid: true, userName: userName });
     } else {
-      // res.send(JSON.parse(
-      //   '{"isExist": "false"}'
-      // ))
-      console.log("client isnt valid and cant log in");use
       io.sockets.emit("login", { is_valid: false });
     }
   });
@@ -217,7 +180,6 @@ function autheticateUser(userName, password, res) {
 
 function getUser(userName, res) {
   //pull thr data from DB for the /get/user
-  console.log("inside getUser");
   const users = client.db("gigos").collection("users");
   const doc = {
     userName: userName,
@@ -225,14 +187,9 @@ function getUser(userName, res) {
   users.findOne(doc, function (err, result) {
     if (err) throw err;
     if (result == null) {
-      //   res.send(JSON.parse(
-      //     '{"userName": "this user is not exist"}'
-      //  ))
-      console.log("user not found");
       io.sockets.emit("getUser", { user: null });
       return;
     } else {
-      console.log("user found");
       if (res){ res.send(result);
         return;
       }
@@ -255,7 +212,6 @@ function addMovie(
   genre,
   res
 ) {
-  //helper function for signup
   const users = client.db("gigos").collection("users");
   const movies = client.db("gigos").collection("movies");
   const user = {
@@ -273,7 +229,7 @@ function addMovie(
     stars: stars,
     img: img,
     releaseYear: releaseYear,
-    genre: genre,
+    genre: genre
   };
   users.findOne(user, function (err, result) {
     if (err) throw err;
@@ -281,18 +237,74 @@ function addMovie(
       movies.findOne(movie, function (err, result) {
         if (err) throw err;
         if (result != null) {
-          console.log("this movie is already exist");
-          io.sockets.emit("addMovie", { result: false });
-          return;
-          // res.send("this movie is already exist")
+            res.send("this movie is already exist")
         } else {
-          console.log("insert new movie");
           movies.insertOne(movie);
+          res.send("insert movie: "  + movieName);
         }
-        io.sockets.emit("addMovie", { result: true });
         return;
       });
-    } else return null;
+    } else{
+      res.send("user is not admin")
+    }
+  });
+}
+
+async function updateMovie(
+  userName,oldName,newName,
+  description,locations,trailer,duration,director,
+  stars,img,releaseYear,genre,res
+) {
+  const users = client.db("gigos").collection("users");
+  const movies = client.db("gigos").collection("movies");
+  const user = {
+    userName: userName,
+  };
+  const movie = {
+    movieName: oldName
+  };
+  const moviesArr = await movies.find().toArray();
+  for(let i =0; i<moviesArr.length; i++){//validation test
+    if(moviesArr[i].movieName == newName){
+      res.send("new name is already exist");
+      return;
+    }
+  }
+  users.findOne(user, function (err, result) {
+    if (err) throw err;
+    if (result.isAdmin) {
+      movies.findOne(movie, async function (err, result) {
+        if (err) throw err;
+        if (result != null) {
+          const options = { upsert: true };
+          const updateDoc = {
+            //set the new movie
+            $set: {
+              movieName: newName,
+              description: description,
+              locations: locations,
+              trailer: trailer,
+              duration: duration,
+              director: director,
+              stars: stars,
+              img: img,
+              releaseYear: releaseYear,
+              genre: genre
+            }
+          };
+          const movieToUpdate = {
+            movieName: oldName
+          }
+          await movies.updateOne(movieToUpdate, updateDoc, options); //update
+          res.send("update movie: " + newName);
+        } else {
+          res.send("movie dont exist");
+        }
+        return;
+      });
+    } else{
+      res.send("user is not admin")
+    }
   });
 }
 
@@ -313,6 +325,7 @@ function removeMovie(userName, movieName, res) {
           //remove movie
           if (err) throw err;
           console.log(" document(s) deleted");
+          res.send(movieName + " is removed");
         });
         usersArr = await users.find().toArray();
         for (let i = 0; i < usersArr.length; i++) {
@@ -381,7 +394,8 @@ async function getAllMovies(userName, res) {
           action: 0,
           drama: 0,
           comedy: 0,
-          documentary: 0,
+          biography: 0,
+          animation:0
         };
         for (var i = 0; i < filterMov.length; i++) {
           json[filterMov[i].genre] += 1;
@@ -796,6 +810,26 @@ app.post("/addMovie", (req, res) => {
   addMovie(
     req.query.userName,
     req.query.movieName,
+    req.query.description,
+    req.query.locations,
+    req.query.trailer,
+    req.query.duration,
+    req.query.director,
+    req.query.stars,
+    req.query.img,
+    req.query.releaseYear,
+    req.query.genre,
+    res
+  );
+});
+
+app.post("/updateMovie", (req, res) => {
+  //req  parameters:  user name, oldName, newName, description, locations, trailer,duration, director, stars, img,
+  //releaseYear, genre. if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none
+  updateMovie(
+    req.query.userName,
+    req.query.oldName,
+    req.query.newName,
     req.query.description,
     req.query.locations,
     req.query.trailer,

@@ -9,7 +9,7 @@
 4. write/update rate to movie - path: post http://localhost:8080/rate , parameters:  movieName, userName, rate. V
 
 5. add movie path: post http://localhost:8080/addMovie , parameters:  user name, movieName, description, 
-locations, trailer, rate,duration, director, stars, img, releaseYear, genre.
+locations, trailer,duration, director, stars, img, releaseYear, genre.
  if the movie is already exist return res = "this movie is already exist", case that the user is not admin return none. V
 
 6 create user - path: post http://localhost:8080/signUp , parameters:  userName and password.
@@ -46,9 +46,15 @@ the function remove the movie from movies and all the watch lists that includes 
  - path: get http://localhost:8080/searchMovie , parameters:  movieName, genre, startYear,
   endYear. if the not exist return empty arr, else return arr of movies json. V  
 
-17. this path movie from watch list of user
+17. this path remove movie from watch list of user
  - path: post http://localhost:8080/removeFromWl ,parameters:  movieName, userName.
   if the movie is exist in the watchList this func remove him, else do nothing. V  
+
+18. this path update movie 
+- path: post http://localhost:8080/updateMovie , parameters:  user name, oldName, newName, description, locations, trailer,duration, director, stars, img,
+  releaseYear, genre. if the newName is already exist as another movieName return res = "new name is already exist", 
+  case that the user is not admin return res = "user is not admin", case that the oldName movie is not exist res = "movie dont exist"
+  case that succeed res = "update movie: newName". V 
 
 movieJson: 
 

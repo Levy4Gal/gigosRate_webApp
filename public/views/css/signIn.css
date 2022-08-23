@@ -73,6 +73,7 @@ body {
     height: 60px;
     line-height: 60px;
     border-radius: 4px;
+    cursor: pointer;
   }
   
   input[type="text"],
