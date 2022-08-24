@@ -1,4 +1,4 @@
-// Send login request to the server socket io.
+// Send login request to the server socket io..
 function Login(_userame,_password,_isAdmin){
     socket.emit("login", {
         username: _userame,
