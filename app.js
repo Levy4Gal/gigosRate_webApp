@@ -233,7 +233,7 @@ function addMovie(
   };
   users.findOne(user, function (err, result) {
     if (err) throw err;
-    if (result.isAdmin) {
+    if (result != null && result.isAdmin) {
       movies.findOne(movie, function (err, result) {
         if (err) throw err;
         if (result != null) {
@@ -263,17 +263,20 @@ async function updateMovie(
   const movie = {
     movieName: oldName
   };
-  const moviesArr = await movies.find().toArray();
-  for(let i =0; i<moviesArr.length; i++){//validation test
-    if(moviesArr[i].movieName == newName){
-      res.send("new name is already exist");
-      return;
+  if(oldName != newName){
+    const moviesArr = await movies.find().toArray();
+    for(let i =0; i<moviesArr.length; i++){//validation test
+      if(moviesArr[i].movieName == newName){
+        res.send("new name is already exist");
+        return;
+      }
     }
   }
-  users.findOne(user, function (err, result) {
+
+  users.findOne(user, function (err, result) {//find the user that invoke the update
     if (err) throw err;
-    if (result.isAdmin) {
-      movies.findOne(movie, async function (err, result) {
+    if (result != null && result.isAdmin) {//check if the user is admin
+      movies.findOne(movie, async function (err, result) {//find movie to update
         if (err) throw err;
         if (result != null) {
           const options = { upsert: true };
@@ -292,7 +295,7 @@ async function updateMovie(
               genre: genre
             }
           };
-          const movieToUpdate = {
+          const movieToUpdate = {//movie to update
             movieName: oldName
           }
           await movies.updateOne(movieToUpdate, updateDoc, options); //update
@@ -300,7 +303,6 @@ async function updateMovie(
         } else {
           res.send("movie dont exist");
         }
-        return;
       });
     } else{
       res.send("user is not admin")
