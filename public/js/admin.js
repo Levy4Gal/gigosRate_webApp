@@ -260,7 +260,7 @@ function onSaveEdit(){
     var img= $('#editimgLink').val();
     var releaseYear = $('#editreleaseYear').val();
     var genre = $('#genre').val();
-    httpPostAsync(`http://localhost:8080/updateMovie?userName=${JSON.parse(sessionStorage.getItem('user')).userName}&oldName=${lastEditedMovieName}&newName=movieName&description=${movieDesc}&locations=${locations}&trailer=${trailer}&rate=0&duration=${duration}&director=${director}&stars=${stars}&img=${img}&releaseYear=${releaseYear}&genre=${genre}`,"",
+    httpPostAsync(`http://localhost:8080/updateMovie?userName=${JSON.parse(sessionStorage.getItem('user')).userName}&oldName=${lastEditedMovieName}&newName=${movieName}&description=${movieDesc}&locations=${locations}&trailer=${trailer}&rate=0&duration=${duration}&director=${director}&stars=${stars}&img=${img}&releaseYear=${releaseYear}&genre=${genre}`,"",
     function (value){
         alert(value);
     });
