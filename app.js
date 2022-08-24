@@ -59,14 +59,6 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
-app.post("/login", (req, res) => {
-  var user_name = req.body.user;
-  var password = req.body.password;
-  console.log(req.query);
-  console.log("User name = " + user_name + ", password is " + password);
-  res.end("yes");
-});
-
 //Admin test
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
