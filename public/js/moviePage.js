@@ -44,7 +44,7 @@ $(document).ready(function(){
         document.getElementById("stars").innerHTML ="Stars: " + item.stars;
         document.getElementById("image").setAttribute("src" ,item.img);
         let url =fixUrl(item.trailer);
-        document.getElementById("movie").setAttribute("data" ,url);
+        document.getElementById("movie").setAttribute("src" ,url);
          
         showStarsFromDBrate(fixedStars,item);
         rateStars(ratingStars,item);

@@ -12,15 +12,14 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/index.html"));
 });
 
-var http = require("http"); 
-var server = http.createServer(app); 
-var io = require("socket.io")(server); 
-server.listen(port); 
+var http = require("http");
+var server = http.createServer(app);
+var io = require("socket.io")(server);
+server.listen(port);
 console.log("server strarted on port: " + port);
 
 // ****************** Socket IO functions ****************\\
 io.sockets.on("connection", function (ClientSocket) {
-
   // Event for login request.
   ClientSocket.on("login", function (data) {
     var _username = data.username;
@@ -119,11 +118,11 @@ function createUser(userName, password, res) {
   users.findOne(valid, function (err, result) {
     if (err) throw err;
     if (result != null) {
-      io.sockets.emit("sign-up", { is_valid: false }); 
+      io.sockets.emit("sign-up", { is_valid: false });
       return;
     }
     users.insertOne(doc);
-    io.sockets.emit("sign-up", { is_valid: true }); 
+    io.sockets.emit("sign-up", { is_valid: true });
   });
 }
 
@@ -145,7 +144,7 @@ function removeUser(adminName, userNameToDelete, res) {
           res.send("userName " + userNameToDelete + " is deleted");
           console.log(" document(s) deleted");
         });
-      }else{
+      } else {
         res.send("you are not admin");
       }
     }
@@ -182,10 +181,11 @@ function getUser(userName, res) {
       io.sockets.emit("getUser", { user: null });
       return;
     } else {
-      if (res){ res.send(result);
+      if (res) {
+        res.send(result);
         return;
       }
-      io.sockets.emit("getUser", { user: result });      
+      io.sockets.emit("getUser", { user: result });
     }
   });
 }
@@ -209,19 +209,19 @@ function addMovie(
   const user = {
     userName: userName,
   };
-  const rate = {'totalRate':0};
+  const rate = { totalRate: 0 };
   const movie = {
     movieName: movieName,
     description: description,
     locations: locations,
     trailer: trailer,
-    'rate': JSON.stringify(rate),
+    rate: JSON.stringify(rate),
     duration: duration,
     director: director,
     stars: stars,
     img: img,
     releaseYear: releaseYear,
-    genre: genre
+    genre: genre,
   };
   users.findOne(user, function (err, result) {
     if (err) throw err;
@@ -229,23 +229,33 @@ function addMovie(
       movies.findOne(movie, function (err, result) {
         if (err) throw err;
         if (result != null) {
-            res.send("this movie is already exist")
+          res.send("this movie is already exist");
         } else {
           movies.insertOne(movie);
-          res.send("insert movie: "  + movieName);
+          res.send("insert movie: " + movieName);
         }
         return;
       });
-    } else{
-      res.send("user is not admin")
+    } else {
+      res.send("user is not admin");
     }
   });
 }
 
 async function updateMovie(
-  userName,oldName,newName,
-  description,locations,trailer,duration,director,
-  stars,img,releaseYear,genre,res
+  userName,
+  oldName,
+  newName,
+  description,
+  locations,
+  trailer,
+  duration,
+  director,
+  stars,
+  img,
+  releaseYear,
+  genre,
+  res
 ) {
   const users = client.db("gigos").collection("users");
   const movies = client.db("gigos").collection("movies");
@@ -253,22 +263,26 @@ async function updateMovie(
     userName: userName,
   };
   const movie = {
-    movieName: oldName
+    movieName: oldName,
   };
-  if(oldName != newName){
+  if (oldName != newName) {
     const moviesArr = await movies.find().toArray();
-    for(let i =0; i<moviesArr.length; i++){//validation test
-      if(moviesArr[i].movieName == newName){
+    for (let i = 0; i < moviesArr.length; i++) {
+      //validation test
+      if (moviesArr[i].movieName == newName) {
         res.send("new name is already exist");
         return;
       }
     }
   }
 
-  users.findOne(user, function (err, result) {//find the user that invoke the update
+  users.findOne(user, function (err, result) {
+    //find the user that invoke the update
     if (err) throw err;
-    if (result != null && result.isAdmin) {//check if the user is admin
-      movies.findOne(movie, async function (err, result) {//find movie to update
+    if (result != null && result.isAdmin) {
+      //check if the user is admin
+      movies.findOne(movie, async function (err, result) {
+        //find movie to update
         if (err) throw err;
         if (result != null) {
           const options = { upsert: true };
@@ -284,20 +298,21 @@ async function updateMovie(
               stars: stars,
               img: img,
               releaseYear: releaseYear,
-              genre: genre
-            }
+              genre: genre,
+            },
           };
-          const movieToUpdate = {//movie to update
-            movieName: oldName
-          }
+          const movieToUpdate = {
+            //movie to update
+            movieName: oldName,
+          };
           await movies.updateOne(movieToUpdate, updateDoc, options); //update
           res.send("update movie: " + newName);
         } else {
           res.send("movie dont exist");
         }
       });
-    } else{
-      res.send("user is not admin")
+    } else {
+      res.send("user is not admin");
     }
   });
 }
@@ -355,7 +370,6 @@ function removeMovie(userName, movieName, res) {
 async function getAllMovies(userName, res) {
   //helper function for signup
   var movies = await client.db("gigos").collection("movies").find().toArray();
-  console.log(userName);
   if (userName != null) {
     //case that wants movies with content of user
     const users = client.db("gigos").collection("users");
@@ -389,7 +403,7 @@ async function getAllMovies(userName, res) {
           drama: 0,
           comedy: 0,
           biography: 0,
-          animation:0
+          animation: 0,
         };
         for (var i = 0; i < filterMov.length; i++) {
           json[filterMov[i].genre] += 1;
@@ -853,7 +867,6 @@ app.get("/searchMovie", (req, res) => {
     res
   );
 });
-
 
 app.get("/allMovies", (req, res) => {
   //req  parameters:  userName
