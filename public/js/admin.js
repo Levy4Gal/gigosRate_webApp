@@ -44,7 +44,7 @@ function displayLoadedUser(){
         $(".list").empty();
         let line =         `          <div class="line">
         <div class="name"> ${displayUsers.userName}</div>
-        <img class="delete" src="img/deleteIcon.png" />
+        <img id="${displayUsers.userName}" onclick="deleteUser(this.id)" class="delete" src="img/deleteIcon.png" />
       </div>`;
         $(".list").append(line);
 
@@ -70,6 +70,11 @@ function displayLoadedMovies(){
 
 function deleteMovie(name){
     httpPostAsync(`http://localhost:8080/removeMovie?userName=${JSON.parse(sessionStorage.getItem('user')).userName}&movieName=${name}`,"",search);
+}
+
+function deleteUser(user){
+    httpPostAsync(`http://localhost:8080/removeUser?userName=${JSON.parse(sessionStorage.getItem('user')).userName}&toDelete=${user}`,"",search);
+
 }
 
 function addEditMoviePanel(movieName) {
